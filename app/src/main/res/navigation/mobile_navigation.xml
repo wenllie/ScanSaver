@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_dashboard">
+
+    <fragment
+        android:id="@+id/nav_dashboard"
+        android:name="com.example.scansaverapp.users.dashboard.DashboardFragment"
+        android:label="@string/menu_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/nav_spending"
+        android:name="com.example.scansaverapp.users.spending.SpendingFragment"
+        android:label="@string/menu_spending"
+        tools:layout="@layout/fragment_spending" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.example.scansaverapp.users.settings.SettingsFragment"
+        android:label="@string/menu_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/nav_help_center"
+        android:name="com.example.scansaverapp.users.helpcenter.HelpCenterFragment"
+        android:label="@string/menu_help_center"
+        tools:layout="@layout/fragment_help_center" />
+    <fragment
+        android:id="@+id/shoppingCartFragment"
+        android:name="com.example.scansaverapp.users.dashboard.ShoppingCartFragment"
+        android:label="fragment_shopping_cart"
+        tools:layout="@layout/fragment_shopping_cart" />
+</navigation>

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "468360572804",
+    "firebase_url": "https://scan-saver-default-rtdb.firebaseio.com",
+    "project_id": "scan-saver",
+    "storage_bucket": "scan-saver.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468360572804:android:8e8f15f278f701f2a477d1",
+        "android_client_info": {
+          "package_name": "com.example.scansaverapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "468360572804-85mnr13jv8m2vk8a51sr0rj52nfe73dv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.scansaverapp",
+            "certificate_hash": "5862c1f478e08b80885a9dae34ed018c9082d8d1"
+          }
+        },
+        {
+          "client_id": "468360572804-dgg3ebqcqha8l6rnvba44q1h2517do28.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1BJ8a9PSb2ssi5gwrtJPiNVYCLgucI7s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "468360572804-dgg3ebqcqha8l6rnvba44q1h2517do28.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

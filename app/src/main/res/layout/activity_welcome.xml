@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="20dp"
+    android:layout_gravity="center"
+    tools:context=".WelcomeActivity">
+
+    <TextView
+        android:layout_marginTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Welcome To"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textStyle="bold" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animated_welcome"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_gravity="center"
+        app:lottie_rawRes="@raw/welcome_animation"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="false"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="ScanSaver: Budgeting Barcode Scanner"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:gravity="bottom">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/welcomeBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/rounded_button_main"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:text="Let's Go"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+    </RelativeLayout>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

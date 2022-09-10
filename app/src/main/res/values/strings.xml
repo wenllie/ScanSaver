@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">ScanSaver</string>
+    <string name="create_account">Create an Account</string>
+    <string name="sign_in">Sign In</string>
+
+    <!--Gender Spinner-->
+    <string name="gender_prompt">Choose a Gender</string>
+    <string-array name="gender">
+        <item>Female</item>
+        <item>Male</item>
+    </string-array>
+
+    <string name="reset_prompt">Choose a Method</string>
+    <string-array name="reset">
+        <item>Email</item>
+        <item>Phone Number</item>
+    </string-array>
+    <string name="title_activity_user_nav_drawer">UserNavDrawerActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_dashboard">Dashboard</string>
+    <string name="menu_spending">Spending</string>
+    <string name="menu_logout">Logout</string>
+    <string name="menu_notifications">Notifications</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_help_center">Help Center</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="barcode">Barcode Scanner for Grocery Budgeting</string>
+
+    <string name="help_center">It looks like you are experiencing problems in our application. We are here to help you so please get in touch with us.</string>
+    <string name="email_us">You can email us at:</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+</resources>

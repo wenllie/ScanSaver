@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
@@ -27,6 +29,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     MaterialCheckBox employeeCheckBox;
     MaterialTextView userForgotPassword;
 
+    //shared preferences
+    private static final String PREF_LOGIN = "LOGIN_PREF";
+    private static final String USER_EMAIL = "EMAIL_ADDRESS";
+    private static final String USER_PASSWORD = "PASSWORD";
+
     public static String userID;
     FirebaseAuth mAuth;
 
@@ -40,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         userPassword = (TextInputEditText) findViewById(R.id.userPassword);
         userSignInBtn = (AppCompatButton) findViewById(R.id.userSignInBtn);
         userRegisterBtn = (AppCompatButton) findViewById(R.id.userRegister);
-//        employeeCheckBox = (MaterialCheckBox) findViewById(R.id.employeeCheckbox);
         userForgotPassword = (MaterialTextView) findViewById(R.id.userForgotPassword);
 
         mAuth = FirebaseAuth.getInstance();
@@ -61,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 finish();
                 break;
             case R.id.userForgotPassword:
-//                startActivity(new Intent(MainActivity.this, ForgotPasswordActivity.class));
+                startActivity(new Intent(MainActivity.this, ForgotPasswordActivity.class));
                 finish();
                 break;
         }
@@ -75,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             userEmail.setError("Email is required!");
             userEmail.requestFocus();
         } else if (TextUtils.isEmpty(password)){
-            userPassword.setError("Email is required!");
+            userPassword.setError("Password is required!");
             userPassword.requestFocus();
         } else {
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -83,7 +89,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
                         if (mAuth.getCurrentUser().isEmailVerified()){
-                            Toast.makeText(MainActivity.this, "User Logged in Successfully", Toast.LENGTH_LONG).show();
+
+                            SharedPreferences.Editor editor = getSharedPreferences(PREF_LOGIN, MODE_PRIVATE).edit();
+                            editor.putString(USER_EMAIL, email);
+                            editor.putString(USER_PASSWORD, password);
+                            editor.commit();
+
                             startActivity(new Intent(MainActivity.this, UserNavDrawer.class));
                             finish();
                         } else {

@@ -2,169 +2,143 @@
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dashboardFrag"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/dashboardFrag"
     tools:context=".users.dashboard.DashboardFragment">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:background="@drawable/dashboard_bg"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:layout_height="match_parent">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:layout_alignParentTop="true"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="false"
+            app:lottie_rawRes="@raw/shopping_bag" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="100dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/dashboard_bg"
             android:gravity="center"
-            android:orientation="vertical"
-            android:padding="5dp">
+            android:orientation="horizontal"
+            android:padding="10dp">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginBottom="15dp"
+            <androidx.cardview.widget.CardView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
                 android:padding="5dp"
-                android:background="@drawable/rounded_background_box"
-                app:srcCompat="@drawable/barcode"
-                app:tint="@color/blue_dark" />
+                app:cardCornerRadius="10dp"
+                app:cardElevation="7dp">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/scanBarcodeBtn"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/rounded_button_main"
-                android:text="Scan"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:background="#e7f7ff"
+                        android:padding="5dp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/barcode" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/scanBarcodeBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:text="Scan"
+                        android:textAllCaps="false"
+                        android:textStyle="bold" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:padding="5dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="7dp">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:background="#e7f7ff"
+                        android:padding="5dp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/cart" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/shoppingCartBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:text="Cart"
+                        android:textAllCaps="false"
+                        android:textStyle="bold" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:padding="5dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="7dp">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:background="#e7f7ff"
+                        android:padding="5dp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/analytics" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/spendingPDFBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:text="Spending"
+                        android:textAllCaps="false"
+                        android:textStyle="bold" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </androidx.cardview.widget.CardView>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="5dp">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/rounded_background_box"
-                app:srcCompat="@drawable/cart"
-                android:padding="5dp"
-                app:tint="@color/blue_dark" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/shoppingCartBtn"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/rounded_button_main"
-                android:text="Cart"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="5dp">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/rounded_background_box"
-                app:srcCompat="@drawable/pdf_print"
-                android:padding="5dp"
-                app:tint="@color/blue_dark" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/spendingPDFBtn"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/rounded_button_main"
-                android:text="Spending"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/background_dash"
-        android:orientation="vertical">
-
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginLeft="120dp"
-            android:background="@drawable/rounded_button_main"
-            android:fontFamily="@font/baloo_bhai"
-            android:gravity="center"
-            android:text="@string/barcode"
-            android:padding="5dp"
-            android:textColor="@color/white"
-            android:textSize="18sp"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginLeft="120dp"
-            android:background="@drawable/grey_box"
-            android:gravity="center"
-            android:text="Easy to use"
-            android:textColor="@color/black"
-            android:padding="5dp"
-            android:textSize="18sp"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginLeft="120dp"
-            android:background="@drawable/grey_box"
-            android:gravity="center"
-            android:text="Calculate the expenses"
-            android:textColor="@color/black"
-            android:padding="5dp"
-            android:textSize="18sp"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginLeft="120dp"
-            android:background="@drawable/grey_box"
-            android:gravity="center"
-            android:text="Prioritize bills"
-            android:textColor="@color/black"
-            android:padding="5dp"
-            android:textSize="18sp"/>
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </RelativeLayout>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

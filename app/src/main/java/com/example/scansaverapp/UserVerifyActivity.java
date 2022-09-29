@@ -64,49 +64,25 @@ public class UserVerifyActivity extends AppCompatActivity implements View.OnClic
                     verifyCode.setError("Please enter the code!");
                     verifyCode.requestFocus();
                 } else {
-                    PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, verifycode);
-                    FirebaseAuth
-                            .getInstance()
-                            .signInWithCredential(credential)
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()){
-                                Intent login = new Intent(UserVerifyActivity.this, WelcomeActivity.class);
-                                login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(login);
-                                finish();
-                            } else {
-                                Toast.makeText(UserVerifyActivity.this, "Invalid OTP!", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                    mAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                if (verificationId != null) {
-                                    FirebaseAuth
-                                            .getInstance()
-                                            .signInWithCredential(credential)
-                                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                                @Override
-                                                public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
-                                                    if (task.isSuccessful()) {
-
-
-                                                    } else {
-                                                        Toast.makeText(UserVerifyActivity.this, "Invalid OTP!", Toast.LENGTH_SHORT).show();
-                                                    }
-
-                                                }
-                                            });
-                                }
-                            }
-                        }
-                    });
+                    if (verificationId != null) {
+                        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, verifycode);
+                        mAuth.getCurrentUser()
+                                .linkWithCredential(credential)
+                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            Intent login = new Intent(UserVerifyActivity.this, SetProfilePictureActivity.class);
+                                            login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(login);
+                                            finish();
+                                        } else {
+                                            Toast.makeText(UserVerifyActivity.this, "Invalid OTP!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                    }
                 }
-                verifyCode.clearFocus();
                 break;
         }
     }

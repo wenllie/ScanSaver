@@ -1,40 +1,32 @@
 package com.example.scansaverapp;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.appcompat.widget.LinearLayoutCompat;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.airbnb.lottie.LottieAnimationView;
+import com.example.scansaverapp.helpers_database.UserDetails;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.FirebaseException;
-import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthSettings;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
@@ -50,11 +42,12 @@ import java.util.concurrent.TimeUnit;
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     //initialize variables
-    AppCompatCheckBox termsConditionsDialog;
     TextInputEditText userFullName, userBirthday, userAge, userPhoneNumber, userEmailRegister, userPasswordRegister, userConfirmPassword;
     Spinner userGender;
     AppCompatButton userRegisterBtn, dateBtn;
     TextView userSignIn;
+    CheckBox termsConditionsCheckbox;
+    private MaterialAlertDialogBuilder termsDialog;
     private int mYear, mMonth, mDay;
 
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
@@ -79,14 +72,37 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         userSignIn = (TextView) findViewById(R.id.signInBtn);
         userRegisterBtn = (AppCompatButton) findViewById(R.id.userRegisterBtn);
         dateBtn = (AppCompatButton) findViewById(R.id.dateBtn);
-        termsConditionsDialog = (AppCompatCheckBox) findViewById(R.id.termsConditionsDialog);
+        termsConditionsCheckbox = (CheckBox) findViewById(R.id.termsConditionsCheckbox);
 
         mAuth = FirebaseAuth.getInstance();
+
+        userRegisterBtn.setEnabled(false);
+        termsDialog = new MaterialAlertDialogBuilder(this, R.style.CutShapeTheme);
+
+        termsConditionsCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    termsDialog.setTitle("Terms & Conditions");
+                    termsDialog.setMessage(getResources().getString(R.string.terms_conditions));
+                    termsDialog.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            userRegisterBtn.setEnabled(true);
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    termsConditionsCheckbox.setChecked(true);
+                    termsDialog.show();
+                }
+            }
+        });
 
         //Function for buttons
         userSignIn.setOnClickListener(this);
         userRegisterBtn.setOnClickListener(this);
         dateBtn.setOnClickListener(this);
+        termsConditionsCheckbox.setOnClickListener(this);
     }
 
     @Override
@@ -127,16 +143,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             case R.id.userRegisterBtn:
                 createUserProfile();
                 break;
-            case R.id.termsConditionsDialog:
-                showDialog();
+            case R.id.termsConditionsCheckbox:
+
                 break;
         }
-    }
-
-    private void showDialog() {
-        Dialog dialog = new Dialog(getApplicationContext());
-        dialog.setContentView(R.layout.terms_conditions_dialog);
-        dialog.show();
     }
 
     private void createUserProfile() {
@@ -215,100 +225,91 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             userConfirmPassword.requestFocus();
             return;
         }
-        if (!termsConditionsDialog.isChecked()){
-            Toast.makeText(RegisterActivity.this, "Please agree to the Terms & Conditions.", Toast.LENGTH_LONG);
+        if (password.equals(confirmPassword)) {
 
-            if (password.equals(confirmPassword)) {
+            //Create user profile
+            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
 
-                //Create user profile
-                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
+                        //store user data into realtime database
+                        UserDetails userDetails = new UserDetails(fullName, gender, birthday, age, phoneNumber, email, user.getUid());
 
-                            //store user data into realtime database
-                            UserDetails userDetails = new UserDetails(fullName, gender, birthday, age, phoneNumber, email, password);
+                        //extracting user reference from database for "Registered Employers"
+                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Customers").child("Personal Information");
 
-                            //extracting user reference from database for "Registered Employers"
-                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+                        reference.child(user.getUid()).setValue(userDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
 
-                            reference.child(user.getUid()).child("Basic Information").setValue(userDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    //send email verification
+                                    user.sendEmailVerification();
 
-                                    if (task.isSuccessful()) {
-                                        //send email verification
-                                        user.sendEmailVerification();
-
-                                        // to get the user ID for verifying user
+                                    // to get the user ID for verifying user
 //                                    UserVerifyActivity.userID = user.getUid();
 
-                                        mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                                    mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
-                                            @Override
-                                            public void onVerificationCompleted(PhoneAuthCredential credential) {
-                                            }
+                                        @Override
+                                        public void onVerificationCompleted(PhoneAuthCredential credential) {
+                                        }
 
-                                            @Override
-                                            public void onVerificationFailed(FirebaseException e) {
-                                                Toast.makeText(RegisterActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                                            }
+                                        @Override
+                                        public void onVerificationFailed(FirebaseException e) {
+                                            Toast.makeText(RegisterActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                        }
 
-                                            @Override
-                                            public void onCodeSent(@NonNull String verificationId,
-                                                                   @NonNull PhoneAuthProvider.ForceResendingToken token) {
-                                                //verify user after successful registration
-                                                Intent verify = new Intent(RegisterActivity.this, UserVerifyActivity.class);
-                                                //prevent user from returning back to the register page on pressing back button after registration
-                                                verify.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                verify.putExtra("phone", userPhoneNumber.getText().toString().trim());
-                                                verify.putExtra("verificationId", verificationId);
-                                                startActivity(verify);
-                                                finish();
-                                            }
-                                        };
-                                        PhoneAuthOptions options =
-                                                PhoneAuthOptions.newBuilder(mAuth)
-                                                        .setPhoneNumber("+63" + userPhoneNumber.getText().toString().trim())       // Phone number to verify
-                                                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                                                        .setActivity(RegisterActivity.this)                 // Activity (for callback binding)
-                                                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
-                                                        .build();
-                                        PhoneAuthProvider.verifyPhoneNumber(options);
+                                        @Override
+                                        public void onCodeSent(@NonNull String verificationId,
+                                                               @NonNull PhoneAuthProvider.ForceResendingToken token) {
+                                            //verify user after successful registration
+                                            Intent verify = new Intent(RegisterActivity.this, UserVerifyActivity.class);
+                                            //prevent user from returning back to the register page on pressing back button after registration
+                                            verify.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            verify.putExtra("phone", userPhoneNumber.getText().toString().trim());
+                                            verify.putExtra("verificationId", verificationId);
+                                            startActivity(verify);
+                                            finish();
+                                        }
+                                    };
+                                    PhoneAuthOptions options =
+                                            PhoneAuthOptions.newBuilder(mAuth)
+                                                    .setPhoneNumber("+63" + userPhoneNumber.getText().toString().trim())       // Phone number to verify
+                                                    .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                                                    .setActivity(RegisterActivity.this)                 // Activity (for callback binding)
+                                                    .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+                                                    .build();
+                                    PhoneAuthProvider.verifyPhoneNumber(options);
 
-                                    } else {
-                                        Toast.makeText(RegisterActivity.this, "Registration failed! Please try again.", Toast.LENGTH_LONG).show();
-                                    }
+                                } else {
+                                    Toast.makeText(RegisterActivity.this, "Registration failed! Please try again.", Toast.LENGTH_LONG).show();
                                 }
-                            });
-
-                        } else {
-                            try {
-                                throw task.getException();
-                            } catch (FirebaseAuthWeakPasswordException e) {
-                                userPasswordRegister.setError("Password is too weak! Please use combination of alphabets, numbers and special characters.");
-                                userPasswordRegister.requestFocus();
-                            } catch (FirebaseAuthInvalidCredentialsException e) {
-                                userEmailRegister.setError("Email is invalid or already in use! Please use another email.");
-                                userEmailRegister.requestFocus();
-                            } catch (FirebaseAuthUserCollisionException e) {
-                                userEmailRegister.setError("User already registered with this email! Please use another email.");
-                                userEmailRegister.requestFocus();
-                            } catch (Exception e) {
-                                Log.e(TAG, e.getMessage());
-                                Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-
                             }
+                        });
+
+                    } else {
+                        try {
+                            throw task.getException();
+                        } catch (FirebaseAuthWeakPasswordException e) {
+                            userPasswordRegister.setError("Password is too weak! Please use combination of alphabets, numbers and special characters.");
+                            userPasswordRegister.requestFocus();
+                        } catch (FirebaseAuthInvalidCredentialsException e) {
+                            userEmailRegister.setError("Email is invalid or already in use! Please use another email.");
+                            userEmailRegister.requestFocus();
+                        } catch (FirebaseAuthUserCollisionException e) {
+                            userEmailRegister.setError("User already registered with this email! Please use another email.");
+                            userEmailRegister.requestFocus();
+                        } catch (Exception e) {
+                            Log.e(TAG, e.getMessage());
+                            Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
-                });
-            }
-        } else {
-
+                }
+            });
         }
-
-
     }
 
 }

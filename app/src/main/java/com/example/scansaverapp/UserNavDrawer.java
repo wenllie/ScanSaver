@@ -1,10 +1,14 @@
 package com.example.scansaverapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -17,12 +21,20 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.scansaverapp.databinding.ActivityUserNavDrawerBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class UserNavDrawer extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityUserNavDrawerBinding binding;
+    TextView navFullName, navEmail;
     FirebaseAuth mAuth;
+
+    private DatabaseReference userReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +45,30 @@ public class UserNavDrawer extends AppCompatActivity {
 
         setSupportActionBar(binding.appBarUserNavDrawer.toolbar);
 
+
         mAuth = FirebaseAuth.getInstance();
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
+
+        navFullName = navigationView.getHeaderView(0).findViewById(R.id.navFullName);
+        navEmail = navigationView.getHeaderView(0).findViewById(R.id.navEmail);
+        userReference = FirebaseDatabase.getInstance().getReference().child("Customers").child("Personal Information").child(FirebaseAuth.getInstance().getUid());
+
+        userReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                navFullName.setText( snapshot.child("fullName").getValue().toString() );
+                navEmail.setText( snapshot.child("email").getValue().toString() );
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(UserNavDrawer.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -54,10 +86,19 @@ public class UserNavDrawer extends AppCompatActivity {
     }
 
     private void logout() {
-        mAuth.signOut();
-        Intent goLogin = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(goLogin);
-        finish();
+
+        SharedPreferences.Editor editor = getSharedPreferences("LOGIN_PREF",getApplicationContext().MODE_PRIVATE).edit();
+        editor.clear();
+        editor.commit();
+
+        if (editor.commit()) {
+
+            mAuth.signOut();
+            Toast.makeText(getApplicationContext(), "Logout Successfully", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(UserNavDrawer.this, MainActivity.class));//open login activity on successful logout
+            finish();
+
+        }
     }
 
     @Override
@@ -71,7 +112,6 @@ public class UserNavDrawer extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_notifications: {
-                // navigate to notifications screen
                 return true;
             }
             default:

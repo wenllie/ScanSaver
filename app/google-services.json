@@ -8,6 +8,43 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:468360572804:android:b6d89dedb64956b9a477d1",
+        "android_client_info": {
+          "package_name": "com.example.scansaveradmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "468360572804-0umrfur3vasi1ssbk2d40dkip8btfha7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.scansaveradmin",
+            "certificate_hash": "5862c1f478e08b80885a9dae34ed018c9082d8d1"
+          }
+        },
+        {
+          "client_id": "468360572804-dgg3ebqcqha8l6rnvba44q1h2517do28.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1BJ8a9PSb2ssi5gwrtJPiNVYCLgucI7s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "468360572804-dgg3ebqcqha8l6rnvba44q1h2517do28.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:468360572804:android:8e8f15f278f701f2a477d1",
         "android_client_info": {
           "package_name": "com.example.scansaverapp"

@@ -29,6 +29,7 @@ import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -40,7 +41,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
 
     AppCompatTextView phStart;
     TextInputEditText chooseMethod;
-    TextInputLayout emailLayout, phoneNumberLayout;
     Spinner chooseResetPassword;
     AppCompatButton resetPasswordBtn;
     private String verificationId;
@@ -48,6 +48,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
 
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
 
+    DatabaseReference userReference;
     FirebaseAuth mAuth;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -60,7 +61,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
         chooseMethod = (TextInputEditText) findViewById(R.id.chooseMethod);
         chooseResetPassword = (Spinner) findViewById(R.id.chooseResetPassword);
         resetPasswordBtn = (AppCompatButton) findViewById(R.id.resetPasswordBtn);
-        phoneNumberLayout = (TextInputLayout) findViewById(R.id.phoneNumberLayout);
 
         mAuth = FirebaseAuth.getInstance();
 

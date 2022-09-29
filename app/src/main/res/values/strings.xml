@@ -3,6 +3,9 @@
     <string name="create_account">Create an Account</string>
     <string name="sign_in">Sign In</string>
 
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
+
     <!--Gender Spinner-->
     <string name="gender_prompt">Choose a Gender</string>
     <string-array name="gender">
@@ -37,8 +40,52 @@
     <string name="help_center">It looks like you are experiencing problems in our application. We are here to help you so please get in touch with us.</string>
     <string name="email_us">You can email us at:</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="terms_conditions"> Welcome to our Application which developed by the researchers of Technological Institute of the Philippines – Manila (TIP).
+        If you continue to browse and use this application, you are agreeing to comply with and be bound by the following terms and conditions of use,
+        which together with our privacy policy govern our relationship with you in relation to this Application. These Terms include all other policies,
+        rules and terms and conditions as set forth in Service materials from time to time, all of which are incorporated herein. If you object to anything
+        in these Terms, the Privacy Policy, or the other Policies, do not use the Site or the Services.
+
+        \n\n<b>Condition of Use</b>\n\n
+        We will provide this Mobile Application to you, which is subject to the conditions stated below in this document. Every time you visit this Mobile
+        Application, use its service you accept the following conditions. Therefore, we urge you to read and understand it carefully.
+        Your use of any information or materials on this Mobile Application is entirely at your own risk, for which we shall not be liable. It shall be your own
+        responsibility to ensure that any products, services, or information available through this application meet your specific requirements.
+
+        \n\n<b>Publicity of the Application</b>\n\n
+        By posting Content to the Service, you grant Us the right and license to use, modify, publicly perform, publicly display, reproduce, and distribute such
+        Content on and through the Service. You retain all Your rights to any Content You submit, post, or display on or through the Service and You are
+        responsible for protecting those rights. You agree that this license includes the right for Us to make Your Content available to other users of
+        the Service, who may also use Your Content subject to these Terms.
+        The Company is not responsible for the content of the Service\'s users. You expressly understand and agree that you are solely responsible for the
+        content and for all activity that occurs under your account, whether done so by You or any third person using Your account.
+
+        \n\n<b>Copyright</b>\n\n
+        This website contains material which is owned by or licensed to us. It includes, but is not limited to, to the contents, layout, design, colors,
+        appearance, graphics and imagery of the Mobile Application, Contents and Materials as well as copyrights, trademarks and other intellectual
+        property contained in the Mobile Application. All trademarks reproduced in this Mobile Application, which are not the property of, or licensed
+        to the operator, are acknowledged on the Application.
+        Unauthorized use of this website may give rise to a claim for damages and/or be a criminal offence.
+
+        \n\n<b>Linkage to third parties</b>\n\n
+        From time to time, this Mobile Application may also include links to other websites. These links are provided for your convenience to provide further
+        information. They do not signify that we endorse the website(s). We have no responsibility for the content of the linked website(s).
+
+        \n\n<b>Termination and Suspension of the service</b>\n\n
+        If you fail, or suspect on reasonable grounds that you have failed to comply with any of the provisions of this Agreement, operators may, without
+        notice to you: \n(i) terminate this agreement and/or your Account, and you will remain liable for all the amounts due under your Account to and
+        including the date of termination; and/or \n(ii) terminate the license to the software; and/or \n(iii) preclude your access to the Mobile Application.
+        Termination will not affect the products that you have already acquired. However, you may be unable to authorize additional mobile phones to
+        use the service. You may cease to use the service at any time.
+
+        \n\n<b>Applicable Law</b>\n\n
+        By visiting this Mobile Application, you agree that the laws of the Philippines, without regard to principles of conflict laws, will govern these
+        terms and condition, or any dispute of any sort that might come between you or business partners and associates.
+        By continuing to use our Mobile Application you acknowledge that you have had the chance to review and consider this Terms and Condition, and you
+        acknowledge that you agreed to it. This means that you also consent to the use of your information and the method of disclosure as described in
+        this Terms and Condition. If your do not understand the Terms and Condition or do not agree to it, then please do not use the Mobile Application.
+
+
+    </string>
 
 </resources>

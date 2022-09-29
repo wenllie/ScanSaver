@@ -12,11 +12,10 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.Navigation;
 
 import com.example.scansaverapp.R;
 import com.example.scansaverapp.databinding.FragmentDashboardBinding;
-import com.example.scansaverapp.users.spending.SpendingFragment;
+import com.example.scansaverapp.users.spending.SpendingActivity;
 
 public class DashboardFragment extends Fragment implements View.OnClickListener{
 
@@ -70,12 +69,11 @@ public class DashboardFragment extends Fragment implements View.OnClickListener{
 
                 break;
             case R.id.shoppingCartBtn:
-
+                getActivity().startActivity(new Intent(getActivity(), ShoppingCartViewActivity.class));
                 break;
             case R.id.spendingPDFBtn:
-                FragmentTransaction fr = getFragmentManager().beginTransaction();
-                fr.replace(R.id.nav_host_fragment_content_user_nav_drawer,new SpendingFragment());
-                fr.commit();
+                Intent spending = new Intent(getActivity(), SpendingActivity.class);
+                getActivity().startActivity(spending);
                 break;
 
         }

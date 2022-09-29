@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.scansaveradmin">
+
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/logo_white_bg"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/logo_white_bg_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ScanSaverApp"
+        tools:targetApi="31">
+        <activity
+            android:name=".AdminWelcomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminSetUpProfileActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".admin.settings.EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.settings.PrivacySecurityActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.items.AddGroceryItemActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.settings.SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.requests.RequestsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.items.GroceryItemsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.customers.CustomersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.complaints.ComplaintsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminNavDrawerActivity"
+            android:exported="false"
+            android:label="@string/title_activity_admin_nav_drawer"
+            android:theme="@style/Theme.ScanSaverApp.NoActionBar" />
+        <activity
+            android:name=".AdminVerifyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminRegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+    </application>
+
+</manifest>

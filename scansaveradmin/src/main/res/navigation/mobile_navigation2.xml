@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation2"
+    app:startDestination="@id/nav_admin_dashboard">
+
+    <fragment
+        android:id="@+id/nav_admin_dashboard"
+        android:name="com.example.scansaveradmin.admin.dashboard.AdminDashboardFragment"
+        android:label="@string/menu_admin_dashboard"
+        tools:layout="@layout/fragment_admin_dashboard" />
+
+    <activity
+        android:id="@+id/nav_complaints"
+        android:name="com.example.scansaveradmin.admin.complaints.ComplaintsActivity"
+        android:label="@string/menu_complaints"
+        tools:layout="@layout/activity_complaints" />
+    <activity
+        android:id="@+id/nav_customers"
+        android:name="com.example.scansaveradmin.admin.customers.CustomersActivity"
+        android:label="@string/menu_customers"
+        tools:layout="@layout/activity_customers" />
+    <activity
+        android:id="@+id/nav_grocery_items"
+        android:name="com.example.scansaveradmin.admin.items.GroceryItemsActivity"
+        android:label="@string/menu_grocery_items"
+        tools:layout="@layout/activity_grocery_items" />
+    <activity
+        android:id="@+id/nav_requests"
+        android:name="com.example.scansaveradmin.admin.requests.RequestsActivity"
+        android:label="@string/menu_requests"
+        tools:layout="@layout/activity_requests" />
+    <activity
+        android:id="@+id/nav_settings"
+        android:name="com.example.scansaveradmin.admin.settings.SettingsActivity"
+        android:label="@string/action_settings"
+        tools:layout="@layout/activity_settings" />
+</navigation>

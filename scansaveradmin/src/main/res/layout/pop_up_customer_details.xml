@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_top_for_pop_up"
+        android:backgroundTint="@color/blue_main">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Customer Info"
+            android:textColor="@color/white"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#eeeeee"
+            android:scrollbars="none">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_marginTop="5dp"
+                    app:cardCornerRadius="8dp"
+                    android:layout_width="180dp"
+                    android:layout_height="230dp"
+                    android:layout_gravity="center">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/groceryPhotoShow"
+                            android:layout_width="match_parent"
+                            android:layout_height="180dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_gravity="center" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/updateGroceryPhotoBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:background="@android:color/transparent"
+                            android:text="Update Profile Photo"
+                            android:textAllCaps="false"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    android:layout_marginTop="20dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/updateCustomerName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Full Name"
+                        android:inputType="text"
+                        android:textColorHint="@color/blue_main" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                        android:layout_width="250dp"
+                        app:boxCornerRadiusTopStart="10dp"
+                        android:layout_height="match_parent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/updateCustomerBirthday"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:enabled="false"
+                            android:hint="Birthday"
+                            android:inputType="date"
+                            android:textColorHint="@color/blue_dark" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/dateBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/rounded_up_right_corner_small"
+                        android:gravity="center"
+                        android:text="Select Date"
+                        android:backgroundTint="@color/blue_main"
+                        android:textColor="@color/white"
+                        android:textAllCaps="false"
+                        android:textStyle="bold" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/updateCustomerAge"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Age"
+                        android:enabled="false"
+                        android:inputType="text"
+                        android:textColorHint="@color/blue_main" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="3dp"
+                    android:textSize="16dp"
+                    android:text="Gender" />
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/updateCustomerGenderSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:entries="@array/gender"
+                    android:prompt="@string/gender_prompt"
+                    android:scrollbarStyle="insideInset"
+                    android:background="@drawable/rounded_up_corner"
+                    android:backgroundTint="@color/blue_main"
+                    android:spinnerMode="dropdown" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/updateCustomerEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:hint="Email"
+                        android:inputType="text"
+                        android:textColorHint="@color/blue_main" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="+63"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:padding="3dp"
+                        android:background="@drawable/rounded_up_left_corner_small"
+                        android:backgroundTint="@color/blue_main"
+                        android:layout_marginRight="3dp"/>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:boxCornerRadiusTopEnd="10dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/updateCustomerPhoneNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="Phone Number"
+                            android:inputType="phone"
+                            android:textColorHint="@color/blue_dark" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/updateCustomerInfoBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Update Item"
+                    android:textAllCaps="false"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/rounded_button_main"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

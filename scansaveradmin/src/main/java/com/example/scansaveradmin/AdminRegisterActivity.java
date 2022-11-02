@@ -105,6 +105,12 @@ public class AdminRegisterActivity extends AppCompatActivity implements View.OnC
     }
 
     @Override
+    public void onBackPressed() {
+        startActivity(new Intent(AdminRegisterActivity.this, MainActivity.class));
+        finish();
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.signInBtn:

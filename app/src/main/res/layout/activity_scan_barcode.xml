@@ -6,109 +6,139 @@
     android:layout_height="match_parent"
     tools:context=".users.dashboard.ScanBarcodeActivity">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_blob_scene_haikei__1_" />
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/topLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/blue_main"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/frScannerToDashboard"
             android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_baseline_arrow_back_24"
             android:padding="10dp"
-            app:tint="@color/white"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Barcode Scanner"
-            android:gravity="center_vertical"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
+            app:tint="@color/white"
+            android:src="@drawable/ic_baseline_close_24" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 
     <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/aniLayout"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="300dp"
         android:layout_below="@id/topLayout"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginRight="20dp"
-        android:padding="20dp">
+        android:layout_marginTop="70dp">
 
-        <ImageView
+        <com.airbnb.lottie.LottieAnimationView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="false"
+            app:lottie_rawRes="@raw/girl_shopping_cart" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <RelativeLayout
-        android:id="@+id/linearBottom"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"
-        android:gravity="center">
+        android:layout_height="match_parent"
+        android:layout_below="@id/aniLayout"
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:weightSum="2">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_up_left_corner"
-                android:gravity="center"
-                android:backgroundTint="#e98585"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="10dp">
 
-                <androidx.appcompat.widget.AppCompatButton
+                <RelativeLayout
                     android:id="@+id/scannerBarcodeBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    android:drawableLeft="@drawable/ic_baseline_qr_code_scanner_24"
-                    android:drawableTint="@color/white"
-                    android:text="Scan Barcode"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Scan \nBarcode"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textStyle="bold" />
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="80dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="15dp"
+                        android:src="@drawable/barcode_icon" />
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_up_right_corner"
-                android:backgroundTint="#67d482"
-                android:gravity="center">
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="10dp">
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/scannerViewCartBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    android:drawableStart="@drawable/ic_baseline_shopping_cart_checkout_24"
-                    android:drawableTint="@color/white"
-                    android:text="Shopping Cart"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white" />
+                <RelativeLayout
+                    android:id="@+id/shoppingCartBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Shopping \nCart"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textStyle="bold" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:src="@drawable/shopping_cart_icon" />
 
+                </RelativeLayout>
 
-    </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>

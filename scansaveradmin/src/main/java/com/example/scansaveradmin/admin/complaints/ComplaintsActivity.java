@@ -18,6 +18,7 @@ import com.example.scansaveradmin.admin.complaints.complaintlist.ComplaintListMo
 import com.example.scansaveradmin.admin.requests.RequestsActivity;
 import com.example.scansaveradmin.admin.requests.requestlist.RequestAdapter;
 import com.example.scansaveradmin.admin.requests.requestlist.RequestListModel;
+import com.example.scansaveradmin.admin.settings.SettingsActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -86,10 +87,19 @@ public class ComplaintsActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
+    public void onBackPressed() {
+        Intent toDashboard = new Intent(ComplaintsActivity.this, AdminNavDrawerActivity.class);
+        toDashboard.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        toDashboard.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(toDashboard);
+        finish();
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.frComplaintsToDashboard:
-                startActivity(new Intent(ComplaintsActivity.this, AdminNavDrawerActivity.class));
+                onBackPressed();
                 break;
         }
     }

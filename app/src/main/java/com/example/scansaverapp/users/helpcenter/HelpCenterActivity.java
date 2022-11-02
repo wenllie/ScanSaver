@@ -3,17 +3,28 @@ package com.example.scansaverapp.users.helpcenter;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.cardview.widget.CardView;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.example.scansaverapp.R;
 import com.example.scansaverapp.UserNavDrawer;
+import com.example.scansaverapp.users.settings.CardViewRateUs;
+import com.example.scansaverapp.users.settings.SettingsActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -29,6 +40,7 @@ public class HelpCenterActivity extends AppCompatActivity implements View.OnClic
 
     ImageView frHelpCenterToDashboard;
     AppCompatButton submitRequestBtn, fileComplaintBtn;
+    CardView rateUs;
     private MaterialAlertDialogBuilder requestDialog, complaintsDialog;
 
     private Calendar calendar;
@@ -40,33 +52,58 @@ public class HelpCenterActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_help_center);
 
         frHelpCenterToDashboard = (ImageView) findViewById(R.id.frHelpCenterToDashboard);
-        fileComplaintBtn = (AppCompatButton) findViewById(R.id.fileComplaintBtn);
-        submitRequestBtn = (AppCompatButton) findViewById(R.id.submitRequestBtn);
+        /*fileComplaintBtn = (AppCompatButton) findViewById(R.id.fileComplaintBtn);
+        submitRequestBtn = (AppCompatButton) findViewById(R.id.submitRequestBtn);*/
+        rateUs = findViewById(R.id.rateUs);
 
         frHelpCenterToDashboard.setOnClickListener(this);
-        submitRequestBtn.setOnClickListener(this);
-        fileComplaintBtn.setOnClickListener(this);
+        /*submitRequestBtn.setOnClickListener(this);
+        fileComplaintBtn.setOnClickListener(this);*/
+        rateUs.setOnClickListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent toDashboard = new Intent(HelpCenterActivity.this, UserNavDrawer.class);
+        toDashboard.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        toDashboard.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(toDashboard);
+        finish();
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.frHelpCenterToDashboard:
-                Intent toDashboard = new Intent(HelpCenterActivity.this, UserNavDrawer.class);
-                startActivity(toDashboard);
+                onBackPressed();
                 break;
 
-            case R.id.submitRequestBtn:
+            /*case R.id.submitRequestBtn:
                 submitRequest();
                 break;
 
             case R.id.fileComplaintBtn:
                 submitComplaint();
+                break;*/
+
+            case R.id.rateUs:
+                rateApp();
                 break;
         }
     }
 
-    private void submitComplaint() {
+    private void rateApp() {
+
+        CardViewRateUs rateDialog = new CardViewRateUs(HelpCenterActivity.this);
+        rateDialog.getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+        rateDialog.setCancelable(false);
+        rateDialog.show();
+
+    }
+
+
+
+    /*private void submitComplaint() {
 
         LayoutInflater inflater = getLayoutInflater();
         View com_layout = inflater.inflate(R.layout.dialog_box_complaints, null);
@@ -184,5 +221,5 @@ public class HelpCenterActivity extends AppCompatActivity implements View.OnClic
                         dialogInterface.cancel();
                     }
                 }).show();
-    }
+    }*/
 }

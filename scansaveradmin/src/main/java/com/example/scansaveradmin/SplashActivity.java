@@ -9,61 +9,74 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.scansaveradmin.admin.settings.ThemePref;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SplashActivity extends AppCompatActivity {
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private final int SPLASH_TIME_OUT = 4000;
 
-    private static final String PREF_LOGIN = "LOGIN_PREF";
-    private static final String USER_EMAIL = "EMAIL_ADDRESS";
-    private static final String USER_PASSWORD = "PASSWORD";
-    private static final String NIGHT_MODE_PREF = "PREF_NIGHT_MODE";
+    FirebaseUser user;
+
+    ThemePref themePref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        themePref = new ThemePref(this);
+        if (themePref.loadNightModeState() == 2){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else if (themePref.loadNightModeState() == 1){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
         TextView powered = findViewById(R.id.powered);
-        ImageView logo = findViewById(R.id.logo_small);
         LottieAnimationView animated = findViewById(R.id.animated);
 
-        powered.animate().translationX(1000).setDuration(1000).setStartDelay(2500);
-        logo.animate().translationX(1000).setDuration(1000).setStartDelay(2500);
-        animated.animate().translationX(-1000).setDuration(1000).setStartDelay(2500);
+        Animation fadeIn = new AlphaAnimation(0, 1);
+        fadeIn.setInterpolator(new DecelerateInterpolator()); //add this
+        fadeIn.setDuration(200);
+
+        Animation fadeOut = new AlphaAnimation(1, 0);
+        fadeOut.setInterpolator(new AccelerateInterpolator()); //and this
+        fadeOut.setStartOffset(2800);
+        fadeOut.setDuration(3500);
+
+        AnimationSet animation = new AnimationSet(false); //change to false
+        animation.addAnimation(fadeIn);
+        animation.addAnimation(fadeOut);
+
+
+        powered.setAnimation(animation);
+        animated.setAnimation(animation);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
-
-                SharedPreferences nightMode = getSharedPreferences(NIGHT_MODE_PREF, MODE_PRIVATE);
-
-                SharedPreferences preferences = getSharedPreferences(PREF_LOGIN, MODE_PRIVATE);
                 Intent intent = null;
-                if(preferences.contains(USER_EMAIL)&&preferences.contains(USER_PASSWORD)){
-                    if (nightMode.getBoolean("value", true)) {
-
-                        intent = new Intent(SplashActivity.this, AdminNavDrawerActivity.class);//if login
-
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    } else {
-                        intent = new Intent(SplashActivity.this, AdminNavDrawerActivity.class);//if login
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    }
-                }else {
+                if (user != null) {
+                    intent = new Intent(SplashActivity.this, AdminNavDrawerActivity.class);//if login
+                } else {
                     intent = new Intent(SplashActivity.this, MainActivity.class);//if not login
-
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 }
                 startActivity(intent);
                 finish();
             }
-        }, 4000);
+        }, SPLASH_TIME_OUT);
     }
 }

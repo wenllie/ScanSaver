@@ -10,7 +10,7 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/blue_main">
+        android:background="?attr/colorPrimary">
 
         <ImageView
             android:id="@+id/frCustomersToDashboard"
@@ -22,14 +22,12 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginRight="40dp"
-            android:gravity="center"
-            android:text="List of Customers"
+            android:layout_height="match_parent"
+            android:text="Customers"
+            android:gravity="center_vertical"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -39,6 +37,15 @@
         android:layout_height="match_parent"
         android:layout_margin="10dp"
         android:orientation="vertical">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchCustomers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_grocery_bg"
+            android:layout_marginBottom="10dp"
+            app:queryHint="Enter customer name"
+            app:iconifiedByDefault="false"/>
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"

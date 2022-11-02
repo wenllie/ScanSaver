@@ -6,9 +6,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/grocery_items_card_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    card_view:cardBackgroundColor="@color/white"
-    android:layout_margin="10dp"
+    android:layout_height="120dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="5dp"
     card_view:cardCornerRadius="20dp"
     android:elevation="10dp"
     tools:ignore="MissingDefaultResource">
@@ -21,74 +22,97 @@
         android:gravity="center"
         android:layout_margin="10dp">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="100dp"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/groceryImageView"
+            android:layout_width="110dp"
             android:layout_height="match_parent"
-            card_view:srcCompat="@drawable/grocery_item"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="200dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_gravity="center">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/groceryItemNameTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="TextView"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/black"/>
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/groceryPriceTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="TextView"
-                android:textColor="@color/black"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
+            card_view:srcCompat="@drawable/grocery_item"/>
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_gravity="center"
-            android:gravity="center">
+            android:weightSum="5">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/ivPlusSign"
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="+"
-                android:textSize="20sp"
-                android:background="@android:color/transparent"
-                android:textColor="@color/black"
-                />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="5dp"
+                android:gravity="center_vertical"
+                android:layout_weight="1"
+                android:layout_gravity="center">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/groceryQuantityTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="00"
-                android:textSize="16dp"
-                android:textColor="@color/black" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/ivMinusSign"
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/groceryItemNameTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="TextView"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textStyle="bold" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/groceryMeasurementTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/groceryItemNameTextView"
+                        android:gravity="center_vertical"
+                        android:text="TextView"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/groceryPriceTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="center_vertical"
+                        android:text="TextView"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="-"
-                android:textColor="@color/black"
-                android:background="@android:color/transparent"
-                android:textSize="20sp" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:gravity="center">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/ivPlusSign"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="+"
+                    android:textSize="20sp"
+                    android:background="@android:color/transparent"
+                    />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/groceryQuantityTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="00"
+                    android:textSize="16dp"
+                    android:textStyle="bold"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/ivMinusSign"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:background="@android:color/transparent"
+                    android:textSize="20sp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 

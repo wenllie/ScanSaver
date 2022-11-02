@@ -11,7 +11,7 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/blue_main">
+        android:background="?attr/colorPrimary">
 
         <ImageView
             android:id="@+id/frPrivacySecurityToSettings"
@@ -20,6 +20,15 @@
             android:padding="10dp"
             android:src="@drawable/ic_baseline_close_24"
             app:tint="@color/white" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Privacy &amp; Security"
+            android:gravity="center_vertical"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

@@ -57,4 +57,10 @@ public class AdminWelcomeActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
+        finish();
+    }
 }

@@ -29,7 +29,7 @@ public class UpdatePasswordActivity extends AppCompatActivity {
     ImageView backToEditProfile;
     TextView textVerify;
 
-    private String currPassword, newPass, confNewPass;
+    private String currPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +58,16 @@ public class UpdatePasswordActivity extends AppCompatActivity {
         backToEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(UpdatePasswordActivity.this, EditProfileActivity.class));
-                finish();
+                onBackPressed();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent toEditProfile = new Intent(UpdatePasswordActivity.this, EditProfileActivity.class);
+        startActivity(toEditProfile);
+        finish();
     }
 
     //Re-authenticate user before updating the password

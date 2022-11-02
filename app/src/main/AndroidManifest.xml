@@ -26,7 +26,7 @@
             android:name=".SetProfilePictureActivity"
             android:exported="false" />
         <activity
-            android:name=".users.settings.ExpensesAnalyticsActivity"
+            android:name=".users.expenses.ExpensesAnalyticsActivity"
             android:exported="false" />
         <activity
             android:name=".users.settings.PrivacySecurityActivity"

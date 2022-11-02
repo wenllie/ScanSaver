@@ -2,6 +2,7 @@ package com.example.scansaveradmin.admin.customers;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +16,8 @@ import com.example.scansaveradmin.AdminNavDrawerActivity;
 import com.example.scansaveradmin.R;
 import com.example.scansaveradmin.admin.customers.customerlist.CustomerListAdapter;
 import com.example.scansaveradmin.admin.customers.customerlist.CustomerListModel;
+import com.example.scansaveradmin.admin.items.grocerylist.GroceryListModel;
+import com.example.scansaveradmin.admin.settings.SettingsActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -35,17 +38,12 @@ public class CustomersActivity extends AppCompatActivity implements View.OnClick
     List<CustomerListModel> customerList;
     CustomerListAdapter customerListAdapter;
 
+    //Search view
+    SearchView searchCustomers;
+
     public static String userID;
 
     private FirebaseUser user;
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-        startActivity(new Intent(CustomersActivity.this, AdminNavDrawerActivity.class));
-        finish();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +52,7 @@ public class CustomersActivity extends AppCompatActivity implements View.OnClick
 
         frCustomersToDashboard = (ImageView) findViewById(R.id.frCustomersToDashboard);
         customerRecycler = (RecyclerView) findViewById(R.id.customerRecycler);
+        searchCustomers = findViewById(R.id.searchCustomers);
 
         //get the user ID of the user
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -88,18 +87,58 @@ public class CustomersActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
+        //search customers
+        searchCustomers.clearFocus();
+        searchCustomers.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                filterCustomerList(newText);
+                return true;
+            }
+        });
+
         //on click listeners
         frCustomersToDashboard.setOnClickListener(this);
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent toDashboard = new Intent(CustomersActivity.this, AdminNavDrawerActivity.class);
+        toDashboard.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        toDashboard.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(toDashboard);
+        finish();
+    }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.frCustomersToDashboard:
-                startActivity(new Intent(CustomersActivity.this, AdminNavDrawerActivity.class));
-                overridePendingTransition(androidx.navigation.ui.R.anim.nav_default_enter_anim, androidx.navigation.ui.R.anim.nav_default_exit_anim);
+                onBackPressed();
                 break;
         }
     }
+
+    private void filterCustomerList(String newText) {
+
+        List<CustomerListModel> filteredList = new ArrayList<>();
+
+        for (CustomerListModel customerListModel : customerList) {
+
+            if (customerListModel.getFullName().toLowerCase().contains(newText.toLowerCase())) {
+
+                filteredList.add(customerListModel);
+
+            }
+            customerListAdapter.filteredCustomerList(filteredList);
+        }
+
+    }
+
 }

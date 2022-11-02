@@ -36,12 +36,18 @@ public class PrivacySecurityActivity extends AppCompatActivity implements View.O
         privacyPolicyBtn.setOnClickListener(this);
     }
 
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(PrivacySecurityActivity.this, SettingsActivity.class));
+        finish();
+    }
+
     @SuppressLint("ResourceAsColor")
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.frPrivacyToSettings:
-                startActivity(new Intent(PrivacySecurityActivity.this, SettingsActivity.class));
+                onBackPressed();
                 break;
             case R.id.termsConditionsDialogBtn:
                 showDialogTerms();

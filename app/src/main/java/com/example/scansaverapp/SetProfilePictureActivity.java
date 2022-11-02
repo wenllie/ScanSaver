@@ -68,6 +68,7 @@ public class SetProfilePictureActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(SetProfilePictureActivity.this, WelcomeActivity.class));
+                finish();
             }
         });
     }

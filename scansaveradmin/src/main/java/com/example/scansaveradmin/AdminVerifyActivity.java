@@ -49,6 +49,12 @@ public class AdminVerifyActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
+    public void onBackPressed() {
+        finishAffinity();
+        finish();
+    }
+
+    @Override
     public void onClick(View view) {
         String verifycode = verifyCode.getText().toString().trim();
 

@@ -1,40 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center"
     tools:context=".SplashActivity">
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animated"
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_gravity="center"
-        app:lottie_rawRes="@raw/splash_animation"
-        app:lottie_autoPlay="true"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="50dp"
+        android:layout_alignParentTop="true">
 
-    <TextView
-        android:id="@+id/powered"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animated"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            app:lottie_rawRes="@raw/splash_animation"
+            app:lottie_autoPlay="true"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/baloo_bhai"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
         android:gravity="center"
-        android:text="Powered by DevCrew"
-        android:textColor="@color/blue_dark"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:shadowColor="@color/black"
-        android:shadowDx="2"
-        android:shadowDy="2"
-        android:shadowRadius = "2"/>
+        android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/logo_small"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:gravity="center"
-        android:src="@drawable/background" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/powered"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/baloo_bhai"
+            android:gravity="center"
+            android:shadowRadius="2"
+            android:text="Powered by DevCrew"
+            android:textColor="@color/blue_darker"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</RelativeLayout>

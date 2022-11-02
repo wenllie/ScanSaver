@@ -29,11 +29,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     FirebaseAuth mAuth;
 
-    //shared preferences
-    private static final String PREF_LOGIN = "LOGIN_PREF";
-    private static final String USER_EMAIL = "EMAIL_ADDRESS";
-    private static final String USER_PASSWORD = "PASSWORD";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +44,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         addAccount.setOnClickListener(this);
         adminSignInBtn.setOnClickListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
+        finish();
     }
 
     @Override
@@ -80,11 +81,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
                         if (mAuth.getCurrentUser().isEmailVerified()){
-
-                            SharedPreferences.Editor editor = getSharedPreferences(PREF_LOGIN, MODE_PRIVATE).edit();
-                            editor.putString(USER_EMAIL, email);
-                            editor.putString(USER_PASSWORD, password);
-                            editor.commit();
 
                             startActivity(new Intent(MainActivity.this, AdminNavDrawerActivity.class));
                             finish();

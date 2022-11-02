@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.scansaveradmin.R;
@@ -20,7 +21,7 @@ import com.google.android.material.card.MaterialCardView;
 
 public class AdminDashboardFragment extends Fragment implements View.OnClickListener{
 
-    MaterialCardView manageItems, manageRequests, manageComplaints, manageUsers;
+    LinearLayoutCompat manageItems, manageRequests, manageComplaints, manageUsers;
 
     private FragmentAdminDashboardBinding binding;
 
@@ -30,10 +31,10 @@ public class AdminDashboardFragment extends Fragment implements View.OnClickList
         binding = FragmentAdminDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        manageRequests = (MaterialCardView) root.findViewById(R.id.manageRequests);
-        manageComplaints = (MaterialCardView) root.findViewById(R.id.manageComplaints);
-        manageItems = (MaterialCardView) root.findViewById(R.id.manageItems);
-        manageUsers = (MaterialCardView) root.findViewById(R.id.manageUsers);
+        manageRequests = root.findViewById(R.id.manageRequests);
+        manageComplaints = root.findViewById(R.id.manageComplaints);
+        manageItems = root.findViewById(R.id.manageItems);
+        manageUsers = root.findViewById(R.id.manageUsers);
 
         manageRequests.setOnClickListener(this);
         manageComplaints.setOnClickListener(this);
@@ -54,18 +55,19 @@ public class AdminDashboardFragment extends Fragment implements View.OnClickList
         switch (view.getId()) {
             case R.id.manageUsers:
                 getActivity().startActivity(new Intent(getActivity(), CustomersActivity.class));
+                getActivity().finish();
                 break;
             case R.id.manageItems:
                 getActivity().startActivity(new Intent(getActivity(), GroceryItemsActivity.class));
-
+                getActivity().finish();
                 break;
             case R.id.manageComplaints:
                 getActivity().startActivity(new Intent(getActivity(), ComplaintsActivity.class));
-
+                getActivity().finish();
                 break;
             case R.id.manageRequests:
                 getActivity().startActivity(new Intent(getActivity(), RequestsActivity.class));
-
+                getActivity().finish();
                 break;
         }
     }

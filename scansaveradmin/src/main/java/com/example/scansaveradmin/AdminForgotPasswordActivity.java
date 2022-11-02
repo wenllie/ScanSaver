@@ -67,6 +67,12 @@ public class AdminForgotPasswordActivity extends AppCompatActivity implements Vi
     }
 
     @Override
+    public void onBackPressed() {
+        startActivity(new Intent(AdminForgotPasswordActivity.this, MainActivity.class));
+        finish();
+    }
+
+    @Override
     public void onClick(View view) {
         String inputValue = methodInput.getText().toString();
         String methodValue = chooseResetMethod.getSelectedItem().toString();

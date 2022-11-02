@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/ic_circle_scatter_haikei"
     tools:context=".users.settings.SettingsActivity">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:background="@color/blue_main">
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/frSettingsToDashboard"
@@ -19,16 +19,7 @@
             android:layout_height="match_parent"
             android:padding="10dp"
             android:src="@drawable/ic_baseline_arrow_back_24"
-            app:tint="@color/white" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Settings"
-            android:gravity="center_vertical"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
+            app:tint="?colorOnPrimary" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -80,18 +71,6 @@
                         android:gravity="center"
                         android:textSize="12dp" />
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/editProfileBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@android:color/transparent"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="20dp"
-                        android:text="Edit Profile"
-                        android:textAllCaps="false"
-                        android:textStyle="bold" />
-
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
@@ -114,40 +93,38 @@
                             android:orientation="vertical"
                             android:padding="10dp">
 
-                            <!--Notifications toggle on and off-->
+                            <!--Edit Profile-->
                             <RelativeLayout
+                                android:id="@+id/editProfileBtn"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
                                 <androidx.appcompat.widget.AppCompatImageView
-                                    android:id="@+id/notificationIcon"
+                                    android:id="@+id/editProfileIcon"
                                     android:layout_width="40dp"
                                     android:layout_height="40dp"
                                     android:layout_centerVertical="true"
-                                    android:background="@drawable/ic_baseline_circle_24"
-                                    android:backgroundTint="#8a52cc"
-                                    android:padding="10dp"
-                                    android:src="@drawable/ic_baseline_notifications_24"
-                                    app:tint="@color/white" />
+                                    android:padding="3dp"
+                                    android:src="@drawable/edit_profile" />
 
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerInParent="true"
                                     android:layout_marginStart="20dp"
-                                    android:layout_toEndOf="@+id/notificationIcon"
-                                    android:text="Notifications"
+                                    android:layout_toEndOf="@+id/editProfileIcon"
+                                    android:text="Edit Profile"
                                     android:textStyle="bold" />
 
-                                <androidx.appcompat.widget.SwitchCompat
+                                <androidx.appcompat.widget.AppCompatImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
-                                    android:layout_gravity="end"
-                                    android:minWidth="50dp" />
+                                    android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+                                    app:tint="@color/grey_color" />
 
                             </RelativeLayout>
 
@@ -158,8 +135,9 @@
                                 android:layout_marginBottom="10dp"
                                 android:background="#bcbcbc" />
 
-                            <!--Dark Mode toggle on and off-->
+                            <!--theme (dark, light, system)-->
                             <RelativeLayout
+                                android:id="@+id/themeLayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
@@ -170,11 +148,8 @@
                                     android:layout_width="40dp"
                                     android:layout_height="40dp"
                                     android:layout_centerVertical="true"
-                                    android:background="@drawable/ic_baseline_circle_24"
-                                    android:backgroundTint="#8a52cc"
-                                    android:padding="10dp"
-                                    android:src="@drawable/ic_baseline_dark_mode_24"
-                                    app:tint="@color/white" />
+                                    android:padding="5dp"
+                                    android:src="@drawable/dark_mode" />
 
 
                                 <androidx.appcompat.widget.AppCompatTextView
@@ -186,14 +161,13 @@
                                     android:text="Dark Mode"
                                     android:textStyle="bold" />
 
-                                <androidx.appcompat.widget.SwitchCompat
-                                    android:id="@+id/darkModeToggleSwitch"
+                                <androidx.appcompat.widget.AppCompatImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
-                                    android:layout_gravity="end"
-                                    android:minWidth="50dp" />
+                                    android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+                                    app:tint="@color/grey_color" />
 
                             </RelativeLayout>
 
@@ -209,7 +183,6 @@
                                 android:id="@+id/privacySecurityBtn"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
@@ -218,11 +191,8 @@
                                     android:layout_width="40dp"
                                     android:layout_height="40dp"
                                     android:layout_centerVertical="true"
-                                    android:background="@drawable/ic_baseline_circle_24"
-                                    android:backgroundTint="#bc5f5f"
-                                    android:padding="10dp"
-                                    android:src="@drawable/ic_baseline_lock_24"
-                                    app:tint="@color/white" />
+                                    android:padding="3dp"
+                                    android:src="@drawable/privacysecurity" />
 
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:layout_width="wrap_content"
@@ -262,59 +232,11 @@
                             android:orientation="vertical"
                             android:padding="10dp">
 
-                            <!--Expenses-->
-                            <RelativeLayout
-                                android:id="@+id/expensesAnalyticsBtn"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="10dp"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <androidx.appcompat.widget.AppCompatImageView
-                                    android:id="@+id/expensesIcon"
-                                    android:layout_width="40dp"
-                                    android:layout_height="40dp"
-                                    android:layout_centerVertical="true"
-                                    android:background="@drawable/ic_baseline_circle_24"
-                                    android:backgroundTint="#53cf77"
-                                    android:padding="10dp"
-                                    android:src="@drawable/ic_baseline_attach_money_24"
-                                    app:tint="@color/white" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerInParent="true"
-                                    android:layout_marginStart="20dp"
-                                    android:layout_toEndOf="@+id/expensesIcon"
-                                    android:text="Your Expenses"
-                                    android:textStyle="bold" />
-
-                                <androidx.appcompat.widget.AppCompatImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentEnd="true"
-                                    android:layout_centerVertical="true"
-                                    android:src="@drawable/ic_baseline_arrow_forward_ios_24"
-                                    app:tint="@color/grey_color" />
-
-                            </RelativeLayout>
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp"
-                                android:background="#bcbcbc" />
-
                             <!--Help Center-->
                             <RelativeLayout
                                 android:id="@+id/frSettingsToHelpCenter"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
@@ -323,11 +245,7 @@
                                     android:layout_width="40dp"
                                     android:layout_height="40dp"
                                     android:layout_centerVertical="true"
-                                    android:background="@drawable/ic_baseline_circle_24"
-                                    android:backgroundTint="#4aa4d5"
-                                    android:padding="10dp"
-                                    android:src="@drawable/ic_baseline_home_24"
-                                    app:tint="@color/white" />
+                                    android:src="@drawable/help" />
 
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:layout_width="wrap_content"
@@ -335,7 +253,7 @@
                                     android:layout_centerInParent="true"
                                     android:layout_marginStart="20dp"
                                     android:layout_toEndOf="@+id/helpcenterIcon"
-                                    android:text="Help Center"
+                                    android:text="Help &amp; feedback"
                                     android:textStyle="bold" />
 
                                 <androidx.appcompat.widget.AppCompatImageView
@@ -360,7 +278,6 @@
                                 android:id="@+id/aboutUsBtn"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
@@ -369,11 +286,7 @@
                                     android:layout_width="40dp"
                                     android:layout_height="40dp"
                                     android:layout_centerVertical="true"
-                                    android:background="@drawable/ic_baseline_circle_24"
-                                    android:backgroundTint="#dea666"
-                                    android:padding="10dp"
-                                    android:src="@drawable/ic_baseline_question_mark_24"
-                                    app:tint="@color/white" />
+                                    android:src="@drawable/aboutus" />
 
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:layout_width="wrap_content"

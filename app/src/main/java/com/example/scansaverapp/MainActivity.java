@@ -26,18 +26,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     TextInputEditText userEmail, userPassword;
     AppCompatButton userSignInBtn, userRegisterBtn;
-    MaterialCheckBox employeeCheckBox;
     MaterialTextView userForgotPassword;
-
-    //shared preferences
-    private static final String PREF_LOGIN = "LOGIN_PREF";
-    private static final String USER_EMAIL = "EMAIL_ADDRESS";
-    private static final String USER_PASSWORD = "PASSWORD";
 
     public static String userID;
     FirebaseAuth mAuth;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,12 +50,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public void onBackPressed() {
+        finishAffinity();
+        finish();
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.userSignInBtn:
                 loginUser();
                 break;
-            case R.id.userRegister  :
+            case R.id.userRegister:
                 startActivity(new Intent(MainActivity.this, RegisterActivity.class));
                 finish();
                 break;
@@ -89,11 +88,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
                         if (mAuth.getCurrentUser().isEmailVerified()){
-
-                            SharedPreferences.Editor editor = getSharedPreferences(PREF_LOGIN, MODE_PRIVATE).edit();
-                            editor.putString(USER_EMAIL, email);
-                            editor.putString(USER_PASSWORD, password);
-                            editor.commit();
 
                             startActivity(new Intent(MainActivity.this, UserNavDrawer.class));
                             finish();

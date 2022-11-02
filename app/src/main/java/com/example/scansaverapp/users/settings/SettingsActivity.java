@@ -9,23 +9,26 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.SwitchCompat;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.scansaverapp.R;
 import com.example.scansaverapp.UserNavDrawer;
 import com.example.scansaverapp.helpers_database.ProfilePhotoModel;
+import com.example.scansaverapp.users.expenses.ExpensesAnalyticsActivity;
 import com.example.scansaverapp.users.helpcenter.HelpCenterActivity;
+import com.example.scansaverapp.users.spending.SpendingActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,6 +41,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.onesignal.OSDeviceState;
+import com.onesignal.OneSignal;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ViewHolder;
 import com.squareup.picasso.Picasso;
 
 import java.util.UUID;
@@ -49,31 +56,37 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     ImageView frSettingsToDashboard;
     CircleImageView profileImage;
     AppCompatTextView registeredFullName, registeredEmail;
-    AppCompatButton editProfileBtn;
-    SwitchCompat darkModeToggleSwitch;
-    RelativeLayout privacySecurityBtn, frSettingsToHelpCenter, expensesAnalyticsBtn, aboutUsBtn;
-
-    private static final String NIGHT_MODE_PREF = "PREF_NIGHT_MODE";
+    RelativeLayout privacySecurityBtn, frSettingsToHelpCenter, aboutUsBtn, themeLayout, editProfileBtn;
 
     private DatabaseReference imageReference = FirebaseDatabase.getInstance().getReference("Customers").child("Profile Photo").child(FirebaseAuth.getInstance().getUid());
     private FirebaseStorage firebaseStorage;
     private StorageReference imageStorageRef;
     private Uri imageUri;
 
+    //theme
+    ThemePref themePref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        themePref = new ThemePref(this);
+        if (themePref.loadNightModeState() == 2){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else if (themePref.loadNightModeState() == 1){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
         frSettingsToDashboard = (ImageView) findViewById(R.id.frSettingsToDashboard);
         registeredFullName = (AppCompatTextView) findViewById(R.id.registeredFullName);
         registeredEmail = (AppCompatTextView) findViewById(R.id.registeredEmail);
-        editProfileBtn = (AppCompatButton) findViewById(R.id.editProfileBtn);
+        editProfileBtn = (RelativeLayout) findViewById(R.id.editProfileBtn);
         privacySecurityBtn = (RelativeLayout) findViewById(R.id.privacySecurityBtn);
         frSettingsToHelpCenter = (RelativeLayout) findViewById(R.id.frSettingsToHelpCenter);
-        expensesAnalyticsBtn = (RelativeLayout) findViewById(R.id.expensesAnalyticsBtn);
         aboutUsBtn = (RelativeLayout) findViewById(R.id.aboutUsBtn);
-        darkModeToggleSwitch = (SwitchCompat) findViewById(R.id.darkModeToggleSwitch);
+        themeLayout = (RelativeLayout) findViewById(R.id.themeLayout);
         profileImage = (CircleImageView) findViewById(R.id.profileImage);
 
         //storage
@@ -111,36 +124,81 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-        //DarkMode Toggle
-        /*SharedPreferences sharedPreferences = getSharedPreferences("NIGHT_MODE_PREF", MODE_PRIVATE);
-        darkModeToggleSwitch.setChecked(sharedPreferences.getBoolean("value", true));*/
-        darkModeToggleSwitch.setOnClickListener(new View.OnClickListener() {
+        //app theme light, dark, system
+        themeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (darkModeToggleSwitch.isChecked()) {
-                    SharedPreferences.Editor editor = getSharedPreferences(NIGHT_MODE_PREF, MODE_PRIVATE).edit();
-                    editor.putBoolean("value", true);
-                    editor.commit();
-                    darkModeToggleSwitch.setChecked(true);
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                final DialogPlus themeDialog = DialogPlus.newDialog(SettingsActivity.this)
+                        .setContentHolder(new ViewHolder(R.layout.pop_up_set_theme))
+                        .setExpanded(true, 1000)
+                        .create();
+
+                View v = themeDialog.getHolderView();
+
+                RadioGroup radioGroup = v.findViewById(R.id.radioGroupTheme);
+                RadioButton radioLight = v.findViewById(R.id.radioLight);
+                RadioButton radioDark = v.findViewById(R.id.radioDark);
+                RadioButton radioSystem = v.findViewById(R.id.radioSystem);
+
+                if (themePref.loadNightModeState() == 2){
+                    radioDark.setChecked(true);
+                } else if (themePref.loadNightModeState() == 1){
+                    radioLight.setChecked(true);
                 } else {
-                    SharedPreferences.Editor editor = getSharedPreferences(NIGHT_MODE_PREF, MODE_PRIVATE).edit();
-                    editor.putBoolean("value", false);
-                    editor.commit();
-                    darkModeToggleSwitch.setChecked(false);
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    radioSystem.setChecked(true);
                 }
+
+                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup radioGroup, int position) {
+
+                        int id = radioGroup.getCheckedRadioButtonId();
+
+                        switch (id) {
+                            case R.id.radioLight:
+                                themePref.setNightModeState(1);
+                                restartApp();
+                                break;
+
+                            case R.id.radioDark:
+                                themePref.setNightModeState(2);
+                                restartApp();
+                                break;
+
+                            case R.id.radioSystem:
+                                themePref.setNightModeState(-1);
+                                restartApp();
+                                break;
+                        }
+                    }
+                });
+
+                themeDialog.show();
             }
         });
 
-        //setonclick for buttons
+        //set on click for buttons
         editProfileBtn.setOnClickListener(this);
         frSettingsToDashboard.setOnClickListener(this);
         privacySecurityBtn.setOnClickListener(this);
         frSettingsToHelpCenter.setOnClickListener(this);
-        expensesAnalyticsBtn.setOnClickListener(this);
         aboutUsBtn.setOnClickListener(this);
         profileImage.setOnClickListener(this);
+    }
+
+    private void restartApp() {
+        Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent toDashboard = new Intent(SettingsActivity.this, UserNavDrawer.class);
+        toDashboard.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        toDashboard.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(toDashboard);
+        finish();
     }
 
     @SuppressLint("ResourceAsColor")
@@ -150,35 +208,31 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             case R.id.editProfileBtn:
                 Intent editProfile = new Intent(SettingsActivity.this, EditProfileActivity.class);
                 startActivity(editProfile);
+                finish();
                 break;
 
             case R.id.frSettingsToDashboard:
-                startActivity(new Intent(SettingsActivity.this, UserNavDrawer.class));
+                onBackPressed();
                 break;
 
             case R.id.privacySecurityBtn:
                 startActivity(new Intent(SettingsActivity.this, PrivacySecurityActivity.class));
+                finish();
                 break;
 
             case R.id.frSettingsToHelpCenter:
                 startActivity(new Intent(SettingsActivity.this, HelpCenterActivity.class));
-                break;
-
-            case R.id.expensesAnalyticsBtn:
-                startActivity(new Intent(SettingsActivity.this, ExpensesAnalyticsActivity.class));
+                finish();
                 break;
 
             case R.id.aboutUsBtn:
-                Dialog termsDialog = new Dialog(this);
-                termsDialog.setContentView(R.layout.dialog_box_about_us);
+                final DialogPlus aboutUsDialog = DialogPlus.newDialog(SettingsActivity.this)
+                        .setContentHolder(new ViewHolder(R.layout.dialog_box_about_us))
+                        .setExpanded(true, 1500)
+                        .setContentBackgroundResource(R.drawable.rounded_top_for_pop_up)
+                        .create();
 
-                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                lp.copyFrom(termsDialog.getWindow().getAttributes());
-                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-                termsDialog.show();
-                termsDialog.getWindow().setAttributes(lp);
-                termsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.R.color.transparent));
+                aboutUsDialog.show();
                 break;
 
             case R.id.profileImage:

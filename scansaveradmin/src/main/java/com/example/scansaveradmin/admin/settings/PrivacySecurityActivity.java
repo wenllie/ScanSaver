@@ -34,11 +34,16 @@ public class PrivacySecurityActivity extends AppCompatActivity implements View.O
     }
 
     @Override
+    public void onBackPressed() {
+        startActivity(new Intent(PrivacySecurityActivity.this, SettingsActivity.class));
+        finish();
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.frPrivacySecurityToSettings:
-                startActivity(new Intent(PrivacySecurityActivity.this, SettingsActivity.class));
-                finish();
+                onBackPressed();
                 break;
             case R.id.termAndConditionsLayout:
                 termsAndConditionsShowDialog();

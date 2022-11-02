@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_gravity="center"
-    tools:context=".users.settings.ExpensesAnalyticsActivity">
+    android:background="?attr/colorOnSecondary"
+    android:orientation="vertical"
+    tools:context=".users.expenses.ExpensesAnalyticsActivity">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/blue_main">
+        android:background="?attr/colorPrimary">
 
         <ImageView
             android:id="@+id/frExpensesToSettings"
@@ -24,17 +25,52 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Expenses"
             android:gravity="center_vertical"
+            android:text="Expenses"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:textStyle="bold" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <TextView
+
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Expenses analytics"/>
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spendingCategoryExSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/spending_category"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/monthlyExpensesBarChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp" />
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/monthlyExpensesPieChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </ScrollView>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

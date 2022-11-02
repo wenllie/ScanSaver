@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
+<!--    <item
         android:id="@+id/action_notifications"
         android:title="@string/menu_notifications"
-        android:icon="@drawable/ic_baseline_notifications_24"
-        android:iconTint="?attr/colorOnPrimary"
-        app:showAsAction="ifRoom" />
+        android:icon="@drawable/notification_icon_with_padding"
+        app:showAsAction="ifRoom" />-->
 </menu>

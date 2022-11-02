@@ -24,14 +24,14 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="none"
-                android:fillViewport="true">
+                android:fillViewport="true"
+                android:scrollbars="none">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center_vertical">
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="100dp"
@@ -42,6 +42,7 @@
                             android:id="@+id/groceryItemPhoto"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_marginLeft="8dp"
                             card_view:srcCompat="@drawable/grocery_items" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -49,16 +50,17 @@
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="5dp"
                         android:orientation="vertical">
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/groceryItemNameTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
                             android:gravity="center_vertical"
                             android:text="TextView"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:textColor="@color/black"
                             android:textStyle="bold" />
 

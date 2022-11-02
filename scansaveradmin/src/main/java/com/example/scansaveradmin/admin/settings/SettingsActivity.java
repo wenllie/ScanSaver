@@ -19,6 +19,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -36,6 +38,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ViewHolder;
 import com.squareup.picasso.Picasso;
 
 import java.util.UUID;
@@ -47,26 +51,34 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     ImageView frSettingsToDashboard;
     CircleImageView profileImage;
     AppCompatTextView registeredFullName, registeredEmail;
-    SwitchCompat darkModeSwitchBtn;
     AppCompatButton editProfileBtn;
-    RelativeLayout privacy_security_layout, aboutUsLayout;
-
-    private static final String NIGHT_MODE_PREF = "PREF_NIGHT_MODE";
+    RelativeLayout privacy_security_layout, aboutUsLayout, darkModeLayout;
 
     private DatabaseReference imageReference = FirebaseDatabase.getInstance().getReference("Admin").child("Admin Users").child(FirebaseAuth.getInstance().getUid());
     private FirebaseStorage firebaseStorage;
     private StorageReference imageStorageRef;
     private Uri imageUri;
 
+    //theme
+    ThemePref themePref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        themePref = new ThemePref(this);
+        if (themePref.loadNightModeState() == 2){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else if (themePref.loadNightModeState() == 1){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
         frSettingsToDashboard = findViewById(R.id.frSettingsToDashboard);
         registeredFullName = findViewById(R.id.registeredFullName);
         registeredEmail = findViewById(R.id.registeredEmail);
-        darkModeSwitchBtn = findViewById(R.id.darkModeSwitchBtn);
+        darkModeLayout = findViewById(R.id.darkModeLayout);
         privacy_security_layout = findViewById(R.id.privacy_security_layout);
         aboutUsLayout = findViewById(R.id.aboutUsLayout);
         editProfileBtn = findViewById(R.id.editProfileBtn);
@@ -95,29 +107,61 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         });
 
 
-        //Dark Mode Toggle Settings
-        //the switch will be automatically turned on
-        /*SharedPreferences sharedPreferences = getSharedPreferences("save", MODE_PRIVATE);
-        darkModeSwitchBtn.setChecked(sharedPreferences.getBoolean("value", true));*/
-        darkModeSwitchBtn.setOnClickListener(new View.OnClickListener() {
+        //Dark Mode Settings
+        darkModeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (darkModeSwitchBtn.isChecked()) {
-                    SharedPreferences.Editor editor = getSharedPreferences(NIGHT_MODE_PREF, MODE_PRIVATE).edit();
-                    editor.putBoolean("value", true);
-                    editor.apply();
-                    darkModeSwitchBtn.setChecked(true);
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                final DialogPlus themeDialog = DialogPlus.newDialog(SettingsActivity.this)
+                        .setContentHolder(new ViewHolder(R.layout.pop_up_set_theme))
+                        .setExpanded(true, 1000)
+                        .create();
+
+                View v = themeDialog.getHolderView();
+
+                RadioGroup radioGroup = v.findViewById(R.id.radioGroupTheme);
+                RadioButton radioLight = v.findViewById(R.id.radioLight);
+                RadioButton radioDark = v.findViewById(R.id.radioDark);
+                RadioButton radioSystem = v.findViewById(R.id.radioSystem);
+
+                if (themePref.loadNightModeState() == 2){
+                    radioDark.setChecked(true);
+                } else if (themePref.loadNightModeState() == 1){
+                    radioLight.setChecked(true);
                 } else {
-                    SharedPreferences.Editor editor = getSharedPreferences(NIGHT_MODE_PREF, MODE_PRIVATE).edit();
-                    editor.putBoolean("value", false);
-                    editor.apply();
-                    darkModeSwitchBtn.setChecked(false);
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    radioSystem.setChecked(true);
                 }
+
+                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup radioGroup, int position) {
+
+                        int id = radioGroup.getCheckedRadioButtonId();
+
+                        switch (id) {
+                            case R.id.radioLight:
+                                themePref.setNightModeState(1);
+                                restartApp();
+                                break;
+
+                            case R.id.radioDark:
+                                themePref.setNightModeState(2);
+                                restartApp();
+                                break;
+
+                            case R.id.radioSystem:
+                                themePref.setNightModeState(-1);
+                                restartApp();
+                                break;
+                        }
+                    }
+                });
+
+                themeDialog.show();
             }
         });
 
+
+        //on click buttons
         frSettingsToDashboard.setOnClickListener(this);
         privacy_security_layout.setOnClickListener(this);
         editProfileBtn.setOnClickListener(this);
@@ -125,22 +169,42 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         profileImage.setOnClickListener(this);
     }
 
+    private void restartApp() {
+        Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent toDashboard = new Intent(SettingsActivity.this, AdminNavDrawerActivity.class);
+        toDashboard.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        toDashboard.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(toDashboard);
+        finish();
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.frSettingsToDashboard:
-                startActivity(new Intent(SettingsActivity.this, AdminNavDrawerActivity.class));
-                finish();
+                onBackPressed();
                 break;
+
             case R.id.privacy_security_layout:
                 startActivity(new Intent(SettingsActivity.this, PrivacySecurityActivity.class));
+                finish();
                 break;
+
             case R.id.aboutUsLayout:
                 aboutUsShowDialog();
                 break;
+
             case R.id.editProfileBtn:
                 startActivity(new Intent(SettingsActivity.this, EditProfileActivity.class));
+                finish();
                 break;
+
             case R.id.profileImage:
                 choosePhoto();
                 break;

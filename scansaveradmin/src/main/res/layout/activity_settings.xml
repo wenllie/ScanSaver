@@ -11,7 +11,7 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/blue_main">
+        android:background="?attr/colorPrimary">
 
         <ImageView
             android:id="@+id/frSettingsToDashboard"
@@ -20,6 +20,15 @@
             android:padding="10dp"
             android:src="@drawable/ic_baseline_arrow_back_24"
             app:tint="@color/white" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Settings"
+            android:gravity="center_vertical"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -96,52 +105,9 @@
                     android:orientation="vertical"
                     android:padding="10dp">
 
-                    <!--Notifications toggle on and off-->
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/notificationIcon"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_centerVertical="true"
-                            android:background="@drawable/ic_baseline_circle_24"
-                            android:backgroundTint="#8a52cc"
-                            android:padding="10dp"
-                            android:src="@drawable/ic_baseline_notifications_24"
-                            app:tint="@color/white" />
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:layout_marginStart="20dp"
-                            android:layout_toEndOf="@+id/notificationIcon"
-                            android:text="Notifications"
-                            android:textStyle="bold" />
-
-                        <androidx.appcompat.widget.SwitchCompat
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:layout_gravity="end"
-                            android:minWidth="50dp" />
-
-                    </RelativeLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="#bcbcbc" />
-
                     <!--Dark Mode toggle on and off-->
                     <RelativeLayout
+                        android:id="@+id/darkModeLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -151,12 +117,9 @@
                             android:id="@+id/darkModeIcon"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/ic_baseline_circle_24"
-                            android:backgroundTint="#8a52cc"
                             android:layout_centerVertical="true"
-                            android:padding="10dp"
-                            android:src="@drawable/ic_baseline_dark_mode_24"
-                            app:tint="@color/white" />
+                            android:padding="7dp"
+                            android:src="@drawable/dark_mode" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
@@ -167,14 +130,13 @@
                             android:text="Dark Mode"
                             android:textStyle="bold" />
 
-                        <androidx.appcompat.widget.SwitchCompat
-                            android:id="@+id/darkModeSwitchBtn"
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
-                            android:layout_gravity="end"
-                            android:minWidth="50dp" />
+                            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+                            app:tint="#808080" />
 
                     </RelativeLayout>
 
@@ -197,12 +159,9 @@
                             android:id="@+id/privacyAndSecurityIcon"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
+                            android:padding="7dp"
                             android:layout_centerVertical="true"
-                            android:background="@drawable/ic_baseline_circle_24"
-                            android:backgroundTint="#bc5f5f"
-                            android:padding="10dp"
-                            android:src="@drawable/ic_baseline_lock_24"
-                            app:tint="@color/white" />
+                            android:src="@drawable/privacysecurity"/>
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
@@ -242,12 +201,9 @@
                             android:id="@+id/aboutIcon"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
+                            android:padding="7dp"
                             android:layout_centerVertical="true"
-                            android:background="@drawable/ic_baseline_circle_24"
-                            android:backgroundTint="#dea666"
-                            android:padding="10dp"
-                            android:src="@drawable/ic_baseline_question_mark_24"
-                            app:tint="@color/white" />
+                            android:src="@drawable/aboutus" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
@@ -272,22 +228,17 @@
 
             </androidx.cardview.widget.CardView>
 
-            <RelativeLayout
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp">
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:text="Powered by DevCrew"
+                android:textColor="@color/blue_main" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginBottom="5dp"
-                    android:text="Powered by DevCrew"
-                    android:textColor="@color/blue_main" />
-
-            </RelativeLayout>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 

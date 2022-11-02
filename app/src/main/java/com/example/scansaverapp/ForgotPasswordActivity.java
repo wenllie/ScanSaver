@@ -86,6 +86,11 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
     }
 
     @Override
+    public void onBackPressed() {
+        startActivity(new Intent(ForgotPasswordActivity.this, MainActivity.class));
+    }
+
+    @Override
     public void onClick(View view) {
         String choose = chooseMethod.getText().toString();
         String chooseValue = chooseResetPassword.getSelectedItem().toString();

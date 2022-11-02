@@ -27,19 +27,50 @@
 
 
     <!--  Grocery Categories  -->
+    <string-array name="grocery_main_category">
+        <item>Beauty &amp; Personal Care</item>
+        <item>Food</item>
+        <item>Home Essentials</item>
+        <item>Pharmacy</item>
+    </string-array>
+
+    <string-array name="personal_category">
+        <item>Baby Products</item>
+        <item>Facial Products</item>
+        <item>Toiletries</item>
+    </string-array>
+
     <string name="grocery_category_prompt">Choose Category</string>
     <string-array name="grocery_category">
-        <item>Canned Goods</item>
-        <item>Grains</item>
-        <item>Dried Foods</item>
-        <item>Fruits &amp; Vegetables</item>
-        <item>Frozen Foods</item>
-        <item>Cooking Essentials</item>
-        <item>Snacks</item>
         <item>Baby Foods and Care Products</item>
-        <item>Beverages</item>
-        <item>Toiletries</item>
+        <item>Baking Supply</item>
+        <item>Canned Goods</item>
+        <item>Coffee</item>
+        <item>Condiments &amp; Sauces</item>
+        <item>Cooking Essentials</item>
+        <item>Dried Fish &amp; Seafoods</item>
+        <item>Dried Fruits &amp; Vegetables</item>
+        <item>Fresh Fruits &amp; Vegetables</item>
+        <item>Frozen Foods</item>
+        <item>Fruit Juice &amp; Juice Concentrates</item>
+        <item>Grains</item>
+        <item>Frozen Snacks &amp; Appetizers</item>
+        <item>Meat Products</item>
+        <item>Poultry Products</item>
+        <item>Pasta &amp; Noodles</item>
+        <item>Seasoning Mix</item>
+        <item>Snacks &amp; Sweets</item>
+        <item>Sports &amp; Energy Drinks</item>
+        <item>Spreads &amp; Jams</item>
+        <item>Wine &amp; Beer</item>
+    </string-array>
+
+    <string-array name="home_category">
         <item>Home Cleaning Products</item>
+    </string-array>
+
+    <string-array name="pharmacy_category">
+        <item>Medicines</item>
     </string-array>
 
     <string name="title_activity_user_nav_drawer">UserNavDrawerActivity</string>
@@ -112,7 +143,11 @@
         By continuing to use our Mobile Application you acknowledge that you have had the chance to review and consider this Terms and Condition, and you
         acknowledge that you agreed to it. This means that you also consent to the use of your information and the method of disclosure as described in
         this Terms and Condition. If your do not understand the Terms and Condition or do not agree to it, then please do not use the Mobile Application.
-
-
     </string>
+
+    <string name="about_dev_crew">Scan Saver is Barcode Scanner Grocery Budgeting Mobile Application developed by the student researchers of Technological
+        Institute of the Philippines (TIP) - Manila Campus that aims to help the customers to manage their budget real time and determine the cost of
+        groceries of the customer\'s monthly and yearly spending.
+    </string>
+
 </resources>

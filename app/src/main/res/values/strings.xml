@@ -13,6 +13,34 @@
         <item>Male</item>
     </string-array>
 
+    <!--  Month Names     -->
+    <string-array name="month_names">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+
+    <!--Spending Monthly and yearly-->
+    <string-array name="spending_category">
+        <item>Monthly</item>
+        <item>Annually</item>
+    </string-array>
+
+    <string name="create_pdf">Create PDF</string>
+    <string name="msg_progress_pdf">Converting to PDF file. Please wait a few moment.\nTotal page :%s</string>
+    <string name="msg_progress_merger_pdf">All pdf file merge into one file. Please wait few moment. After done of merging pdf file, go to pdf file path.</string>
+    <string name="error_file">Can\'t read pdf file</string>
+    <string name="send_to">Send mail...</string>
+
     <string name="reset_prompt">Choose a Method</string>
     <string-array name="reset">
         <item>Email</item>
@@ -28,12 +56,16 @@
 
     <string name="menu_dashboard">Dashboard</string>
     <string name="menu_spending">Spending</string>
+    <string name="menu_expenses">Expenses</string>
     <string name="menu_logout">Logout</string>
     <string name="menu_notifications">Notifications</string>
     <string name="menu_settings">Settings</string>
-    <string name="menu_help_center">Help Center</string>
+    <string name="menu_help_center">Help &amp; Feedback</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="verify_otp">Verify \nOTP</string>
 
     <string name="barcode">Barcode Scanner for Grocery Budgeting</string>
 
@@ -85,7 +117,11 @@
         acknowledge that you agreed to it. This means that you also consent to the use of your information and the method of disclosure as described in
         this Terms and Condition. If your do not understand the Terms and Condition or do not agree to it, then please do not use the Mobile Application.
 
+    </string>
 
+    <string name="about_dev_crew">Scan Saver is Barcode Scanner Grocery Budgeting Mobile Application developed by the student researchers of Technological
+        Institute of the Philippines (TIP) - Manila Campus that aims to help the customers to manage their budget real time and determine the cost of
+        groceries of the customer\'s monthly and yearly spending.
     </string>
 
 </resources>

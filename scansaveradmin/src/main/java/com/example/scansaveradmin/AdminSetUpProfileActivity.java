@@ -68,8 +68,15 @@ public class AdminSetUpProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(AdminSetUpProfileActivity.this, AdminWelcomeActivity.class));
+                finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
+        finish();
     }
 
     private void choosePhoto() {

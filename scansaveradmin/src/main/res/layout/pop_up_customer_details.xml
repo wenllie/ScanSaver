@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_top_for_pop_up"
-        android:backgroundTint="@color/blue_main">
+        android:backgroundTint="?attr/colorPrimary">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
@@ -125,7 +125,7 @@
                         android:background="@drawable/rounded_up_right_corner_small"
                         android:gravity="center"
                         android:text="Select Date"
-                        android:backgroundTint="@color/blue_main"
+                        android:backgroundTint="?attr/colorPrimary"
                         android:textColor="@color/white"
                         android:textAllCaps="false"
                         android:textStyle="bold" />
@@ -160,16 +160,19 @@
                     android:textSize="16dp"
                     android:text="Gender" />
 
-                <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/updateCustomerGenderSpinner"
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/updateCustomerGender"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:entries="@array/gender"
-                    android:prompt="@string/gender_prompt"
-                    android:scrollbarStyle="insideInset"
                     android:background="@drawable/rounded_up_corner"
-                    android:backgroundTint="@color/blue_main"
-                    android:spinnerMode="dropdown" />
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:text="Gender"
+                    android:enabled="false"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:paddingLeft="15dp"
+                    android:backgroundTint="?attr/colorPrimary"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
@@ -205,7 +208,7 @@
                         android:textColor="@color/white"
                         android:padding="3dp"
                         android:background="@drawable/rounded_up_left_corner_small"
-                        android:backgroundTint="@color/blue_main"
+                        android:backgroundTint="?attr/colorPrimary"
                         android:layout_marginRight="3dp"/>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -233,6 +236,7 @@
                     android:textAllCaps="false"
                     android:layout_marginTop="15dp"
                     android:background="@drawable/rounded_button_main"
+                    android:backgroundTint="?attr/colorPrimary"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/white"
                     android:textStyle="bold" />

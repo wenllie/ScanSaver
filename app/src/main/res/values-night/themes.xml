@@ -2,19 +2,66 @@
     <!-- Base application theme. -->
     <style name="Theme.ScanSaverApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/blue_main</item>
+        <item name="colorPrimary">@color/blue_darker</item>
         <item name="colorPrimaryVariant">@color/blue_dark</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/blue_light</item>
-        <item name="colorSecondaryVariant">@color/blue_lighter</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondary">@color/blue_darker</item>
+        <item name="colorSecondaryVariant">@color/blue_light_variant</item>
+        <item name="colorOnSecondary">@color/grey_color</item>
 
         <item name="android:textColor">@color/white</item>
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+
         <!-- Customize your theme here. -->
+
+        <!--changing activity animation-->
+        <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
+
+        <item name="snackbarStyle">@style/Widget.App.Snackbar</item>
+        <item name="snackbarButtonStyle">@style/Widget.App.SnackbarButton</item>
+    </style>
+
+    <!--changing activity animation-->
+    <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/fade_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/fade_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/fade_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/fade_out</item>
+    </style>
+
+    <!-- Snack bars -->
+    <style name="Widget.App.Snackbar" parent="Widget.MaterialComponents.Snackbar">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Snackbar</item>
+        <item name="actionTextColorAlpha">1</item>
+        <item name="android:textAppearance">?attr/textAppearanceBody2</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <!--Spinner text color-->
+    <style name="Spinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!--Rating bar-->
+    <style name="RatingBar" parent="Widget.AppCompat.RatingBar">
+
+        <!--no selected rating-->
+        <item name="colorControlNormal">#4D000000</item>
+
+        <!--with selected rating-->
+        <item name="colorControlActivated">?attr/colorPrimary</item>
+    </style>
+
+    <style name="Widget.App.SnackbarButton" parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Snackbar" parent="">
+        <item name="colorPrimary">@color/blue_main</item>
+        <item name="colorOnSurface">@color/cute_blue</item>
     </style>
 
     <style name="SplashScreen" parent="Theme.AppCompat.Light.NoActionBar">

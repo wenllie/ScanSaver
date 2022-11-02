@@ -60,7 +60,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="180dp"
                                     android:layout_alignParentTop="true"
-                                    android:layout_gravity="center" />
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/grocery_item" />
 
                                 <androidx.appcompat.widget.AppCompatButton
                                     android:id="@+id/groceryPhotoBtn"
@@ -77,10 +78,12 @@
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
                         <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp">
+                            android:layout_marginTop="20dp"
+                            app:boxCornerRadiusTopEnd="10dp"
+                            app:boxCornerRadiusTopStart="10dp">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/groceryName"
@@ -92,10 +95,12 @@
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp">
+                            android:layout_marginTop="10dp"
+                            app:boxCornerRadiusTopEnd="10dp"
+                            app:boxCornerRadiusTopStart="10dp">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/groceryMeasurement"
@@ -108,19 +113,20 @@
 
 
                         <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp">
+                            android:layout_marginTop="10dp"
+                            app:boxCornerRadiusTopEnd="10dp"
+                            app:boxCornerRadiusTopStart="10dp">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/groceryPrice"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:drawableStart="@drawable/peso_icon"
                                 android:drawablePadding="5dp"
                                 android:hint="Price"
-                                android:inputType="number"
+                                android:inputType="numberDecimal"
                                 android:textColorHint="@color/blue_main" />
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -134,15 +140,27 @@
                             android:id="@+id/groceryCategorySpinner"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:entries="@array/grocery_category"
-                            android:prompt="@string/grocery_category_prompt"
+                            android:spinnerMode="dropdown" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Sub-Category" />
+
+                        <androidx.appcompat.widget.AppCompatSpinner
+                            android:id="@+id/grocerySubCategorySpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
                             android:spinnerMode="dropdown" />
 
                         <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp">
+                            android:layout_marginTop="10dp"
+                            app:boxCornerRadiusTopEnd="10dp"
+                            app:boxCornerRadiusTopStart="10dp">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/groceryBrand"
@@ -153,26 +171,54 @@
                                 android:textColorHint="@color/blue_main" />
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        <androidx.appcompat.widget.LinearLayoutCompat
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp">
+                            android:layout_height="50dp"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="6">
 
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/groceryUPCA"
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/groceryUPCA"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center_vertical"
+                                    android:paddingLeft="20dp"
+                                    android:text="UPC-A"
+                                    android:textStyle="bold" />
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="UPC-A"
-                                android:inputType="text"
-                                android:textColorHint="@color/blue_main" />
-                        </com.google.android.material.textfield.TextInputLayout>
+                                android:layout_weight="5"
+                                android:orientation="vertical">
+
+                                <androidx.appcompat.widget.AppCompatButton
+                                    android:id="@+id/scanBarcodeBtn"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/ic_menu_camera" />
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
 
                         <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp">
+                            android:layout_marginTop="10dp"
+                            app:boxCornerRadiusTopEnd="10dp"
+                            app:boxCornerRadiusTopStart="10dp">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/groceryEAN13"
@@ -192,7 +238,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_alignParentBottom="true"
-                    android:background="@color/blue_main">
+                    android:background="?attr/colorPrimary">
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/addGroceryItemBtn"

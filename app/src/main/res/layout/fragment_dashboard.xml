@@ -1,144 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dashboardFrag"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center|top"
     android:orientation="vertical"
     tools:context=".users.dashboard.DashboardFragment">
 
-    <RelativeLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_layered_waves_haikei" />
 
-        <com.airbnb.lottie.LottieAnimationView
+    <LinearLayout
+        android:id="@+id/topdash"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="500dp"
-            android:layout_alignParentTop="true"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="false"
-            app:lottie_rawRes="@raw/shopping_bag" />
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="20dp"
+            android:orientation="vertical">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/dashboard_bg"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="100dp"
+            <TextView
+                android:id="@+id/morningOrNight"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="center"
-                android:padding="5dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="7dp">
+                android:layout_marginTop="20dp"
+                android:textStyle="bold" />
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/currentDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationCart"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@+id/topdash"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="15dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/shopping_bag" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/animationCart"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/scanBarcodeBtn"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:padding="5dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="7dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:background="@drawable/cart_scanner_bg"
+                android:weightSum="3">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <com.airbnb.lottie.LottieAnimationView
+                    <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:background="#e7f7ff"
-                        android:padding="5dp"
-                        app:lottie_autoPlay="true"
-                        app:lottie_loop="true"
-                        app:lottie_rawRes="@raw/barcode" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/scanBarcodeBtn"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
                         android:background="@android:color/transparent"
-                        android:text="Scan"
+                        android:text="Cart &amp; Scanner"
                         android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="5dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         android:textStyle="bold" />
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:textColor="@color/black"
+                        android:text="Scan grocery item and add it on your cart"/>
 
-            </androidx.cardview.widget.CardView>
+                </LinearLayout>
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="center"
-                android:padding="5dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="7dp">
-
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
 
                     <com.airbnb.lottie.LottieAnimationView
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
-                        android:background="#e7f7ff"
                         android:padding="5dp"
                         app:lottie_autoPlay="true"
                         app:lottie_loop="true"
                         app:lottie_rawRes="@raw/cart" />
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/shoppingCartBtn"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
-                        android:text="Cart"
-                        android:textAllCaps="false"
-                        android:textStyle="bold" />
+                </LinearLayout>
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="center"
-                android:padding="5dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="7dp">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/spendingPDFBtn"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:padding="5dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="7dp">
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                android:background="@drawable/spending_bg">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:background="@android:color/transparent"
+                        android:text="Spending"
+                        android:layout_marginTop="5dp"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:textColor="@color/black"
+                        android:text="See your grocery spending on a monthly or yearly basis"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
 
                     <com.airbnb.lottie.LottieAnimationView
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
-                        android:background="#e7f7ff"
                         android:padding="5dp"
                         app:lottie_autoPlay="true"
                         app:lottie_loop="true"
                         app:lottie_rawRes="@raw/analytics" />
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/spendingPDFBtn"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
-                        android:text="Spending"
-                        android:textAllCaps="false"
-                        android:textStyle="bold" />
+                </LinearLayout>
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+    </LinearLayout>
 
-    </RelativeLayout>
-
-</androidx.appcompat.widget.LinearLayoutCompat>
+</RelativeLayout>

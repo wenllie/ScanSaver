@@ -82,7 +82,7 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
                 TextInputEditText updateCustomerName = v.findViewById(R.id.updateCustomerName);
                 TextInputEditText updateCustomerBirthday = v.findViewById(R.id.updateCustomerBirthday);
                 TextInputEditText updateCustomerAge = v.findViewById(R.id.updateCustomerAge);
-                AppCompatSpinner updateCustomerGenderSpinner = v.findViewById(R.id.updateCustomerGenderSpinner);
+                AppCompatTextView updateCustomerGender = v.findViewById(R.id.updateCustomerGender);
                 TextInputEditText updateCustomerEmail = v.findViewById(R.id.updateCustomerEmail);
                 TextInputEditText updateCustomerPhoneNumber = v.findViewById(R.id.updateCustomerPhoneNumber);
                 AppCompatButton updateCustomerInfoBtn = v.findViewById(R.id.updateCustomerInfoBtn);
@@ -90,7 +90,7 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
                 updateCustomerName.setText(customerList.get(position).getFullName());
                 updateCustomerBirthday.setText(customerList.get(position).getBirthday());
                 updateCustomerAge.setText(customerList.get(position).getAge());
-                updateCustomerGenderSpinner.equals(customerList.get(position).getGender());
+                updateCustomerGender.setText(customerList.get(position).getGender());
                 updateCustomerEmail.setText(customerList.get(position).getEmail());
                 updateCustomerPhoneNumber.setText(customerList.get(position).getPhoneNumber());
 
@@ -107,7 +107,7 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
                         updateCustomer.put("fullName", updateCustomerName.getText().toString());
                         updateCustomer.put("birthday", updateCustomerBirthday.getText().toString());
                         updateCustomer.put("age", updateCustomerAge.getText().toString());
-                        updateCustomer.put("gender", updateCustomerGenderSpinner.getSelectedItem().toString());
+                        updateCustomer.put("gender", updateCustomerGender.getText().toString());
                         updateCustomer.put("email", updateCustomerEmail.getText().toString());
                         updateCustomer.put("phoneNumber", updateCustomerPhoneNumber.getText().toString());
 
@@ -211,6 +211,13 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
 
             return 0;
         }
+    }
+
+    public void filteredCustomerList(List<CustomerListModel> filteredList){
+
+        customerList =   filteredList;
+        notifyDataSetChanged();
+
     }
 
     public class CustomerListViewHolder extends RecyclerView.ViewHolder {

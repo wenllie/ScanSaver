@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.scansaverapp.R;
+import com.example.scansaverapp.UserNavDrawer;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -23,7 +24,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
-
 public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     ImageView frEditProfileToSettings;
@@ -79,6 +79,13 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
+    public void onBackPressed() {
+        Intent toSettings = new Intent(EditProfileActivity.this, SettingsActivity.class);
+        startActivity(toSettings);
+        finish();
+    }
+
+    @Override
     public void onClick(View view) {
         String fullName = editFullName.getText().toString();
         String phoneNumber = editPhoneNumber.getText().toString();
@@ -92,12 +99,12 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                 finish();
                 break;
             case R.id.frEditProfileToSettings:
-                startActivity(new Intent(EditProfileActivity.this, SettingsActivity.class));
-                finish();
+                onBackPressed();
                 break;
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void updateProfile(String fullName, String phoneNumber) {
 
         HashMap user = new HashMap();

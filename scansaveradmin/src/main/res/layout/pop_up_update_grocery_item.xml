@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_top_for_pop_up"
-        android:backgroundTint="@color/blue_main">
+        android:backgroundTint="?attr/colorPrimary">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
@@ -140,16 +140,43 @@
                     android:textSize="16dp"
                     android:text="Category" />
 
-                <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/updateGroceryCategorySpinner"
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/updateGroceryCategory"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:entries="@array/grocery_category"
-                    android:prompt="@string/grocery_category_prompt"
-                    android:scrollbarStyle="insideInset"
                     android:background="@drawable/rounded_up_corner"
-                    android:backgroundTint="@color/blue_main"
-                    android:spinnerMode="dropdown" />
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:text="Category"
+                    android:enabled="false"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:paddingLeft="15dp"
+                    android:backgroundTint="?attr/colorPrimary"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="3dp"
+                    android:textSize="16dp"
+                    android:text="Sub-Category" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/updateSubGroceryCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/rounded_up_corner"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:text="Category"
+                    android:enabled="false"
+                    android:gravity="center_vertical"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:paddingLeft="15dp"
+                    android:backgroundTint="?attr/colorPrimary"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
@@ -213,6 +240,7 @@
                     android:textAllCaps="false"
                     android:layout_marginTop="15dp"
                     android:background="@drawable/rounded_button_main"
+                    android:backgroundTint="?attr/colorPrimary"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/white"
                     android:textStyle="bold" />

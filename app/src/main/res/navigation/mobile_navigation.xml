@@ -11,6 +11,12 @@
         android:label="@string/menu_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
+<!--    <activity
+        android:id="@+id/nav_dashboard"
+        android:name="com.example.scansaverapp.users.dashboard.DashboardActivity"
+        android:label="@string/menu_dashboard"
+        tools:layout="@layout/activity_dashboard" />-->
+
     <activity
         android:id="@+id/nav_help_center"
         android:name="com.example.scansaverapp.users.helpcenter.HelpCenterActivity"
@@ -26,4 +32,9 @@
         android:name="com.example.scansaverapp.users.spending.SpendingActivity"
         android:label="@string/menu_spending"
         tools:layout="@layout/activity_spending" />
+    <activity
+        android:id="@+id/nav_expenses"
+        android:name="com.example.scansaverapp.users.expenses.ExpensesAnalyticsActivity"
+        android:label="@string/menu_expenses"
+        tools:layout="@layout/activity_expenses_analytics" />
 </navigation>

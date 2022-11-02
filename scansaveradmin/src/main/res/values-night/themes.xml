@@ -2,13 +2,13 @@
     <!-- Base application theme. -->
     <style name="Theme.ScanSaverApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/blue_main</item>
+        <item name="colorPrimary">@color/blue_darker</item>
         <item name="colorPrimaryVariant">@color/blue_dark</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/blue_light</item>
+        <item name="colorSecondary">@color/blue_darker</item>
         <item name="colorSecondaryVariant">@color/blue_lighter</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorOnSecondary">@color/grey_color</item>
 
         <item name="android:textColor">@color/white</item>
 

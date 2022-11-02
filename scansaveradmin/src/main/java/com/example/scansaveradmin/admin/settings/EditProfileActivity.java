@@ -47,7 +47,6 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         editBirthday = (TextInputEditText) findViewById(R.id.editBirthday);
         editAge = (TextInputEditText) findViewById(R.id.editAge);
         editPhoneNumber = (TextInputEditText) findViewById(R.id.editPhoneNumber);
-        updateProfileBtn = (AppCompatButton) findViewById(R.id.updateProfileBtn);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
@@ -80,6 +79,12 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
+    public void onBackPressed() {
+        startActivity(new Intent(EditProfileActivity.this, SettingsActivity.class));
+        finish();
+    }
+
+    @Override
     public void onClick(View view) {
 
         String fullName = editFullName.getText().toString();
@@ -87,7 +92,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
         switch (view.getId()) {
             case R.id.frEditProfileToSettings:
-                startActivity(new Intent(EditProfileActivity.this, SettingsActivity.class));
+                onBackPressed();
                 break;
             case R.id.updateProfileBtn:
                 updateProfile(fullName, phoneNumber);

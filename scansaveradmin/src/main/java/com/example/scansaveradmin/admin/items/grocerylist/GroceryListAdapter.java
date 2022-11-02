@@ -4,17 +4,21 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.scansaveradmin.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +47,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
         AppCompatTextView groceryName, groceryMeasurement;
         AppCompatButton updateGroceryBtn, deleteGroceryBtn;
+        AppCompatImageView groceryItemPhoto;
 
         public GrocerylistViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -50,6 +56,7 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
             groceryMeasurement = itemView.findViewById(R.id.groceryItemMeasurementTextView);
             updateGroceryBtn = itemView.findViewById(R.id.updateGroceryItemBtn);
             deleteGroceryBtn = itemView.findViewById(R.id.deleteDeleteBtn);
+            groceryItemPhoto = itemView.findViewById(R.id.groceryItemPhoto);
         }
     }
 
@@ -67,6 +74,11 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
         holder.groceryName.setText(model.getGroceryName());
         holder.groceryMeasurement.setText(model.getGroceryMeasurement());
+
+        Glide.with(holder.groceryItemPhoto.getContext())
+                        .load(model.getGroceryImgUrl())
+                                .into(holder.groceryItemPhoto);
+
         holder.updateGroceryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,19 +92,27 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
                 TextInputEditText updateGroceryName = v.findViewById(R.id.updateGroceryName);
                 TextInputEditText updateGroceryMeasurement = v.findViewById(R.id.updateGroceryMeasurement);
                 TextInputEditText updateGroceryPrice = v.findViewById(R.id.updateGroceryPrice);
-                AppCompatSpinner updateGroceryCategory = v.findViewById(R.id.updateGroceryCategorySpinner);
+                AppCompatTextView updateGroceryCategory = v.findViewById(R.id.updateGroceryCategory);
+                AppCompatTextView updateGrocerySubCategory = v.findViewById(R.id.updateSubGroceryCategory);
                 TextInputEditText updateGroceryBrand = v.findViewById(R.id.updateGroceryBrand);
                 TextInputEditText updateGroceryUPCA = v.findViewById(R.id.updateGroceryUPCA);
                 TextInputEditText updateGroceryEAN13 = v.findViewById(R.id.updateGroceryEAN13);
+                AppCompatImageView groceryPhotoShow = v.findViewById(R.id.groceryPhotoShow);
+                AppCompatButton updateGroceryPhotoBtn = v.findViewById(R.id.updateGroceryPhotoBtn);
                 AppCompatButton updateGroceryItemBtn = v.findViewById(R.id.updateGroceryItemBtn);
 
-                updateGroceryName.setText(groceryList.get(position).getGroceryName());
-                updateGroceryMeasurement.setText(groceryList.get(position).getGroceryMeasurement());
-                updateGroceryPrice.setText(groceryList.get(position).getGroceryPrice());
-                updateGroceryCategory.equals(groceryList.get(position).getGroceryName());
-                updateGroceryBrand.setText(groceryList.get(position).getGroceryBrand());
-                updateGroceryUPCA.setText(groceryList.get(position).getGroceryUPCA());
-                updateGroceryEAN13.setText(groceryList.get(position).getGroceryEAN13());
+                updateGroceryName.setText(model.getGroceryName());
+                updateGroceryMeasurement.setText(model.getGroceryMeasurement());
+                updateGroceryPrice.setText(model.getGroceryPrice());
+                updateGroceryBrand.setText(model.getGroceryBrand());
+                updateGroceryUPCA.setText(model.getGroceryUPCA());
+                updateGroceryEAN13.setText(model.getGroceryEAN13());
+                updateGroceryCategory.setText(model.getGroceryCategory());
+                updateGrocerySubCategory.setText(model.getGrocerySubCategory());
+
+                Glide.with(groceryPhotoShow.getContext())
+                        .load(model.getGroceryImgUrl())
+                        .into(groceryPhotoShow);
 
                 updateDialog.show();
 
@@ -105,7 +125,8 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
                         updateGrocery.put("groceryName", updateGroceryName.getText().toString());
                         updateGrocery.put("groceryMeasurement", updateGroceryMeasurement.getText().toString());
                         updateGrocery.put("groceryPrice", updateGroceryPrice.getText().toString());
-                        updateGrocery.put("groceryCategory", updateGroceryCategory.getSelectedItem().toString());
+                        updateGrocery.put("groceryCategory", updateGroceryCategory.getText().toString());
+                        updateGrocery.put("grocerySubCategory", updateGrocerySubCategory.getText().toString());
                         updateGrocery.put("groceryBrand", updateGroceryBrand.getText().toString());
                         updateGrocery.put("groceryUPCA", updateGroceryUPCA.getText().toString());
                         updateGrocery.put("groceryEAN13", updateGroceryEAN13.getText().toString());
@@ -180,6 +201,8 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
         });
     }
 
+
+
     @Override
     public int getItemCount() {
         try {
@@ -188,5 +211,12 @@ public class GroceryListAdapter extends RecyclerView.Adapter<GroceryListAdapter.
 
             return 0;
         }
+    }
+
+    public void filteredGroceryList(List<GroceryListModel> filteredList){
+
+        groceryList =   filteredList;
+        notifyDataSetChanged();
+
     }
 }

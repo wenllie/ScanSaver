@@ -23,11 +23,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AdminNavDrawerActivity extends AppCompatActivity {
 
 
-    TextView navFullName, navEmail;
+    TextView navFullName;
+    CircleImageView navProfilePic;
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityAdminNavDrawerBinding binding;
@@ -50,15 +54,29 @@ public class AdminNavDrawerActivity extends AppCompatActivity {
         NavigationView navigationView = binding.navView;
 
         navFullName = navigationView.getHeaderView(0).findViewById(R.id.navFullName);
-        navEmail = navigationView.getHeaderView(0).findViewById(R.id.navEmail);
+        navProfilePic = navigationView.getHeaderView(0).findViewById(R.id.navProfilePic);
         adminReference = FirebaseDatabase.getInstance().getReference().child("Admin").child("Admin Users").child(FirebaseAuth.getInstance().getUid());
 
         adminReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                navFullName.setText( snapshot.child("Personal Details").child("fullName").getValue().toString() );
-                navEmail.setText( snapshot.child("Personal Details").child("email").getValue().toString() );
+                navFullName.setText(snapshot.child("Personal Details").child("fullName").getValue().toString() );
 
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(AdminNavDrawerActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        DatabaseReference profilePhotoReference = FirebaseDatabase.getInstance().getReference("Admin").child("Admin Users").child(FirebaseAuth.getInstance().getUid());
+
+        profilePhotoReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                Picasso.get().load(snapshot.child("Profile Photo").child("profileUrl").getValue().toString()).into(navProfilePic);
             }
 
             @Override
@@ -78,16 +96,25 @@ public class AdminNavDrawerActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        navigationView.setItemIconTintList(null);
         navigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(menuItem -> {
             logout();
             return true;
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
+        finish();
+    }
+
     private void logout() {
         mAuth.signOut();
-        Intent goLogin = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(goLogin);
+        Intent signout = new Intent(AdminNavDrawerActivity.this, MainActivity.class);//open login activity on successful logout
+        signout.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        signout.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(signout);
         finish();
     }
 

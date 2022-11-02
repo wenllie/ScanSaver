@@ -8,10 +8,13 @@
     <color name="blue_light">#99CCFF</color>
     <color name="blue_main">#488DFD</color>
     <color name="blue_dark">#3366FF</color>
+    <color name="blue_darker">#3b5998</color>
     <color name="blue_lighter">#BBEEFF</color>
     <color name="cute_blue">#b3e3fd</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#990000</color>
     <color name="green">#38761d</color>
+    <color name="grey_color">#808080</color>
+    <color name="light_grey">#eeeeee</color>
 </resources>

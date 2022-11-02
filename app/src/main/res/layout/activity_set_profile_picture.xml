@@ -1,56 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".SetProfilePictureActivity">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center">
+        android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <View
+            android:id="@+id/topView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Finish Setting up your account"
-            android:layout_marginTop="40dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textStyle="bold"/>
+            android:layout_height="250dp"
+            android:background="@drawable/ic_wave_3"
+            android:backgroundTint="?attr/colorSecondary"/>
 
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/uploadProfilePhoto"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="50dp"
-            android:src="@drawable/profile_user"
-            android:layout_gravity="center"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="20dp"
-            android:text="Click the image above to open your gallery."/>
+            android:layout_height="match_parent"
+            android:background="?attr/colorSecondary"
+            android:layout_below="@id/topView"/>
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/completeSetUpBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Continue"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:background="@drawable/rounded_button_main"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textStyle="bold"/>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:orientation="vertical">
 
-</RelativeLayout>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Finish Setting up"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="20dp"
+                    android:textSize="30dp"
+                    android:textColor="?attr/colorPrimary"
+                    android:fontFamily="@font/baloo_bhai"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textStyle="bold"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="your account"
+                    android:layout_marginStart="20dp"
+                    android:textSize="30dp"
+                    android:textColor="?attr/colorPrimary"
+                    android:fontFamily="@font/baloo_bhai"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textStyle="bold"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                app:cardElevation="20dp"
+                app:cardCornerRadius="20dp"
+                android:layout_margin="20dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/uploadProfilePhoto"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:layout_marginTop="20dp"
+                            android:src="@drawable/profile_user"
+                            android:layout_gravity="center"/>
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_marginTop="20dp"
+                            android:text="Click the image above to open your gallery."/>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:background="?attr/colorPrimary">
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/completeSetUpBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:text="Continue"
+                            android:textAllCaps="false"
+                            android:background="@android:color/transparent"
+                            android:textColor="@color/white"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textStyle="bold"/>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </RelativeLayout>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

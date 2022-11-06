@@ -71,7 +71,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
         Context context = holder.itemView.getContext();
         ShoppingCartViewActivity shoppingCartViewActivity = (ShoppingCartViewActivity)context;
-        totalPriceText = shoppingCartViewActivity.findViewById(R.id.totalPriceText);
+        //totalPriceText = shoppingCartViewActivity.findViewById(R.id.totalPriceText);
 
         //totalPriceText.setText(String.format("%.2f", grandTotal()));
 

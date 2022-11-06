@@ -187,7 +187,6 @@ public class SpendingActivity extends AppCompatActivity implements View.OnClickL
                             spendingCategoryReference.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    categoryList.clear();
                                     cartNumberList.clear();
 
                                     for (DataSnapshot yearSnap : snapshot.getChildren()) {
@@ -197,11 +196,11 @@ public class SpendingActivity extends AppCompatActivity implements View.OnClickL
                                             String monthKey = monthSnap.getKey();
 
                                             if (monthKey.equalsIgnoreCase(categoryChosenList.get(position))) {
-                                                cartNumberList.clear();
 
                                                 for (DataSnapshot dateSnap : monthSnap.getChildren()) {
 
                                                     String cartKey = dateSnap.getKey();
+                                                    categoryList.clear();
 
                                                     for (DataSnapshot categorySnap : dateSnap.getChildren()) {
 
@@ -278,14 +277,6 @@ public class SpendingActivity extends AppCompatActivity implements View.OnClickL
                     });
 
                 } else {
-                    categoryChosenList.clear();
-                    categoryList.clear();
-                    foodList.clear();
-                    beautyList.clear();
-                    homeList.clear();
-                    pharmacyList.clear();
-                    cartNumberList.clear();
-                    monthNameList.clear();
 
                     spendingCategoryReference.addValueEventListener(new ValueEventListener() {
                         @Override
@@ -321,6 +312,7 @@ public class SpendingActivity extends AppCompatActivity implements View.OnClickL
                                         String yearKey = yearSnap.getKey();
 
                                         if (yearKey.equalsIgnoreCase(categoryChosenList.get(position))) {
+                                            monthNameList.clear();
 
                                             for (DataSnapshot monthSnap : yearSnap.getChildren()) {
 
@@ -834,8 +826,8 @@ public class SpendingActivity extends AppCompatActivity implements View.OnClickL
                                                     cartNumberList.clear();
 
                                                     for (DataSnapshot dateSnap : monthSnap.getChildren()) {
-                                                        categoryList.clear();
 
+                                                        categoryList.clear();
                                                         String cartNumKey = dateSnap.getKey();
 
                                                         for (DataSnapshot categorySnap : dateSnap.getChildren()) {
@@ -896,6 +888,7 @@ public class SpendingActivity extends AppCompatActivity implements View.OnClickL
                                                     monthNameList.add(new MonthNameClass(monthKey, cartNumberList));
 
                                                 } else if (monthKey.equalsIgnoreCase("October")) {
+                                                    cartNumberList.clear();
 
                                                     for (DataSnapshot dateSnap : monthSnap.getChildren()) {
                                                         categoryList.clear();

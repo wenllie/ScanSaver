@@ -59,7 +59,7 @@ public class ShoppingCartViewActivity extends AppCompatActivity implements View.
 
     ImageView frCartToDashboard;
     AppCompatButton saveShoppingCartBtn;
-    AppCompatTextView totalPriceText, budgetDateTextView;
+    AppCompatTextView budgetDateTextView;
     RelativeLayout shoppingCartViewActivityLayout;
     AppCompatTextView beautyAndPersonalCareBudget, foodBudget, homeEssentialsBudget, pharmacyBudget;
 
@@ -96,7 +96,6 @@ public class ShoppingCartViewActivity extends AppCompatActivity implements View.
 
         frCartToDashboard = (ImageView) findViewById(R.id.frCartToDashboard);
         saveShoppingCartBtn = (AppCompatButton) findViewById(R.id.saveShoppingCartBtn);
-        totalPriceText = (AppCompatTextView) findViewById(R.id.totalPriceText);
         main_recycler = (RecyclerView) findViewById(R.id.main_recycler);
         shoppingCartViewActivityLayout = (RelativeLayout) findViewById(R.id.shoppingCartViewActivityLayout);
 
@@ -118,6 +117,41 @@ public class ShoppingCartViewActivity extends AppCompatActivity implements View.
 
         //set customer budget
         setBudget();
+
+        //show cart
+        showCart();
+
+        //handle swipe left of grocery item
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callBackMethod);
+        itemTouchHelper.attachToRecyclerView(main_recycler);
+
+
+        frCartToDashboard.setOnClickListener(this);
+        saveShoppingCartBtn.setOnClickListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent toScan = new Intent(ShoppingCartViewActivity.this, ScanBarcodeActivity.class);
+        toScan.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        toScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(toScan);
+        finish();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.frCartToDashboard:
+                onBackPressed();
+                break;
+            case R.id.saveShoppingCartBtn:
+                savedShoppingCart(fromShoppingCartRef, toInventoriesRef, FirebaseAuth.getInstance().getUid());
+                break;
+        }
+    }
+
+    private void showCart() {
 
         //show customer details in the recycler view
         groceryList = new ArrayList<>();
@@ -198,39 +232,11 @@ public class ShoppingCartViewActivity extends AppCompatActivity implements View.
             }
         });
 
-        //handle swipe left of grocery item
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callBackMethod);
-        itemTouchHelper.attachToRecyclerView(main_recycler);
-
-
-        frCartToDashboard.setOnClickListener(this);
-        saveShoppingCartBtn.setOnClickListener(this);
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        Intent toScan = new Intent(ShoppingCartViewActivity.this, ScanBarcodeActivity.class);
-        toScan.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        toScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(toScan);
-        finish();
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.frCartToDashboard:
-                onBackPressed();
-                break;
-            case R.id.saveShoppingCartBtn:
-                savedShoppingCart(fromShoppingCartRef, toInventoriesRef, FirebaseAuth.getInstance().getUid());
-                break;
-        }
     }
 
     @SuppressLint("ResourceAsColor")
     private void setBudget() {
+        String budgetMonth = monthName[calendar.get(Calendar.MONTH)];
 
         budgetReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -244,18 +250,121 @@ public class ShoppingCartViewActivity extends AppCompatActivity implements View.
 //                            Toast.makeText(ShoppingCartViewActivity.this, snapshot.getKey() + snapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
 
                         String key = snapshot.getKey();
-
                         if (key.equalsIgnoreCase("beautyAndPersonalCare")) {
                             beautyAndPersonalCareBudget.setText(snapshot.getValue().toString());
-                        }
-                        if (key.equalsIgnoreCase("food")) {
+                        } else if (key.equalsIgnoreCase("food")) {
                             foodBudget.setText(snapshot.getValue().toString());
-                        }
-                        if (key.equalsIgnoreCase("homeEssentials")) {
+                        } else if (key.equalsIgnoreCase("homeEssentials")) {
                             homeEssentialsBudget.setText(snapshot.getValue().toString());
-                        }
-                        if (key.equalsIgnoreCase("pharmacy")) {
+                        } else if (key.equalsIgnoreCase("pharmacy")) {
                             pharmacyBudget.setText(snapshot.getValue().toString());
+                        } else if (key.equalsIgnoreCase("currentMonth")) {
+
+                            String month = snapshot.getValue().toString();
+
+                            if (budgetMonth.equalsIgnoreCase(month)) {
+
+                            } else {
+
+                                final DialogPlus saveBudget = DialogPlus.newDialog(ShoppingCartViewActivity.this)
+                                        .setContentHolder(new ViewHolder(R.layout.pop_up_customer_budget))
+                                        .setContentBackgroundResource(R.drawable.rounded_top_for_pop_up)
+                                        .setCancelable(false)
+                                        .setOnBackPressListener(new OnBackPressListener() {
+                                            @Override
+                                            public void onBackPressed(DialogPlus dialogPlus) {
+                                                dialogPlus.dismiss();
+                                                startActivity(new Intent(ShoppingCartViewActivity.this, UserNavDrawer.class));
+                                                finish();
+                                            }
+                                        })
+                                        .create();
+                                View v = saveBudget.getHolderView();
+
+                                TextInputEditText beautyAndPersonalCareBudgetET = v.findViewById(R.id.beautyAndPersonalCareBudgetET);
+                                TextInputEditText foodBudgetET = v.findViewById(R.id.foodBudgetET);
+                                TextInputEditText homeEssentialsBudgetET = v.findViewById(R.id.homeEssentialsBudgetET);
+                                TextInputEditText pharmacyBudgetET = v.findViewById(R.id.pharmacyBudgetET);
+                                AppCompatButton saveBudgetBtn = v.findViewById(R.id.saveBudgetBtn);
+
+                                saveBudget.show();
+
+                                //remove focus
+                                beautyAndPersonalCareBudgetET.clearFocus();
+                                foodBudgetET.clearFocus();
+                                homeEssentialsBudgetET.clearFocus();
+                                pharmacyBudgetET.clearFocus();
+
+                                saveBudgetBtn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        //create variable for edit texts
+                                        String beautyB = beautyAndPersonalCareBudgetET.getText().toString();
+                                        String foodB = foodBudgetET.getText().toString();
+                                        String homeB = homeEssentialsBudgetET.getText().toString();
+                                        String pharmB = pharmacyBudgetET.getText().toString();
+
+                                        if (beautyB.isEmpty() || foodB.isEmpty() || homeB.isEmpty() || pharmB.isEmpty()) {
+
+                                            beautyAndPersonalCareBudgetET.setError("This field is required");
+                                            foodBudgetET.setError("This field is required");
+                                            homeEssentialsBudgetET.setError("This field is required");
+                                            pharmacyBudgetET.setError("This field is required");
+
+                                            beautyAndPersonalCareBudgetET.requestFocus();
+                                            foodBudgetET.requestFocus();
+                                            homeEssentialsBudgetET.requestFocus();
+                                            pharmacyBudgetET.requestFocus();
+
+                                        } else {
+                                            MaterialAlertDialogBuilder budget = new MaterialAlertDialogBuilder(ShoppingCartViewActivity.this, R.style.CutShapeTheme);
+                                            budget.setTitle("Save Budget");
+                                            budget.setMessage("Are you sure you inputted the correct amount of your budget?");
+
+                                            budget.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                            budgetReference.child(userID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+
+                                                                    budgetReference.child(userID).child("beautyAndPersonalCare").push();
+                                                                    budgetReference.child(userID).child("food").push();
+                                                                    budgetReference.child(userID).child("homeEssentials").push();
+                                                                    budgetReference.child(userID).child("pharmacy").push();
+                                                                    budgetReference.child(userID).child("currentMonth").push();
+
+                                                                    budgetReference.child(userID).child("beautyAndPersonalCare").setValue(beautyB);
+                                                                    budgetReference.child(userID).child("food").setValue(foodB);
+                                                                    budgetReference.child(userID).child("homeEssentials").setValue(homeB);
+                                                                    budgetReference.child(userID).child("pharmacy").setValue(pharmB);
+                                                                    budgetReference.child(userID).child("currentMonth").setValue(budgetMonth);
+                                                                }
+                                                            });
+
+                                                            beautyAndPersonalCareBudget.setText(beautyB);
+                                                            foodBudget.setText(foodB);
+                                                            homeEssentialsBudget.setText(homeB);
+                                                            pharmacyBudget.setText(pharmB);
+
+                                                            dialogInterface.dismiss();
+                                                            saveBudget.dismiss();
+                                                        }
+                                                    })
+                                                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            dialogInterface.cancel();
+                                                        }
+                                                    });
+                                            budget.show();
+                                        }
+                                    }
+                                });
+
+                            }
+
                         }
 
                     }
@@ -329,11 +438,13 @@ public class ShoppingCartViewActivity extends AppCompatActivity implements View.
                                                         budgetReference.child(userID).child("food").push();
                                                         budgetReference.child(userID).child("homeEssentials").push();
                                                         budgetReference.child(userID).child("pharmacy").push();
+                                                        budgetReference.child(userID).child("currentMonth").push();
 
                                                         budgetReference.child(userID).child("beautyAndPersonalCare").setValue(beautyB);
                                                         budgetReference.child(userID).child("food").setValue(foodB);
                                                         budgetReference.child(userID).child("homeEssentials").setValue(homeB);
                                                         budgetReference.child(userID).child("pharmacy").setValue(pharmB);
+                                                        budgetReference.child(userID).child("currentMonth").setValue(budgetMonth);
                                                     }
                                                 });
 
@@ -407,7 +518,6 @@ public class ShoppingCartViewActivity extends AppCompatActivity implements View.
                         }
 
                     }
-
 
 
                 }
@@ -516,4 +626,20 @@ public class ShoppingCartViewActivity extends AppCompatActivity implements View.
 
     }
 
+    /*Show similar product*/
+    private void similarGroceryItem(String newText) {
+
+        List<GroceryItemModel> filteredList = new ArrayList<>();
+
+        for (GroceryItemModel groceryListModel : groceryList) {
+
+            if (groceryListModel.getGroceryName().toLowerCase().contains(newText.toLowerCase())) {
+
+                filteredList.add(groceryListModel);
+
+            }
+            //groceryListAdapter.filteredGroceryList(filteredList);
+        }
+
+    }
 }

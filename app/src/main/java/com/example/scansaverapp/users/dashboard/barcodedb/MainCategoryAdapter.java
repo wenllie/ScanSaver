@@ -128,28 +128,32 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapte
             }
         });
 
-        holder.categoryTotal.setText("₱ " + String.format("%.2f", categoryTotals(pos)));
+        holder.categoryTotal.setText("₱ " + String.format("%.2f", categoryTotals(position)));
 
-        Context context = holder.itemView.getContext();
+        /*Context context = holder.itemView.getContext();
         ShoppingCartViewActivity shoppingCartViewActivity = (ShoppingCartViewActivity) context;
         totalPriceText = shoppingCartViewActivity.findViewById(R.id.totalPriceText);
 
-        totalPriceText.setText(String.format("%.2f", grandTotal()));
+        totalPriceText.setText(String.format("%.2f", grandTotal()));*/
 
     }
 
     public float grandTotal() {
         float grandAve = 0;
+        float aveTotal = 0;
 
         for (int i = 0; i < 4; i++) {
             grandAve += categoryTotals(i);
+            aveTotal = grandAve /4;
+
         }
-        return grandAve;
+        return aveTotal;
     }
 
     public float categoryTotals(int post) {
+        post = pos;
         float avePrice = 0;
-        for (int i = 0; i < mainCategoryClassList.get(post).groceryList.size(); i++) {
+        for (int i = 0; i < mainCategoryClassList.get(pos).groceryList.size(); i++) {
             avePrice += Float.parseFloat(mainCategoryClassList.get(post).groceryList.get(i).getGroceryTotalItemPrice());
         }
         return avePrice;

@@ -3,6 +3,7 @@ package com.example.scansaverapp.users.expenses;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,11 +14,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.anychart.AnyChart;
+import com.anychart.AnyChartView;
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.anychart.chart.common.listener.Event;
+import com.anychart.chart.common.listener.ListenersInterface;
+import com.anychart.charts.Pie;
+import com.anychart.core.ui.ChartCredits;
+import com.anychart.enums.Align;
+import com.anychart.enums.LegendLayout;
 import com.example.scansaverapp.R;
 import com.example.scansaverapp.UserNavDrawer;
 import com.example.scansaverapp.helpers_database.GroceryItemModel;
-import com.example.scansaverapp.users.settings.SettingsActivity;
-import com.example.scansaverapp.users.spending.SpendingActivity;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -40,7 +49,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -49,12 +57,11 @@ public class ExpensesAnalyticsActivity extends AppCompatActivity implements View
 
     ImageView frExpensesToSettings;
     AppCompatSpinner spendingCategoryExSpinner;
+    AppCompatTextView monthChosen;
 
-    //analytics | pie
-    PieChart monthlyExpensesPieChart;
-
-    //analytics | bar
-    BarChart monthlyExpensesBarChart;
+    //spending chart
+    AnyChartView anyChartView;
+    PieChart drilledDownChart;
 
     List<GroceryItemModel> itemList;
     ArrayList<String> monthArrayList;
@@ -73,8 +80,9 @@ public class ExpensesAnalyticsActivity extends AppCompatActivity implements View
 
         frExpensesToSettings = findViewById(R.id.frExpensesToSettings);
         spendingCategoryExSpinner = findViewById(R.id.spendingCategoryExSpinner);
-        monthlyExpensesBarChart = findViewById(R.id.monthlyExpensesBarChart);
-        monthlyExpensesPieChart = findViewById(R.id.monthlyExpensesPieChart);
+        anyChartView = findViewById(R.id.anychart);
+        drilledDownChart = findViewById(R.id.drilledDownChart);
+        monthChosen = findViewById(R.id.monthChosen);
 
         DatabaseReference spendingReference = FirebaseDatabase.getInstance().getReference("Customers").child("Inventories").child(FirebaseAuth.getInstance().getUid());
         yearList = new ArrayList<>();
@@ -90,7 +98,8 @@ public class ExpensesAnalyticsActivity extends AppCompatActivity implements View
                     yearList.add(yearKey);
                 }
 
-                ArrayAdapter<String> yearAdapter = new ArrayAdapter<String>(ExpensesAnalyticsActivity.this, android.R.layout.simple_spinner_dropdown_item, yearList);
+                ArrayAdapter<String> yearAdapter = new ArrayAdapter<String>(ExpensesAnalyticsActivity.this, R.layout.expenses_year_list, yearList);
+                yearAdapter.setDropDownViewResource(R.layout.expenses_year_list);
                 spendingCategoryExSpinner.setAdapter(yearAdapter);
             }
 
@@ -103,12 +112,9 @@ public class ExpensesAnalyticsActivity extends AppCompatActivity implements View
         spendingCategoryExSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                //pie chart | expenses
-                setUpChart();
-                getData();
 
-                //bar chart | expenses
-                barchart();
+                spendingChart();
+
             }
 
             @Override
@@ -139,336 +145,6 @@ public class ExpensesAnalyticsActivity extends AppCompatActivity implements View
         }
     }
 
-    /*Bar chart for total grocery spending on a monthly or yearly basis*/
-    private void barchart() {
-
-        itemList = new ArrayList<>();
-        monthArrayList = new ArrayList<>();
-
-        ArrayList<BarEntry> months = new ArrayList<>();
-
-        DatabaseReference spendingReference = FirebaseDatabase.getInstance().getReference("Customers").child("Inventories").child(FirebaseAuth.getInstance().getUid());
-
-        spendingReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-
-                itemList.clear();
-                monthArrayList.clear();
-
-                for (DataSnapshot yearSnap : task.getResult().getChildren()) {
-
-                    for (DataSnapshot monthSnap : yearSnap.getChildren()) {
-
-                        String monthKey = monthSnap.getKey();
-                        monthArrayList.add(monthKey);
-
-                        if (monthKey.equalsIgnoreCase("January")) {
-                            int month = 1;
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            months.add(new BarEntry(month, groceryTotals()));
-
-                        } else if (monthKey.equalsIgnoreCase("February")) {
-                            int month = 2;
-
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            months.add(new BarEntry(month, groceryTotals()));
-
-                        } else if (monthKey.equalsIgnoreCase("March")) {
-                            int month = 3;
-
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            months.add(new BarEntry(month, groceryTotals()));
-
-                        } else if (monthKey.equalsIgnoreCase("April")) {
-                            int month = 4;
-
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            months.add(new BarEntry(month, groceryTotals()));
-
-                        } else if (monthKey.equalsIgnoreCase("May")) {
-                            int month = 5;
-
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            months.add(new BarEntry(month, groceryTotals()));
-
-                        } else if (monthKey.equalsIgnoreCase("June")) {
-                            int month = 6;
-
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            months.add(new BarEntry(month, groceryTotals()));
-
-                        } else if (monthKey.equalsIgnoreCase("July")) {
-                            int month = 7;
-
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            months.add(new BarEntry(month, groceryTotals()));
-
-                        } else if (monthKey.equalsIgnoreCase("August")) {
-                            int month = 8;
-
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            months.add(new BarEntry(month, groceryTotals()));
-
-                        } else if (monthKey.equalsIgnoreCase("September")) {
-                            int month = 9;
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            months.add(new BarEntry(month, groceryTotals()));
-
-                        } else if (monthKey.equalsIgnoreCase("October")) {
-                            int month = 10;
-
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            months.add(new BarEntry(month, groceryTotals()));
-
-                        } else if (monthKey.equalsIgnoreCase("November")) {
-                            int month = 11;
-
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            months.add(new BarEntry(month, groceryTotals()));
-
-                        } else if (monthKey.equalsIgnoreCase("December")) {
-                            int month = 12;
-
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            months.add(new BarEntry(month, groceryTotals()));
-                        }
-
-                    }
-
-                }
-
-                //applying colors
-                ArrayList<Integer> colors = new ArrayList<>();
-                for (int color : ColorTemplate.COLORFUL_COLORS) {
-                    colors.add(color);
-                }
-
-                for (int color : ColorTemplate.MATERIAL_COLORS) {
-                    colors.add(color);
-                }
-
-                for (int color : ColorTemplate.VORDIPLOM_COLORS) {
-                    colors.add(color);
-                }
-
-                for (int color : ColorTemplate.JOYFUL_COLORS) {
-                    colors.add(color);
-                }
-
-                for (int color : ColorTemplate.LIBERTY_COLORS) {
-                    colors.add(color);
-                }
-
-                for (int color : ColorTemplate.PASTEL_COLORS) {
-                    colors.add(color);
-                }
-
-                colors.add(ColorTemplate.getHoloBlue());
-
-                BarDataSet barDataSet = new BarDataSet(months, "Month");
-                barDataSet.setColors(colors);
-                barDataSet.setValueTextColor(Color.BLACK);
-                barDataSet.setValueTextSize(16f);
-
-                BarData barData = new BarData(barDataSet);
-
-                monthlyExpensesBarChart.setFitBars(true);
-                monthlyExpensesBarChart.setData(barData);
-                monthlyExpensesBarChart.getDescription().setTextColor(R.color.white);
-                monthlyExpensesBarChart.getDescription().setText("Category: Month");
-
-                XAxis axis = monthlyExpensesBarChart.getXAxis();
-                axis.setValueFormatter(new IndexAxisValueFormatter(monthArrayList));
-                axis.setPosition(XAxis.XAxisPosition.TOP);
-                axis.setTextColor(Color.WHITE);
-                axis.setDrawGridLines(false);
-                axis.setDrawAxisLine(false);
-                axis.setGranularity(2f);
-                axis.setLabelCount(months.size());
-                axis.setLabelRotationAngle(180);
-                monthlyExpensesBarChart.animateY(2000);
-                monthlyExpensesBarChart.invalidate();
-
-                Legend legend = monthlyExpensesBarChart.getLegend();
-                legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-                legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-                legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-                legend.setDrawInside(false);
-                legend.setEnabled(true);
-            }
-        });
-
-    }
-
     public float groceryTotals() {
         float totalAve = 0;
         for (int i = 0; i < itemList.size(); i++) {
@@ -478,32 +154,1645 @@ public class ExpensesAnalyticsActivity extends AppCompatActivity implements View
         return totalAve;
     }
 
+    private void spendingChart() {
+
+        anyChartView.setProgressBar(findViewById(R.id.progress_bar));
+
+        Pie pie = AnyChart.pie3d();
+        ChartCredits chartCredits = pie.credits();
+        chartCredits.enabled(false);
+        pie.innerRadius("30%");
+        pie.radius("85%");
+
+        itemList = new ArrayList<>();
+
+        DatabaseReference spendingReference = FirebaseDatabase.getInstance().getReference().child("Customers").child("Inventories").child(FirebaseAuth.getInstance().getUid());
+
+
+        spendingReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot yearSnap : snapshot.getChildren()) {
+                    List<DataEntry> dataEntries = new ArrayList<>();
+
+                    String yearKey = yearSnap.getKey();
+
+                    for (DataSnapshot monthSnap : yearSnap.getChildren()) {
+                        String monthKey = monthSnap.getKey();
+
+                        if (monthKey.equalsIgnoreCase("January")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+
+                                    for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                        itemList.add(groceryItemModel);
+
+                                    }
+                                }
+                            }
+
+                            dataEntries.add(new ValueDataEntry(monthKey, groceryTotals()));
+
+                        } else if (monthKey.equalsIgnoreCase("February")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                        itemList.add(groceryItemModel);
+
+                                    }
+                                }
+                            }
+
+                            dataEntries.add(new ValueDataEntry(monthKey, groceryTotals()));
+
+                        } else if (monthKey.equalsIgnoreCase("March")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                        itemList.add(groceryItemModel);
+
+                                    }
+                                }
+                            }
+
+                            dataEntries.add(new ValueDataEntry(monthKey, groceryTotals()));
+
+                        } else if (monthKey.equalsIgnoreCase("April")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                        itemList.add(groceryItemModel);
+
+                                    }
+                                }
+                            }
+
+                            dataEntries.add(new ValueDataEntry(monthKey, groceryTotals()));
+
+                        } else if (monthKey.equalsIgnoreCase("May")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                        itemList.add(groceryItemModel);
+
+                                    }
+                                }
+                            }
+
+                            dataEntries.add(new ValueDataEntry(monthKey, groceryTotals()));
+
+                        } else if (monthKey.equalsIgnoreCase("June")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                        itemList.add(groceryItemModel);
+
+                                    }
+                                }
+                            }
+
+                            dataEntries.add(new ValueDataEntry(monthKey, groceryTotals()));
+
+                        } else if (monthKey.equalsIgnoreCase("July")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                        itemList.add(groceryItemModel);
+
+                                    }
+                                }
+                            }
+
+                            dataEntries.add(new ValueDataEntry(monthKey, groceryTotals()));
+
+                        } else if (monthKey.equalsIgnoreCase("August")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                        itemList.add(groceryItemModel);
+
+                                    }
+                                }
+                            }
+
+                            dataEntries.add(new ValueDataEntry(monthKey, groceryTotals()));
+
+                        } else if (monthKey.equalsIgnoreCase("September")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                        itemList.add(groceryItemModel);
+
+                                    }
+                                }
+                            }
+
+                            dataEntries.add(new ValueDataEntry(monthKey, groceryTotals()));
+
+                        } else if (monthKey.equalsIgnoreCase("September")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                        itemList.add(groceryItemModel);
+
+                                    }
+                                }
+                            }
+
+                            dataEntries.add(new ValueDataEntry(monthKey, groceryTotals()));
+
+                        } else if (monthKey.equalsIgnoreCase("October")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                        itemList.add(groceryItemModel);
+
+                                    }
+                                }
+                            }
+
+                            dataEntries.add(new ValueDataEntry(monthKey, groceryTotals()));
+
+                        } else if (monthKey.equalsIgnoreCase("November")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                        itemList.add(groceryItemModel);
+
+                                    }
+                                }
+                            }
+
+                            dataEntries.add(new ValueDataEntry(monthKey, groceryTotals()));
+
+                        } else if (monthKey.equalsIgnoreCase("December")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                        itemList.add(groceryItemModel);
+
+                                    }
+                                }
+                            }
+
+                            dataEntries.add(new ValueDataEntry(monthKey, groceryTotals()));
+
+                        }
+
+                        pie.title(yearKey + " Grocery Expenses");
+
+                    }
+
+                    pie.data(dataEntries);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value", "drillDown"}) {
+            @Override
+            public void onClick(Event event) {
+                //Toast.makeText(ExpensesAnalyticsActivity.this, event.getData().get("x") + ":" + event.getData().get("value"), Toast.LENGTH_SHORT).show();
+
+                spendingReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        for (DataSnapshot yearSnap : snapshot.getChildren()) {
+
+                            for (DataSnapshot monthSnap : yearSnap.getChildren()) {
+
+                                String monthKey = monthSnap.getKey();
+
+                                pie.getSelectedPoints();
+
+                                if (monthKey.equalsIgnoreCase(event.getData().get("x"))) {
+
+                                    if (event.getData().get("x").equalsIgnoreCase("January")) {
+
+                                        monthChosen.setText(event.getData().get("x"));
+                                        drilledDownChart.setVisibility(View.VISIBLE);
+                                        setUpChart();
+                                        januaryDrilledDownChart();
+
+                                    } else if (event.getData().get("x").equalsIgnoreCase("February")) {
+
+                                        monthChosen.setText(event.getData().get("x"));
+                                        drilledDownChart.setVisibility(View.VISIBLE);
+                                        setUpChart();
+                                        februaryDrilledDownChart();
+
+                                    } else if (event.getData().get("x").equalsIgnoreCase("March")) {
+
+                                        monthChosen.setText(event.getData().get("x"));
+                                        drilledDownChart.setVisibility(View.VISIBLE);
+                                        setUpChart();
+                                        marchDrilledDownChart();
+
+                                    } else if (event.getData().get("x").equalsIgnoreCase("April")) {
+
+                                        monthChosen.setText(event.getData().get("x"));
+                                        drilledDownChart.setVisibility(View.VISIBLE);
+                                        setUpChart();
+                                        aprilDrilledDownChart();
+
+                                    } else if (event.getData().get("x").equalsIgnoreCase("May")) {
+
+                                        monthChosen.setText(event.getData().get("x"));
+                                        drilledDownChart.setVisibility(View.VISIBLE);
+                                        setUpChart();
+                                        mayDrilledDownChart();
+
+                                    } else if (event.getData().get("x").equalsIgnoreCase("June")) {
+
+                                        monthChosen.setText(event.getData().get("x"));
+                                        drilledDownChart.setVisibility(View.VISIBLE);
+                                        setUpChart();
+                                        juneDrilledDownChart();
+
+                                    } else if (event.getData().get("x").equalsIgnoreCase("July")) {
+
+                                        monthChosen.setText(event.getData().get("x"));
+                                        drilledDownChart.setVisibility(View.VISIBLE);
+                                        setUpChart();
+                                        julyDrilledDownChart();
+
+                                    } else if (event.getData().get("x").equalsIgnoreCase("August")) {
+
+                                        monthChosen.setText(event.getData().get("x"));
+                                        drilledDownChart.setVisibility(View.VISIBLE);
+                                        setUpChart();
+                                        augustDrilledDownChart();
+
+                                    } else if (event.getData().get("x").equalsIgnoreCase("September")) {
+
+                                        monthChosen.setText(event.getData().get("x"));
+                                        drilledDownChart.setVisibility(View.VISIBLE);
+                                        setUpChart();
+                                        septemberDrilledDownChart();
+
+                                    } else if (event.getData().get("x").equalsIgnoreCase("October")) {
+
+                                        monthChosen.setText(event.getData().get("x"));
+                                        drilledDownChart.setVisibility(View.VISIBLE);
+                                        setUpChart();
+                                        octoberDrilledDownChart();
+
+                                    } else if (event.getData().get("x").equalsIgnoreCase("November")) {
+
+                                        monthChosen.setText(event.getData().get("x"));
+                                        drilledDownChart.setVisibility(View.VISIBLE);
+                                        setUpChart();
+                                        novemberDrilledDownChart();
+
+                                    } else if (event.getData().get("x").equalsIgnoreCase("December")) {
+
+                                        monthChosen.setText(event.getData().get("x"));
+                                        drilledDownChart.setVisibility(View.VISIBLE);
+                                        setUpChart();
+                                        decemberDrilledDownChart();
+
+                                    }
+
+                                }
+                            }
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        });
+
+        pie.labels().position("outside");
+
+        pie.legend().title().enabled(false);
+        pie.legend().title()
+                .text("Category")
+                .padding(0d, 0d, 5d, 0d);
+
+        pie.legend()
+                .position("bottom")
+                .itemsLayout(LegendLayout.HORIZONTAL)
+                .align(Align.CENTER);
+
+        anyChartView.setChart(pie);
+
+    }
+
     //set up pie chart for monthly expenses
     private void setUpChart() {
 
-        monthlyExpensesPieChart.setDrawHoleEnabled(true);
-        monthlyExpensesPieChart.setUsePercentValues(true);
-        monthlyExpensesPieChart.setEntryLabelTextSize(14f);
-        monthlyExpensesPieChart.setCenterText("Monthly Expenses");
-        monthlyExpensesPieChart.setCenterTextSize(24);
-        monthlyExpensesPieChart.getDescription().setEnabled(false);
+        drilledDownChart.setDrawHoleEnabled(false);
+        drilledDownChart.setUsePercentValues(true);
+        drilledDownChart.setDrawEntryLabels(false);
+        drilledDownChart.getDescription().setEnabled(false);
 
-        Legend legend = monthlyExpensesPieChart.getLegend();
+        Legend legend = drilledDownChart.getLegend();
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        legend.setTextColor(Color.WHITE);
+        legend.setTextSize(13f);
         legend.setDrawInside(false);
         legend.setEnabled(true);
 
     }
 
-    //get the data in firebase to be displayed in pie chart
-    private void getData() {
+    //get the data in firebase to be displayed in pie chart | December Month
+    private void decemberDrilledDownChart() {
 
-        DatabaseReference spendingReference = FirebaseDatabase.getInstance().getReference("Customers").child("Inventories").child(FirebaseAuth.getInstance().getUid());
-        ArrayList<PieEntry> entries = new ArrayList<>();
+        DatabaseReference spendingReference = FirebaseDatabase.getInstance().getReference().child("Customers").child("Inventories").child(FirebaseAuth.getInstance().getUid());
+        ArrayList<PieEntry> pieEntries = new ArrayList<>();
         itemList = new ArrayList<>();
-        yearList = new ArrayList<>();
+
+        spendingReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot yearSnap : snapshot.getChildren()) {
+
+                    for (DataSnapshot monthSnap : yearSnap.getChildren()) {
+                        String monthKey = monthSnap.getKey();
+
+                        if (monthKey.equalsIgnoreCase("December")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    String categoryKey = idSnap.getKey();
+
+                                    if (categoryKey.equalsIgnoreCase("Food")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Beauty & Personal Care")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Home Essentials")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Pharmacy")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    }
+
+
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+
+                //applying colors
+                ArrayList<Integer> colors = new ArrayList<>();
+                for (int color : ColorTemplate.MATERIAL_COLORS) {
+                    colors.add(color);
+                }
+
+                colors.add(ColorTemplate.getHoloBlue());
+
+                PieDataSet dataSet = new PieDataSet(pieEntries, "");
+                dataSet.setColors(colors);
+                dataSet.setValueTextColor(Color.WHITE);
+
+                PieData data = new PieData(dataSet);
+                data.setDrawValues(true);
+                data.setValueFormatter(new PercentFormatter(drilledDownChart));
+                data.setValueTextSize(16f);
+
+                drilledDownChart.setData(data);
+                drilledDownChart.invalidate();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ExpensesAnalyticsActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //get the data in firebase to be displayed in pie chart | November Month
+    private void novemberDrilledDownChart() {
+
+        DatabaseReference spendingReference = FirebaseDatabase.getInstance().getReference().child("Customers").child("Inventories").child(FirebaseAuth.getInstance().getUid());
+        ArrayList<PieEntry> pieEntries = new ArrayList<>();
+        itemList = new ArrayList<>();
+
+        spendingReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot yearSnap : snapshot.getChildren()) {
+
+                    for (DataSnapshot monthSnap : yearSnap.getChildren()) {
+                        String monthKey = monthSnap.getKey();
+
+                        if (monthKey.equalsIgnoreCase("November")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    String categoryKey = idSnap.getKey();
+
+                                    if (categoryKey.equalsIgnoreCase("Food")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Beauty & Personal Care")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Home Essentials")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Pharmacy")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    }
+
+
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+
+                //applying colors
+                ArrayList<Integer> colors = new ArrayList<>();
+                for (int color : ColorTemplate.MATERIAL_COLORS) {
+                    colors.add(color);
+                }
+
+                colors.add(ColorTemplate.getHoloBlue());
+
+                PieDataSet dataSet = new PieDataSet(pieEntries, "");
+                dataSet.setColors(colors);
+                dataSet.setValueTextColor(Color.WHITE);
+
+                PieData data = new PieData(dataSet);
+                data.setDrawValues(true);
+                data.setValueFormatter(new PercentFormatter(drilledDownChart));
+                data.setValueTextSize(16f);
+
+                drilledDownChart.setData(data);
+                drilledDownChart.invalidate();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ExpensesAnalyticsActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //get the data in firebase to be displayed in pie chart | October Month
+    private void octoberDrilledDownChart() {
+
+        DatabaseReference spendingReference = FirebaseDatabase.getInstance().getReference().child("Customers").child("Inventories").child(FirebaseAuth.getInstance().getUid());
+        ArrayList<PieEntry> pieEntries = new ArrayList<>();
+        itemList = new ArrayList<>();
+
+        spendingReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot yearSnap : snapshot.getChildren()) {
+
+                    for (DataSnapshot monthSnap : yearSnap.getChildren()) {
+                        String monthKey = monthSnap.getKey();
+
+                        if (monthKey.equalsIgnoreCase("October")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    String categoryKey = idSnap.getKey();
+
+                                    if (categoryKey.equalsIgnoreCase("Food")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Beauty & Personal Care")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Home Essentials")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Pharmacy")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    }
+
+
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+
+                //applying colors
+                ArrayList<Integer> colors = new ArrayList<>();
+                for (int color : ColorTemplate.MATERIAL_COLORS) {
+                    colors.add(color);
+                }
+
+                colors.add(ColorTemplate.getHoloBlue());
+
+                PieDataSet dataSet = new PieDataSet(pieEntries, "");
+                dataSet.setColors(colors);
+                dataSet.setValueTextColor(Color.WHITE);
+
+                PieData data = new PieData(dataSet);
+                data.setDrawValues(true);
+                data.setValueFormatter(new PercentFormatter(drilledDownChart));
+                data.setValueTextSize(16f);
+
+                drilledDownChart.setData(data);
+                drilledDownChart.invalidate();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ExpensesAnalyticsActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    //get the data in firebase to be displayed in pie chart | September Month
+    private void septemberDrilledDownChart() {
+
+        DatabaseReference spendingReference = FirebaseDatabase.getInstance().getReference().child("Customers").child("Inventories").child(FirebaseAuth.getInstance().getUid());
+        ArrayList<PieEntry> pieEntries = new ArrayList<>();
+        itemList = new ArrayList<>();
+
+        spendingReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot yearSnap : snapshot.getChildren()) {
+
+                    for (DataSnapshot monthSnap : yearSnap.getChildren()) {
+                        String monthKey = monthSnap.getKey();
+
+                        if (monthKey.equalsIgnoreCase("September")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    String categoryKey = idSnap.getKey();
+
+                                    if (categoryKey.equalsIgnoreCase("Food")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Beauty & Personal Care")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Home Essentials")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Pharmacy")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    }
+
+
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+
+                //applying colors
+                ArrayList<Integer> colors = new ArrayList<>();
+                for (int color : ColorTemplate.MATERIAL_COLORS) {
+                    colors.add(color);
+                }
+
+                colors.add(ColorTemplate.getHoloBlue());
+
+                PieDataSet dataSet = new PieDataSet(pieEntries, "");
+                dataSet.setColors(colors);
+                dataSet.setValueTextColor(Color.WHITE);
+
+                PieData data = new PieData(dataSet);
+                data.setDrawValues(true);
+                data.setValueFormatter(new PercentFormatter(drilledDownChart));
+                data.setValueTextSize(16f);
+
+                drilledDownChart.setData(data);
+                drilledDownChart.invalidate();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ExpensesAnalyticsActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //get the data in firebase to be displayed in pie chart | August Month
+    private void augustDrilledDownChart() {
+
+        DatabaseReference spendingReference = FirebaseDatabase.getInstance().getReference().child("Customers").child("Inventories").child(FirebaseAuth.getInstance().getUid());
+        ArrayList<PieEntry> pieEntries = new ArrayList<>();
+        itemList = new ArrayList<>();
+
+        spendingReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot yearSnap : snapshot.getChildren()) {
+
+                    for (DataSnapshot monthSnap : yearSnap.getChildren()) {
+                        String monthKey = monthSnap.getKey();
+
+                        if (monthKey.equalsIgnoreCase("August")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    String categoryKey = idSnap.getKey();
+
+                                    if (categoryKey.equalsIgnoreCase("Food")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Beauty & Personal Care")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Home Essentials")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Pharmacy")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    }
+
+
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+
+                //applying colors
+                ArrayList<Integer> colors = new ArrayList<>();
+                for (int color : ColorTemplate.MATERIAL_COLORS) {
+                    colors.add(color);
+                }
+
+                colors.add(ColorTemplate.getHoloBlue());
+
+                PieDataSet dataSet = new PieDataSet(pieEntries, "");
+                dataSet.setColors(colors);
+                dataSet.setValueTextColor(Color.WHITE);
+
+                PieData data = new PieData(dataSet);
+                data.setDrawValues(true);
+                data.setValueFormatter(new PercentFormatter(drilledDownChart));
+                data.setValueTextSize(16f);
+
+                drilledDownChart.setData(data);
+                drilledDownChart.invalidate();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ExpensesAnalyticsActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //get the data in firebase to be displayed in pie chart | July Month
+    private void julyDrilledDownChart() {
+
+        DatabaseReference spendingReference = FirebaseDatabase.getInstance().getReference().child("Customers").child("Inventories").child(FirebaseAuth.getInstance().getUid());
+        ArrayList<PieEntry> pieEntries = new ArrayList<>();
+        itemList = new ArrayList<>();
+
+        spendingReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot yearSnap : snapshot.getChildren()) {
+
+                    for (DataSnapshot monthSnap : yearSnap.getChildren()) {
+                        String monthKey = monthSnap.getKey();
+
+                        if (monthKey.equalsIgnoreCase("July")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    String categoryKey = idSnap.getKey();
+
+                                    if (categoryKey.equalsIgnoreCase("Food")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Beauty & Personal Care")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Home Essentials")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Pharmacy")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    }
+
+
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+
+                //applying colors
+                ArrayList<Integer> colors = new ArrayList<>();
+                for (int color : ColorTemplate.MATERIAL_COLORS) {
+                    colors.add(color);
+                }
+
+                colors.add(ColorTemplate.getHoloBlue());
+
+                PieDataSet dataSet = new PieDataSet(pieEntries, "");
+                dataSet.setColors(colors);
+                dataSet.setValueTextColor(Color.WHITE);
+
+                PieData data = new PieData(dataSet);
+                data.setDrawValues(true);
+                data.setValueFormatter(new PercentFormatter(drilledDownChart));
+                data.setValueTextSize(16f);
+
+                drilledDownChart.setData(data);
+                drilledDownChart.invalidate();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ExpensesAnalyticsActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //get the data in firebase to be displayed in pie chart | June Month
+    private void juneDrilledDownChart() {
+
+        DatabaseReference spendingReference = FirebaseDatabase.getInstance().getReference().child("Customers").child("Inventories").child(FirebaseAuth.getInstance().getUid());
+        ArrayList<PieEntry> pieEntries = new ArrayList<>();
+        itemList = new ArrayList<>();
+
+        spendingReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot yearSnap : snapshot.getChildren()) {
+
+                    for (DataSnapshot monthSnap : yearSnap.getChildren()) {
+                        String monthKey = monthSnap.getKey();
+
+                        if (monthKey.equalsIgnoreCase("June")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    String categoryKey = idSnap.getKey();
+
+                                    if (categoryKey.equalsIgnoreCase("Food")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Beauty & Personal Care")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Home Essentials")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Pharmacy")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    }
+
+
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+
+                //applying colors
+                ArrayList<Integer> colors = new ArrayList<>();
+                for (int color : ColorTemplate.MATERIAL_COLORS) {
+                    colors.add(color);
+                }
+
+                colors.add(ColorTemplate.getHoloBlue());
+
+                PieDataSet dataSet = new PieDataSet(pieEntries, "");
+                dataSet.setColors(colors);
+                dataSet.setValueTextColor(Color.WHITE);
+
+                PieData data = new PieData(dataSet);
+                data.setDrawValues(true);
+                data.setValueFormatter(new PercentFormatter(drilledDownChart));
+                data.setValueTextSize(16f);
+
+                drilledDownChart.setData(data);
+                drilledDownChart.invalidate();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ExpensesAnalyticsActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //get the data in firebase to be displayed in pie chart | May Month
+    private void mayDrilledDownChart() {
+
+        DatabaseReference spendingReference = FirebaseDatabase.getInstance().getReference().child("Customers").child("Inventories").child(FirebaseAuth.getInstance().getUid());
+        ArrayList<PieEntry> pieEntries = new ArrayList<>();
+        itemList = new ArrayList<>();
+
+        spendingReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot yearSnap : snapshot.getChildren()) {
+
+                    for (DataSnapshot monthSnap : yearSnap.getChildren()) {
+                        String monthKey = monthSnap.getKey();
+
+                        if (monthKey.equalsIgnoreCase("May")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    String categoryKey = idSnap.getKey();
+
+                                    if (categoryKey.equalsIgnoreCase("Food")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Beauty & Personal Care")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Home Essentials")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Pharmacy")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    }
+
+
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+
+                //applying colors
+                ArrayList<Integer> colors = new ArrayList<>();
+                for (int color : ColorTemplate.MATERIAL_COLORS) {
+                    colors.add(color);
+                }
+
+                colors.add(ColorTemplate.getHoloBlue());
+
+                PieDataSet dataSet = new PieDataSet(pieEntries, "");
+                dataSet.setColors(colors);
+                dataSet.setValueTextColor(Color.WHITE);
+
+                PieData data = new PieData(dataSet);
+                data.setDrawValues(true);
+                data.setValueFormatter(new PercentFormatter(drilledDownChart));
+                data.setValueTextSize(16f);
+
+                drilledDownChart.setData(data);
+                drilledDownChart.invalidate();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ExpensesAnalyticsActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //get the data in firebase to be displayed in pie chart | April Month
+    private void aprilDrilledDownChart() {
+
+        DatabaseReference spendingReference = FirebaseDatabase.getInstance().getReference().child("Customers").child("Inventories").child(FirebaseAuth.getInstance().getUid());
+        ArrayList<PieEntry> pieEntries = new ArrayList<>();
+        itemList = new ArrayList<>();
+
+        spendingReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot yearSnap : snapshot.getChildren()) {
+
+                    for (DataSnapshot monthSnap : yearSnap.getChildren()) {
+                        String monthKey = monthSnap.getKey();
+
+                        if (monthKey.equalsIgnoreCase("April")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    String categoryKey = idSnap.getKey();
+
+                                    if (categoryKey.equalsIgnoreCase("Food")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Beauty & Personal Care")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Home Essentials")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Pharmacy")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    }
+
+
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+
+                //applying colors
+                ArrayList<Integer> colors = new ArrayList<>();
+                for (int color : ColorTemplate.MATERIAL_COLORS) {
+                    colors.add(color);
+                }
+
+                colors.add(ColorTemplate.getHoloBlue());
+
+                PieDataSet dataSet = new PieDataSet(pieEntries, "");
+                dataSet.setColors(colors);
+                dataSet.setValueTextColor(Color.WHITE);
+
+                PieData data = new PieData(dataSet);
+                data.setDrawValues(true);
+                data.setValueFormatter(new PercentFormatter(drilledDownChart));
+                data.setValueTextSize(16f);
+
+                drilledDownChart.setData(data);
+                drilledDownChart.invalidate();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ExpensesAnalyticsActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //get the data in firebase to be displayed in pie chart | March Month
+    private void marchDrilledDownChart() {
+
+        DatabaseReference spendingReference = FirebaseDatabase.getInstance().getReference().child("Customers").child("Inventories").child(FirebaseAuth.getInstance().getUid());
+        ArrayList<PieEntry> pieEntries = new ArrayList<>();
+        itemList = new ArrayList<>();
+
+        spendingReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot yearSnap : snapshot.getChildren()) {
+
+                    for (DataSnapshot monthSnap : yearSnap.getChildren()) {
+                        String monthKey = monthSnap.getKey();
+
+                        if (monthKey.equalsIgnoreCase("March")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    String categoryKey = idSnap.getKey();
+
+                                    if (categoryKey.equalsIgnoreCase("Food")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Beauty & Personal Care")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Home Essentials")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Pharmacy")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    }
+
+
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+
+                //applying colors
+                ArrayList<Integer> colors = new ArrayList<>();
+                for (int color : ColorTemplate.MATERIAL_COLORS) {
+                    colors.add(color);
+                }
+
+                colors.add(ColorTemplate.getHoloBlue());
+
+                PieDataSet dataSet = new PieDataSet(pieEntries, "");
+                dataSet.setColors(colors);
+                dataSet.setValueTextColor(Color.WHITE);
+
+                PieData data = new PieData(dataSet);
+                data.setDrawValues(true);
+                data.setValueFormatter(new PercentFormatter(drilledDownChart));
+                data.setValueTextSize(16f);
+
+                drilledDownChart.setData(data);
+                drilledDownChart.invalidate();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ExpensesAnalyticsActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //get the data in firebase to be displayed in pie chart | February Month
+    private void februaryDrilledDownChart() {
+
+        DatabaseReference spendingReference = FirebaseDatabase.getInstance().getReference().child("Customers").child("Inventories").child(FirebaseAuth.getInstance().getUid());
+        ArrayList<PieEntry> pieEntries = new ArrayList<>();
+        itemList = new ArrayList<>();
+
+        spendingReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot yearSnap : snapshot.getChildren()) {
+
+                    for (DataSnapshot monthSnap : yearSnap.getChildren()) {
+                        String monthKey = monthSnap.getKey();
+
+                        if (monthKey.equalsIgnoreCase("February")) {
+                            itemList.clear();
+
+                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+
+                                    String categoryKey = idSnap.getKey();
+
+                                    if (categoryKey.equalsIgnoreCase("Food")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Beauty & Personal Care")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Home Essentials")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    } else if (categoryKey.equalsIgnoreCase("Pharmacy")) {
+
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
+
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
+
+                                        }
+
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
+
+                                    }
+
+
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+
+                //applying colors
+                ArrayList<Integer> colors = new ArrayList<>();
+                for (int color : ColorTemplate.MATERIAL_COLORS) {
+                    colors.add(color);
+                }
+
+                colors.add(ColorTemplate.getHoloBlue());
+
+                PieDataSet dataSet = new PieDataSet(pieEntries, "");
+                dataSet.setColors(colors);
+                dataSet.setValueTextColor(Color.WHITE);
+
+                PieData data = new PieData(dataSet);
+                data.setDrawValues(true);
+                data.setValueFormatter(new PercentFormatter(drilledDownChart));
+                data.setValueTextSize(16f);
+
+                drilledDownChart.setData(data);
+                drilledDownChart.invalidate();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ExpensesAnalyticsActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //get the data in firebase to be displayed in pie chart | January Month
+    private void januaryDrilledDownChart() {
+
+        DatabaseReference spendingReference = FirebaseDatabase.getInstance().getReference().child("Customers").child("Inventories").child(FirebaseAuth.getInstance().getUid());
+        ArrayList<PieEntry> pieEntries = new ArrayList<>();
+        itemList = new ArrayList<>();
 
         spendingReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -521,214 +1810,57 @@ public class ExpensesAnalyticsActivity extends AppCompatActivity implements View
 
                                 for (DataSnapshot idSnap : cartSnap.getChildren()) {
 
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
+                                    String categoryKey = idSnap.getKey();
 
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
+                                    if (categoryKey.equalsIgnoreCase("Food")) {
 
-                                    }
-                                }
-                            }
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
 
-                            entries.add(new PieEntry(groceryTotals(), monthKey));
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
 
-                        } else if (monthKey.equalsIgnoreCase("February")) {
-                            itemList.clear();
+                                        }
 
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
 
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+                                    } else if (categoryKey.equalsIgnoreCase("Beauty & Personal Care")) {
 
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
 
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
 
-                                    }
-                                }
-                            }
+                                        }
 
-                            entries.add(new PieEntry(groceryTotals(), monthKey));
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
 
-                        } else if (monthKey.equalsIgnoreCase("March")) {
-                            itemList.clear();
+                                    } else if (categoryKey.equalsIgnoreCase("Home Essentials")) {
 
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
 
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
 
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
+                                        }
 
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
 
-                                    }
-                                }
-                            }
+                                    } else if (categoryKey.equalsIgnoreCase("Pharmacy")) {
 
-                            entries.add(new PieEntry(groceryTotals(), monthKey));
+                                        for (DataSnapshot snap : idSnap.getChildren()) {
 
-                        } else if (monthKey.equalsIgnoreCase("April")) {
-                            itemList.clear();
+                                            GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
+                                            itemList.add(groceryItemModel);
 
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+                                        }
 
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
+                                        pieEntries.add(new PieEntry(groceryTotals(), categoryKey));
 
                                     }
+
+
                                 }
                             }
-
-                            entries.add(new PieEntry(groceryTotals(), monthKey));
-
-                        } else if (monthKey.equalsIgnoreCase("May")) {
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            entries.add(new PieEntry(groceryTotals(), monthKey));
-
-                        } else if (monthKey.equalsIgnoreCase("June")) {
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            entries.add(new PieEntry(groceryTotals(), monthKey));
-
-                        } else if (monthKey.equalsIgnoreCase("July")) {
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            entries.add(new PieEntry(groceryTotals(), monthKey));
-
-                        } else if (monthKey.equalsIgnoreCase("August")) {
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            entries.add(new PieEntry(groceryTotals(), monthKey));
-
-                        } else if (monthKey.equalsIgnoreCase("September")) {
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            entries.add(new PieEntry(groceryTotals(), monthKey));
-
-                        } else if (monthKey.equalsIgnoreCase("September")) {
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            entries.add(new PieEntry(groceryTotals(), monthKey));
-
-                        } else if (monthKey.equalsIgnoreCase("October")) {
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            entries.add(new PieEntry(groceryTotals(), monthKey));
-
-                        } else if (monthKey.equalsIgnoreCase("November")) {
-                            itemList.clear();
-
-                            for (DataSnapshot cartSnap : monthSnap.getChildren()) {
-
-                                for (DataSnapshot idSnap : cartSnap.getChildren()) {
-
-                                    for (DataSnapshot snap : idSnap.getChildren()) {
-
-                                        GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
-                                        itemList.add(groceryItemModel);
-
-                                    }
-                                }
-                            }
-
-                            entries.add(new PieEntry(groceryTotals(), monthKey));
 
                         }
                     }
@@ -737,43 +1869,23 @@ public class ExpensesAnalyticsActivity extends AppCompatActivity implements View
 
                 //applying colors
                 ArrayList<Integer> colors = new ArrayList<>();
-                for (int color : ColorTemplate.COLORFUL_COLORS) {
-                    colors.add(color);
-                }
-
                 for (int color : ColorTemplate.MATERIAL_COLORS) {
-                    colors.add(color);
-                }
-
-                for (int color : ColorTemplate.VORDIPLOM_COLORS) {
-                    colors.add(color);
-                }
-
-                for (int color : ColorTemplate.JOYFUL_COLORS) {
-                    colors.add(color);
-                }
-
-                for (int color : ColorTemplate.LIBERTY_COLORS) {
-                    colors.add(color);
-                }
-
-                for (int color : ColorTemplate.PASTEL_COLORS) {
                     colors.add(color);
                 }
 
                 colors.add(ColorTemplate.getHoloBlue());
 
-                PieDataSet dataSet = new PieDataSet(entries, "Categories");
+                PieDataSet dataSet = new PieDataSet(pieEntries, "");
                 dataSet.setColors(colors);
                 dataSet.setValueTextColor(Color.WHITE);
 
                 PieData data = new PieData(dataSet);
                 data.setDrawValues(true);
-                data.setValueFormatter(new PercentFormatter(monthlyExpensesPieChart));
-                data.setValueTextSize(12f);
+                data.setValueFormatter(new PercentFormatter(drilledDownChart));
+                data.setValueTextSize(16f);
 
-                monthlyExpensesPieChart.setData(data);
-                monthlyExpensesPieChart.invalidate();
+                drilledDownChart.setData(data);
+                drilledDownChart.invalidate();
 
             }
 

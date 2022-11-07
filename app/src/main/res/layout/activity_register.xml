@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".RegisterActivity">
 
@@ -14,11 +15,8 @@
         <View
             android:id="@+id/topView"
             android:layout_width="match_parent"
-            android:layout_height="600dp"
-            android:background="?attr/colorPrimary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="650dp"
+            android:background="?attr/colorPrimary" />
 
         <View
             android:id="@+id/view5"
@@ -30,17 +28,14 @@
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:orientation="horizontal"
                 android:layout_marginTop="20dp"
+                android:orientation="horizontal"
                 android:weightSum="2">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
@@ -53,14 +48,14 @@
                         android:id="@+id/topText"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Register"
+                        android:layout_marginLeft="20dp"
                         android:fontFamily="@font/baloo_bhai"
                         android:gravity="bottom"
-                        android:layout_marginLeft="20dp"
-                        android:textColor="@android:color/white"
+                        android:text="Register"
                         android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                        android:textColor="@android:color/white"
                         android:textSize="40sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
@@ -89,35 +84,33 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="450dp"
-                    android:elevation="20dp"
-                    app:cardCornerRadius="10dp"
-                    android:layout_margin="20dp"
                     android:layout_gravity="center"
-                    android:outlineAmbientShadowColor="@color/white"
-                    android:outlineSpotShadowColor="@color/white"
-                    android:background="@color/blue_main">
+                    android:layout_margin="20dp"
+                    android:elevation="20dp"
+                    app:cardCornerRadius="10dp">
 
                     <androidx.core.widget.NestedScrollView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scrollbars="vertical"
                         android:scrollbarSize="2dp"
-                        android:scrollbarStyle="insideOverlay">
+                        android:isScrollContainer="false"
+                        android:scrollbarStyle="insideOverlay"
+                        android:scrollbars="vertical">
 
                         <androidx.appcompat.widget.LinearLayoutCompat
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:layout_margin="15dp">
+                            android:layout_margin="15dp"
+                            android:orientation="vertical">
 
                             <com.google.android.material.textfield.TextInputLayout
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:boxCornerRadiusTopStart="20dp"
-                                app:boxCornerRadiusTopEnd="20dp"
-                                app:boxCornerRadiusBottomStart="20dp"
                                 app:boxCornerRadiusBottomEnd="20dp"
+                                app:boxCornerRadiusBottomStart="20dp"
+                                app:boxCornerRadiusTopEnd="20dp"
+                                app:boxCornerRadiusTopStart="20dp"
                                 app:startIconDrawable="@drawable/ic_baseline_person_2_24">
 
                                 <com.google.android.material.textfield.TextInputEditText
@@ -129,14 +122,22 @@
                                     android:textColorHint="@color/blue_dark" />
                             </com.google.android.material.textfield.TextInputLayout>
 
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="Gender"
+                                android:textSize="17sp"
+                                android:textStyle="bold" />
+
                             <androidx.appcompat.widget.AppCompatSpinner
                                 android:id="@+id/userGender"
                                 android:layout_width="match_parent"
-                                android:layout_height="40dp"
-                                android:layout_marginTop="5dp"
+                                android:layout_height="50dp"
+                                android:layout_marginBottom="5dp"
                                 android:entries="@array/gender"
-                                android:spinnerMode="dropdown"
-                                android:prompt="@string/gender_prompt">
+                                android:prompt="@string/gender_prompt"
+                                android:spinnerMode="dropdown">
 
                             </androidx.appcompat.widget.AppCompatSpinner>
 
@@ -150,15 +151,15 @@
                                 <androidx.appcompat.widget.LinearLayoutCompat
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:orientation="vertical"
-                                    android:layout_weight="1">
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
 
                                     <com.google.android.material.textfield.TextInputLayout
                                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        app:boxCornerRadiusTopStart="20dp"
-                                        app:boxCornerRadiusBottomStart="20dp">
+                                        app:boxCornerRadiusBottomStart="20dp"
+                                        app:boxCornerRadiusTopStart="20dp">
 
                                         <com.google.android.material.textfield.TextInputEditText
                                             android:id="@+id/userBirthday"
@@ -175,9 +176,9 @@
                                 <androidx.appcompat.widget.LinearLayoutCompat
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:orientation="vertical"
+                                    android:layout_weight="6"
                                     android:gravity="center"
-                                    android:layout_weight="6">
+                                    android:orientation="vertical">
 
                                     <androidx.appcompat.widget.AppCompatButton
                                         android:id="@+id/dateBtn"
@@ -186,8 +187,8 @@
                                         android:layout_gravity="center"
                                         android:background="@drawable/ic_baseline_calendar_month_24"
                                         android:backgroundTint="?attr/colorPrimary"
-                                        android:textColor="@color/white"
                                         android:textAllCaps="false"
+                                        android:textColor="@color/white"
                                         android:textStyle="bold" />
 
                                 </androidx.appcompat.widget.LinearLayoutCompat>
@@ -198,12 +199,12 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:boxCornerRadiusTopStart="20dp"
-                                app:boxCornerRadiusTopEnd="20dp"
-                                app:boxCornerRadiusBottomStart="20dp"
+                                android:layout_marginTop="5dp"
                                 app:boxCornerRadiusBottomEnd="20dp"
-                                app:startIconDrawable="@drawable/ic_baseline_calendar_month_24"
-                                android:layout_marginTop="5dp">
+                                app:boxCornerRadiusBottomStart="20dp"
+                                app:boxCornerRadiusTopEnd="20dp"
+                                app:boxCornerRadiusTopStart="20dp"
+                                app:startIconDrawable="@drawable/ic_baseline_calendar_month_24">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/userAge"
@@ -225,16 +226,16 @@
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginRight="3dp"
                                     android:text="+63"
-                                    android:textSize="18sp"
-                                    android:layout_marginRight="3dp"/>
+                                    android:textSize="18sp" />
 
                                 <com.google.android.material.textfield.TextInputLayout
                                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    app:boxCornerRadiusTopEnd="20dp"
-                                    app:boxCornerRadiusBottomEnd="20dp">
+                                    app:boxCornerRadiusBottomEnd="20dp"
+                                    app:boxCornerRadiusTopEnd="20dp">
 
                                     <com.google.android.material.textfield.TextInputEditText
                                         android:id="@+id/userPhoneNumber"
@@ -251,12 +252,12 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:startIconDrawable="@drawable/ic_baseline_email_24"
-                                app:boxCornerRadiusTopStart="20dp"
-                                app:boxCornerRadiusTopEnd="20dp"
-                                app:boxCornerRadiusBottomStart="20dp"
+                                android:layout_marginTop="5dp"
                                 app:boxCornerRadiusBottomEnd="20dp"
-                                android:layout_marginTop="5dp">
+                                app:boxCornerRadiusBottomStart="20dp"
+                                app:boxCornerRadiusTopEnd="20dp"
+                                app:boxCornerRadiusTopStart="20dp"
+                                app:startIconDrawable="@drawable/ic_baseline_email_24">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/userEmailRegister"
@@ -271,13 +272,13 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:endIconMode="password_toggle"
-                                app:startIconDrawable="@drawable/ic_baseline_lock_24"
-                                app:boxCornerRadiusTopStart="20dp"
-                                app:boxCornerRadiusTopEnd="20dp"
-                                app:boxCornerRadiusBottomStart="20dp"
+                                android:layout_marginTop="5dp"
                                 app:boxCornerRadiusBottomEnd="20dp"
-                                android:layout_marginTop="5dp">
+                                app:boxCornerRadiusBottomStart="20dp"
+                                app:boxCornerRadiusTopEnd="20dp"
+                                app:boxCornerRadiusTopStart="20dp"
+                                app:endIconMode="password_toggle"
+                                app:startIconDrawable="@drawable/ic_baseline_lock_24">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/userPasswordRegister"
@@ -292,13 +293,13 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:startIconDrawable="@drawable/ic_baseline_lock_24"
-                                app:endIconMode="password_toggle"
-                                app:boxCornerRadiusTopStart="20dp"
-                                app:boxCornerRadiusTopEnd="20dp"
-                                app:boxCornerRadiusBottomStart="20dp"
+                                android:layout_marginTop="5dp"
                                 app:boxCornerRadiusBottomEnd="20dp"
-                                android:layout_marginTop="5dp">
+                                app:boxCornerRadiusBottomStart="20dp"
+                                app:boxCornerRadiusTopEnd="20dp"
+                                app:boxCornerRadiusTopStart="20dp"
+                                app:endIconMode="password_toggle"
+                                app:startIconDrawable="@drawable/ic_baseline_lock_24">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/userConfirmPassword"
@@ -313,19 +314,19 @@
                                 android:id="@+id/termsConditionsCheckbox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="I agree with the Terms &amp; Conditions."/>
+                                android:text="I agree with the Terms &amp; Conditions." />
 
                             <androidx.appcompat.widget.AppCompatButton
                                 android:id="@+id/userRegisterBtn"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="20dp"
+                                android:layout_marginBottom="10dp"
                                 android:background="@drawable/rounded_button_main"
                                 android:text="Register"
                                 android:textColor="#FFFFFF"
                                 android:textSize="20sp"
-                                android:textStyle="bold"
-                                android:layout_marginBottom="10dp"/>
+                                android:textStyle="bold" />
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -342,8 +343,6 @@
             android:layout_height="40dp"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
             android:gravity="center">
 
             <TextView

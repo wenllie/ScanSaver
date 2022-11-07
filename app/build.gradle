@@ -83,6 +83,12 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 
+    //charts
+    implementation 'com.github.highcharts:highcharts-android:10.2.0'
+    implementation 'com.google.code.gson:gson:2.10'
+
+    implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
+
     //pdf
     implementation 'com.tom-roush:pdfbox-android:2.0.25.0'
     implementation 'com.github.Gkemon:Android-XML-to-PDF-Generator:2.6.2'

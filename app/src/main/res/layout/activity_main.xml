@@ -17,10 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="550dp"
             android:background="?attr/colorPrimary"
-            android:layout_alignParentTop="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_alignParentTop="true" />
 
         <View
             android:id="@+id/view5"
@@ -102,8 +99,7 @@
                     android:elevation="20dp"
                     app:cardCornerRadius="20dp"
                     android:layout_margin="20dp"
-                    android:layout_gravity="center"
-                    android:background="@color/blue_main">
+                    android:layout_gravity="center">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"

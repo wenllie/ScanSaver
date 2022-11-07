@@ -10,7 +10,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/ic_stacked_steps_haikei"/>
+        android:background="@drawable/ic_stacked_steps_haikei" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -35,35 +35,66 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="Choose Spending year:"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"/>
 
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/spendingCategoryExSpinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:dropDownWidth="match_parent"
+                android:spinnerMode="dropdown"/>
 
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="none">
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <com.github.mikephil.charting.charts.BarChart
-                        android:id="@+id/monthlyExpensesBarChart"
+                    <com.anychart.AnyChartView
+                        android:id="@+id/anychart"
                         android:layout_width="match_parent"
-                        android:layout_height="500dp" />
+                        android:layout_height="250dp"
+                        android:background="@drawable/ic_stacked_steps_haikei" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignTop="@+id/anychart" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/monthChosen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/white"
+                        android:layout_below="@id/anychart"/>
 
                     <com.github.mikephil.charting.charts.PieChart
-                        android:id="@+id/monthlyExpensesPieChart"
+                        android:id="@+id/drilledDownChart"
                         android:layout_width="match_parent"
-                        android:layout_height="500dp" />
+                        android:layout_height="300dp"
+                        android:visibility="gone"
+                        android:layout_below="@+id/monthChosen" />
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                </RelativeLayout>
 
             </ScrollView>
 

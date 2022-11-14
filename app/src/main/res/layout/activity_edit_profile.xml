@@ -6,30 +6,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_gravity="center"
+    android:background="@drawable/ic_circle_scatter_haikei"
     tools:context=".users.settings.EditProfileActivity">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:background="?attr/colorPrimary">
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/frEditProfileToSettings"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:src="@drawable/ic_baseline_close_24"
-            app:tint="@color/white"
             android:padding="10dp"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Update Profile"
-            android:gravity="center_vertical"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -70,8 +60,6 @@
                         android:layout_height="wrap_content"
                         app:boxCornerRadiusTopEnd="20dp"
                         app:boxCornerRadiusTopStart="20dp"
-                        app:boxCornerRadiusBottomEnd="20dp"
-                        app:boxCornerRadiusBottomStart="20dp"
                         android:layout_marginTop="20dp">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -81,6 +69,23 @@
                             android:hint="Email"
                             android:enabled="false"
                             android:inputType="textEmailAddress"
+                            android:textColorHint="@color/blue_dark" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:prefixText="+63"
+                        app:boxCornerRadiusBottomStart="20dp"
+                        app:boxCornerRadiusBottomEnd="20dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editPhoneNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Phone Number"
+                            android:inputType="phone"
                             android:textColorHint="@color/blue_dark" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -196,38 +201,6 @@
                             android:inputType="text"
                             android:textColorHint="@color/blue_dark" />
                     </com.google.android.material.textfield.TextInputLayout>
-
-                    <androidx.appcompat.widget.LinearLayoutCompat
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="+63"
-                            android:textSize="18sp"
-                            android:layout_marginRight="3dp"/>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:boxCornerRadiusTopEnd="20dp"
-                            app:boxCornerRadiusBottomEnd="20dp">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/editPhoneNumber"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="Phone Number"
-                                android:inputType="phone"
-                                android:textColorHint="@color/blue_dark" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                    </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/updateProfileBtn"

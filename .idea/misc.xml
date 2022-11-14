@@ -59,7 +59,7 @@
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_set_profile_picture.xml" value="0.3484375" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_settings.xml" value="0.33" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_shopping_cart_show_actovoty.xml" value="0.3625" />
-        <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_shopping_cart_view.xml" value="0.3625" />
+        <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_shopping_cart_view.xml" value="0.1" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_spending.xml" value="0.358695652173913" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_splash.xml" value="0.33" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_update_password.xml" value="0.33" />
@@ -67,16 +67,18 @@
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_user_verify.xml" value="0.3625" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_welcome.xml" value="0.3625" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/app_bar_user_nav_drawer.xml" value="0.3625" />
-        <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/card_view_grocery_item.xml" value="0.358695652173913" />
+        <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/card_view_grocery_item.xml" value="0.33" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/card_view_rate_us.xml" value="0.1762917933130699" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/card_view_shopping_cart.xml" value="0.3614583333333333" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/card_view_show_scanned.xml" value="0.5" />
+        <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/card_view_similar_item.xml" value="0.3625" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/content_user_nav_drawer.xml" value="0.34782608695652173" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_box_about_us.xml" value="0.33" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_box_complaints.xml" value="0.25" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_box_privacy_policies.xml" value="0.33" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_box_request.xml" value="0.358695652173913" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_box_show_scanned.xml" value="0.3614583333333333" />
+        <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_box_similar_item.xml" value="0.3614583333333333" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_box_terms_and_conditions.xml" value="0.358695652173913" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_rate_us.xml" value="0.3614583333333333" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/expenses_year_list.xml" value="0.21557971014492755" />
@@ -137,6 +139,7 @@
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/scansaveradmin/src/main/res/layout/card_view_customer_list.xml" value="0.358695652173913" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/scansaveradmin/src/main/res/layout/card_view_grocery_list.xml" value="0.358695652173913" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/scansaveradmin/src/main/res/layout/card_view_request_list.xml" value="0.3614583333333333" />
+        <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/scansaveradmin/src/main/res/layout/card_view_similar_item.xml" value="0.3625" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/scansaveradmin/src/main/res/layout/content_admin_nav_drawer.xml" value="0.3625" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/scansaveradmin/src/main/res/layout/dialog_about_us.xml" value="0.3614583333333333" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/scansaveradmin/src/main/res/layout/dialog_box_about_us.xml" value="0.3371104815864023" />

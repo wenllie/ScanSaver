@@ -2,15 +2,19 @@ package com.example.scansaverapp.users.dashboard.barcodedb;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapter.MainCategoryViewHolder> {
@@ -57,10 +62,13 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapte
 
         holder.categoryTitle.setText(mainCategoryClassList.get(position).title);
 
+        //holder.grocery_items_card_view.setCardBackgroundColor(holder.itemView.getResources().getColor(getRedColor(), null));
+
         DatabaseReference foodRef = FirebaseDatabase.getInstance().getReference("Customers").child("Budget")
                 .child(FirebaseAuth.getInstance().getUid());
 
         foodRef.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("ResourceAsColor")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -112,6 +120,7 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapte
                             if (totals > Float.parseFloat(catTotals)) {
                                 holder.categoryTotal.setTextColor(context.getResources().getColor(R.color.red));
                                 Toast.makeText(context, "Your Pharmacy cart exceeded your budget!", Toast.LENGTH_SHORT).show();
+
                             } else {
                                 holder.categoryTotal.setTextColor(context.getResources().getColor(R.color.blue_main));
                             }

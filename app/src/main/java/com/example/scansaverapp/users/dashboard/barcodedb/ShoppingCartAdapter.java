@@ -1,25 +1,37 @@
 package com.example.scansaverapp.users.dashboard.barcodedb;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.scansaverapp.R;
 import com.example.scansaverapp.helpers_database.GroceryItemModel;
 import com.example.scansaverapp.users.dashboard.ShoppingCartViewActivity;
+import com.example.scansaverapp.users.dashboard.SimilarItemAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +47,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
     float tPrice = 0;
     int qty = 0;
     AppCompatTextView totalPriceText;
+    int selectedPOs = 0;
 
     public ShoppingCartAdapter(Context context, List<GroceryItemModel> groceryList) {
 
@@ -62,6 +75,477 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                 .load(model.getGroceryImgUrl())
                 .into(holder.groceryImageView);
 
+
+        DatabaseReference itemReference = FirebaseDatabase.getInstance().getReference().child("Customers").child("Shopping Cart")
+                .child(model.getCustomerId());
+
+        holder.item_grocery_container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                selectedPOs = position;
+
+                if (selectedPOs == position) {
+
+                    String gName = holder.groceryItemNameTextView.getText().toString();
+                    float gPrice = Float.parseFloat(model.getGroceryPrice());
+
+                    itemReference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                            for (DataSnapshot categorySnap : snapshot.getChildren()) {
+
+                                String categoryKey = categorySnap.getKey();
+
+                                if (categoryKey.equalsIgnoreCase("Beauty & Personal Care")) {
+
+                                    if (model.getGroceryCategory().equalsIgnoreCase(categoryKey)) {
+
+                                        for (DataSnapshot uidSnap : categorySnap.getChildren()) {
+
+                                            if (uidSnap.child("groceryName").getValue() == gName) {
+
+                                                //open dialog box for the terms and conditions
+                                                Dialog similarItemDialog = new Dialog(context);
+                                                similarItemDialog.setContentView(R.layout.dialog_box_similar_item);
+
+                                                RecyclerView similarItemRecycler = similarItemDialog.findViewById(R.id.similarItemRecycler);
+
+                                                DatabaseReference shoppingCartReference = FirebaseDatabase.getInstance().getReference("Admin").child("Grocery Items");
+                                                shoppingCartReference.addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                                        for (DataSnapshot grocerySnap : snapshot.getChildren()) {
+
+                                                            String categorySnap = grocerySnap.getKey();
+
+                                                            if (categorySnap.equalsIgnoreCase("Beauty & Personal Care")) {
+                                                                groceryList.clear();
+
+                                                                for (DataSnapshot uidSnap : grocerySnap.getChildren()) {
+
+                                                                    String groceryNameValues = uidSnap.child("groceryName").getValue().toString();
+                                                                    String groceryPrice = uidSnap.child("groceryPrice").getValue().toString();
+                                                                    float groceryPriceValues = Float.parseFloat(groceryPrice);
+
+                                                                    boolean isFound = gName.indexOf(groceryNameValues) != 1;
+
+                                                                    if (isFound) {
+
+                                                                        if (gName.equalsIgnoreCase(groceryNameValues)) {
+
+                                                                        } else {
+
+                                                                            if (groceryPriceValues < gPrice) {
+
+                                                                                GroceryItemModel groceryItemModel = uidSnap.getValue(GroceryItemModel.class);
+                                                                                groceryList.add(groceryItemModel);
+
+                                                                            }
+
+                                                                        }
+
+                                                                    }
+
+                                                                }
+                                                            }
+                                                        }
+
+                                                        SimilarItemAdapter similarItemAdapter = new SimilarItemAdapter(context, groceryList);
+                                                        similarItemRecycler.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+                                                        similarItemRecycler.setAdapter(similarItemAdapter);
+                                                        similarItemAdapter.notifyDataSetChanged();
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                    }
+                                                });
+
+                                                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                                                lp.copyFrom(similarItemDialog.getWindow().getAttributes());
+                                                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                                                similarItemDialog.show();
+                                                similarItemDialog.getWindow().setAttributes(lp);
+                                                similarItemDialog.getWindow().setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(android.R.color.transparent)));
+
+                                            }
+
+                                        }
+                                    }
+                                } else if (categoryKey.equalsIgnoreCase("Food")) {
+
+                                    if (model.getGroceryCategory().equalsIgnoreCase(categoryKey)) {
+
+                                        for (DataSnapshot uidSnap : categorySnap.getChildren()) {
+
+                                            if (uidSnap.child("groceryName").getValue() == gName) {
+
+                                                //open dialog box for the terms and conditions
+                                                Dialog similarItemDialog = new Dialog(context);
+                                                similarItemDialog.setContentView(R.layout.dialog_box_similar_item);
+
+                                                ImageView backToShoppingCartBtn = similarItemDialog.findViewById(R.id.backToShoppingCartBtn);
+                                                RecyclerView similarItemRecycler = similarItemDialog.findViewById(R.id.similarItemRecycler);
+
+                                                backToShoppingCartBtn.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        similarItemDialog.dismiss();
+                                                    }
+                                                });
+
+                                                DatabaseReference shoppingCartReference = FirebaseDatabase.getInstance().getReference("Admin").child("Grocery Items");
+                                                shoppingCartReference.addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                                        for (DataSnapshot grocerySnap : snapshot.getChildren()) {
+
+                                                            String categorySnap = grocerySnap.getKey();
+
+                                                            if (categorySnap.equalsIgnoreCase("Food")) {
+                                                                groceryList.clear();
+
+                                                                for (DataSnapshot uidSnap : grocerySnap.getChildren()) {
+
+                                                                    String groceryNameValues = uidSnap.child("groceryName").getValue().toString();
+                                                                    String groceryPrice = uidSnap.child("groceryPrice").getValue().toString();
+                                                                    float groceryPriceValues = Float.parseFloat(groceryPrice);
+
+                                                                    boolean isFound = gName.indexOf(groceryNameValues) != 1;
+
+                                                                    if (isFound) {
+
+                                                                        if (gName.equalsIgnoreCase(groceryNameValues)) {
+
+                                                                        } else {
+
+                                                                            if (groceryPriceValues < gPrice) {
+
+                                                                                GroceryItemModel groceryItemModel = uidSnap.getValue(GroceryItemModel.class);
+                                                                                groceryList.add(groceryItemModel);
+
+                                                                            }
+
+                                                                        }
+
+                                                                    }
+
+                                                                }
+                                                            }
+                                                        }
+
+                                                        SimilarItemAdapter similarItemAdapter = new SimilarItemAdapter(context, groceryList);
+                                                        similarItemRecycler.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+                                                        similarItemRecycler.setAdapter(similarItemAdapter);
+                                                        similarItemAdapter.notifyDataSetChanged();
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                    }
+                                                });
+
+                                                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                                                lp.copyFrom(similarItemDialog.getWindow().getAttributes());
+                                                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                                                similarItemDialog.show();
+                                                similarItemDialog.getWindow().setAttributes(lp);
+                                                similarItemDialog.getWindow().setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(android.R.color.transparent)));
+
+                                            }
+
+                                        }
+                                    }
+                                } else if (categoryKey.equalsIgnoreCase("Home Essentials")) {
+
+                                    if (model.getGroceryCategory().equalsIgnoreCase(categoryKey)) {
+
+                                        for (DataSnapshot uidSnap : categorySnap.getChildren()) {
+
+                                            if (uidSnap.child("groceryName").getValue() == gName) {
+
+                                                        //open dialog box for the terms and conditions
+                                                        Dialog similarItemDialog = new Dialog(context);
+                                                        similarItemDialog.setContentView(R.layout.dialog_box_similar_item);
+
+                                                        ImageView backToShoppingCartBtn = similarItemDialog.findViewById(R.id.backToShoppingCartBtn);
+                                                        RecyclerView similarItemRecycler = similarItemDialog.findViewById(R.id.similarItemRecycler);
+
+                                                        backToShoppingCartBtn.setOnClickListener(new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                similarItemDialog.dismiss();
+                                                            }
+                                                        });
+
+                                                        DatabaseReference shoppingCartReference = FirebaseDatabase.getInstance().getReference("Admin").child("Grocery Items");
+                                                        shoppingCartReference.addValueEventListener(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                                                for (DataSnapshot grocerySnap : snapshot.getChildren()) {
+
+                                                                    String categorySnap = grocerySnap.getKey();
+
+                                                                    if (categorySnap.equalsIgnoreCase("Home Essentials")) {
+
+                                                                        groceryList.clear();
+
+                                                                        for (DataSnapshot uidSnap : grocerySnap.getChildren()) {
+
+                                                                            String groceryNameValues = uidSnap.child("groceryName").getValue().toString();
+                                                                            String groceryPrice = uidSnap.child("groceryPrice").getValue().toString();
+                                                                            float groceryPriceValues = Float.parseFloat(groceryPrice);
+
+                                                                            boolean isFound = gName.indexOf(groceryNameValues) != 1;
+
+                                                                            if (isFound) {
+
+                                                                                if (gName.equalsIgnoreCase(groceryNameValues)) {
+
+                                                                                } else {
+
+                                                                                    if (groceryPriceValues < gPrice) {
+
+                                                                                        GroceryItemModel groceryItemModel = uidSnap.getValue(GroceryItemModel.class);
+                                                                                        groceryList.add(groceryItemModel);
+
+                                                                                    }
+
+                                                                                }
+
+                                                                            }
+
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                SimilarItemAdapter similarItemAdapter = new SimilarItemAdapter(context, groceryList);
+                                                                similarItemRecycler.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+                                                                similarItemRecycler.setAdapter(similarItemAdapter);
+                                                                similarItemAdapter.notifyDataSetChanged();
+
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                                            }
+                                                        });
+
+                                                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                                                        lp.copyFrom(similarItemDialog.getWindow().getAttributes());
+                                                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                                        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                                                        similarItemDialog.show();
+                                                        similarItemDialog.getWindow().setAttributes(lp);
+                                                        similarItemDialog.getWindow().setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(android.R.color.transparent)));
+
+                                            }
+
+                                        }
+                                    }
+                                } else if (categoryKey.equalsIgnoreCase("Pharmacy")) {
+
+                                    if (model.getGroceryCategory().equalsIgnoreCase(categoryKey)) {
+
+                                        for (DataSnapshot uidSnap : categorySnap.getChildren()) {
+
+                                            if (uidSnap.child("groceryName").getValue() == gName) {
+
+                                                //open dialog box for the terms and conditions
+                                                Dialog similarItemDialog = new Dialog(context);
+                                                similarItemDialog.setContentView(R.layout.dialog_box_similar_item);
+
+                                                ImageView backToShoppingCartBtn = similarItemDialog.findViewById(R.id.backToShoppingCartBtn);
+                                                RecyclerView similarItemRecycler = similarItemDialog.findViewById(R.id.similarItemRecycler);
+
+                                                backToShoppingCartBtn.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        similarItemDialog.dismiss();
+                                                    }
+                                                });
+
+                                                DatabaseReference shoppingCartReference = FirebaseDatabase.getInstance().getReference("Admin").child("Grocery Items");
+                                                shoppingCartReference.addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                                        for (DataSnapshot grocerySnap : snapshot.getChildren()) {
+
+                                                            String categorySnap = grocerySnap.getKey();
+
+                                                            if (categorySnap.equalsIgnoreCase("Pharmacy")) {
+
+                                                                groceryList.clear();
+
+                                                                for (DataSnapshot uidSnap : grocerySnap.getChildren()) {
+
+                                                                    String groceryNameValues = uidSnap.child("groceryName").getValue().toString();
+                                                                    String groceryPrice = uidSnap.child("groceryPrice").getValue().toString();
+                                                                    float groceryPriceValues = Float.parseFloat(groceryPrice);
+
+                                                                    boolean isFound = gName.indexOf(groceryNameValues) != 1;
+
+                                                                    if (isFound) {
+
+                                                                        if (gName.equalsIgnoreCase(groceryNameValues)) {
+
+                                                                        } else {
+
+                                                                            if (groceryPriceValues < gPrice) {
+
+                                                                                GroceryItemModel groceryItemModel = uidSnap.getValue(GroceryItemModel.class);
+                                                                                groceryList.add(groceryItemModel);
+
+                                                                            }
+
+                                                                        }
+
+                                                                    }
+
+                                                                }
+                                                            }
+                                                        }
+
+                                                        SimilarItemAdapter similarItemAdapter = new SimilarItemAdapter(context, groceryList);
+                                                        similarItemRecycler.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+                                                        similarItemRecycler.setAdapter(similarItemAdapter);
+                                                        similarItemAdapter.notifyDataSetChanged();
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                    }
+                                                });
+
+
+                                                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                                                lp.copyFrom(similarItemDialog.getWindow().getAttributes());
+                                                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                                                similarItemDialog.show();
+                                                similarItemDialog.getWindow().setAttributes(lp);
+                                                similarItemDialog.getWindow().setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(android.R.color.transparent)));
+
+                                            }
+
+                                        }
+                                    }
+                                }
+
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                }
+            }
+        });
+
+        if (selectedPOs == position) {
+
+            String gName = holder.groceryItemNameTextView.getText().toString();
+            String[] searchSimilar = gName.split(" ");
+
+            itemReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                    for (DataSnapshot categorySnap : snapshot.getChildren()) {
+
+                        String categoryKey = categorySnap.getKey();
+
+                        if (categoryKey.equalsIgnoreCase("Beauty & Personal Care")) {
+
+                            if (model.getGroceryCategory().equalsIgnoreCase(categoryKey)) {
+
+                                for (DataSnapshot uidSnap : categorySnap.getChildren()) {
+
+                                    if (uidSnap.child("groceryName").getValue() == gName) {
+
+                                        holder.item_grocery_container.setBackgroundColor(Color.parseColor("#e1f7d5"));
+
+                                    }
+
+                                }
+                            }
+                        } else if (categoryKey.equalsIgnoreCase("Food")) {
+
+                            if (model.getGroceryCategory().equalsIgnoreCase(categoryKey)) {
+
+                                for (DataSnapshot uidSnap : categorySnap.getChildren()) {
+
+                                    if (uidSnap.child("groceryName").getValue() == gName) {
+
+                                        holder.item_grocery_container.setBackgroundColor(Color.parseColor("#e1f7d5"));
+
+                                    }
+
+                                }
+                            }
+                        } else if (categoryKey.equalsIgnoreCase("Home Essentials")) {
+
+                            if (model.getGroceryCategory().equalsIgnoreCase(categoryKey)) {
+
+                                for (DataSnapshot uidSnap : categorySnap.getChildren()) {
+
+                                    if (uidSnap.child("groceryName").getValue() == gName) {
+
+                                        holder.item_grocery_container.setBackgroundColor(Color.parseColor("#e1f7d5"));
+
+                                    }
+
+                                }
+                            }
+                        } else if (categoryKey.equalsIgnoreCase("Pharmacy")) {
+
+                            if (model.getGroceryCategory().equalsIgnoreCase(categoryKey)) {
+
+                                for (DataSnapshot uidSnap : categorySnap.getChildren()) {
+
+                                    if (uidSnap.child("groceryName").getValue() == gName) {
+
+                                        holder.item_grocery_container.setBackgroundColor(Color.parseColor("#e1f7d5"));
+
+                                    }
+
+                                }
+                            }
+                        }
+
+
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+        }
+
         //computation
         quantity = Integer.parseInt(model.getGroceryQuantity());
         qty = quantity;
@@ -70,7 +554,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         totalItemPrice = Float.parseFloat(model.getGroceryTotalItemPrice());
 
         Context context = holder.itemView.getContext();
-        ShoppingCartViewActivity shoppingCartViewActivity = (ShoppingCartViewActivity)context;
+        ShoppingCartViewActivity shoppingCartViewActivity = (ShoppingCartViewActivity) context;
         //totalPriceText = shoppingCartViewActivity.findViewById(R.id.totalPriceText);
 
         //totalPriceText.setText(String.format("%.2f", grandTotal()));
@@ -195,6 +679,8 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         AppCompatTextView groceryItemNameTextView, groceryMeasurementTextView, groceryPriceTextView, groceryQuantityTextView;
         AppCompatImageView groceryImageView;
         AppCompatButton ivPlusSign, ivMinusSign;
+        LinearLayoutCompat item_grocery_container;
+
 
         public ShoppingCartViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -206,6 +692,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
             ivPlusSign = itemView.findViewById(R.id.ivPlusSign);
             ivMinusSign = itemView.findViewById(R.id.ivMinusSign);
             groceryImageView = itemView.findViewById(R.id.groceryImageView);
+            item_grocery_container = itemView.findViewById(R.id.item_grocery_container);
 
         }
     }

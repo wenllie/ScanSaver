@@ -535,6 +535,8 @@ public class ExpensesAnalyticsActivity extends AppCompatActivity implements View
                                         setUpChart();
                                         decemberDrilledDownChart();
 
+                                    } else {
+                                        drilledDownChart.setVisibility(View.GONE);
                                     }
 
                                 }
@@ -825,6 +827,8 @@ public class ExpensesAnalyticsActivity extends AppCompatActivity implements View
                             itemList.clear();
 
                             for (DataSnapshot cartSnap : monthSnap.getChildren()) {
+
+                                String cartIdKey = cartSnap.getKey();
 
                                 for (DataSnapshot idSnap : cartSnap.getChildren()) {
 

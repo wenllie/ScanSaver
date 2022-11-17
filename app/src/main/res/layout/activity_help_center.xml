@@ -67,6 +67,7 @@
                 android:layout_weight="1">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/manageAccountCardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
@@ -105,6 +106,7 @@
                 android:layout_weight="1">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/shoppingCartCardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
@@ -155,6 +157,7 @@
                 android:layout_weight="1">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/monthlyBudgetCardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
@@ -196,6 +199,7 @@
                 android:layout_weight="1">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/grocerySpendingCardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
@@ -214,7 +218,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="10dp"
                             android:layout_marginBottom="10dp"
-                            android:text="Grocery \nExpenses"
+                            android:text="Grocery \nSpending"
                             android:textStyle="bold" />
 
                         <androidx.appcompat.widget.AppCompatImageView
@@ -246,6 +250,7 @@
                 android:layout_weight="1">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/expensesAnalyticsCardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
@@ -260,17 +265,20 @@
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
-                            android:text="Manage \nAccount"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:text="Expenses \nAnalytics"
                             android:textStyle="bold" />
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="wrap_content"
                             android:layout_height="80dp"
                             android:layout_alignParentEnd="true"
-                            android:layout_marginEnd="-15dp"
+                            android:layout_marginEnd="-4dp"
                             android:layout_marginBottom="-7dp"
-                            android:src="@drawable/manage_account" />
+                            android:src="@drawable/analytics_hc" />
 
                     </RelativeLayout>
 
@@ -284,7 +292,7 @@
                 android:layout_weight="1">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/rateUs"
+                    android:id="@+id/rateUsCardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"

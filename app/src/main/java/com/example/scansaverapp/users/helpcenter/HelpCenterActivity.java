@@ -1,37 +1,19 @@
 package com.example.scansaverapp.users.helpcenter;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.Toast;
 
 import com.example.scansaverapp.R;
 import com.example.scansaverapp.UserNavDrawer;
 import com.example.scansaverapp.users.settings.CardViewRateUs;
-import com.example.scansaverapp.users.settings.SettingsActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,7 +22,7 @@ public class HelpCenterActivity extends AppCompatActivity implements View.OnClic
 
     ImageView frHelpCenterToDashboard;
     AppCompatButton submitRequestBtn, fileComplaintBtn;
-    CardView rateUs;
+    CardView rateUsCardView, manageAccountCardView, shoppingCartCardView, monthlyBudgetCardView, expensesAnalyticsCardView, grocerySpendingCardView;
     private MaterialAlertDialogBuilder requestDialog, complaintsDialog;
 
     private Calendar calendar;
@@ -54,12 +36,22 @@ public class HelpCenterActivity extends AppCompatActivity implements View.OnClic
         frHelpCenterToDashboard = (ImageView) findViewById(R.id.frHelpCenterToDashboard);
         /*fileComplaintBtn = (AppCompatButton) findViewById(R.id.fileComplaintBtn);
         submitRequestBtn = (AppCompatButton) findViewById(R.id.submitRequestBtn);*/
-        rateUs = findViewById(R.id.rateUs);
+        rateUsCardView = findViewById(R.id.rateUsCardView);
+        manageAccountCardView = findViewById(R.id.manageAccountCardView);
+        shoppingCartCardView = findViewById(R.id.shoppingCartCardView);
+        monthlyBudgetCardView = findViewById(R.id.monthlyBudgetCardView);
+        expensesAnalyticsCardView = findViewById(R.id.expensesAnalyticsCardView);
+        grocerySpendingCardView = findViewById(R.id.grocerySpendingCardView);
 
         frHelpCenterToDashboard.setOnClickListener(this);
         /*submitRequestBtn.setOnClickListener(this);
         fileComplaintBtn.setOnClickListener(this);*/
-        rateUs.setOnClickListener(this);
+        rateUsCardView.setOnClickListener(this);
+        manageAccountCardView.setOnClickListener(this);
+        shoppingCartCardView.setOnClickListener(this);
+        monthlyBudgetCardView.setOnClickListener(this);
+        expensesAnalyticsCardView.setOnClickListener(this);
+        grocerySpendingCardView.setOnClickListener(this);
     }
 
     @Override
@@ -78,6 +70,31 @@ public class HelpCenterActivity extends AppCompatActivity implements View.OnClic
                 onBackPressed();
                 break;
 
+            case R.id.manageAccountCardView:
+                startActivity(new Intent(HelpCenterActivity.this, ManageAccountHCActivity.class));
+                finish();
+                break;
+
+            case R.id.shoppingCartCardView:
+                startActivity(new Intent(HelpCenterActivity.this, ShoppingCartHCActivity.class));
+                finish();
+                break;
+
+            case R.id.monthlyBudgetCardView:
+                startActivity(new Intent(HelpCenterActivity.this, MonthlyBudgetHCActivity.class));
+                finish();
+                break;
+
+            case R.id.expensesAnalyticsCardView:
+                startActivity(new Intent(HelpCenterActivity.this, ExpensesAnalyticsHCActivity.class));
+                finish();
+                break;
+
+            case R.id.grocerySpendingCardView:
+                startActivity(new Intent(HelpCenterActivity.this, GrocerySpendingHCActivity.class));
+                finish();
+                break;
+
             /*case R.id.submitRequestBtn:
                 submitRequest();
                 break;
@@ -86,7 +103,7 @@ public class HelpCenterActivity extends AppCompatActivity implements View.OnClic
                 submitComplaint();
                 break;*/
 
-            case R.id.rateUs:
+            case R.id.rateUsCardView:
                 rateApp();
                 break;
         }

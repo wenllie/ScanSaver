@@ -77,7 +77,7 @@ public class UserVerifyActivity extends AppCompatActivity implements View.OnClic
                                             startActivity(login);
                                             finish();
                                         } else {
-                                            Toast.makeText(UserVerifyActivity.this, "Invalid OTP!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(UserVerifyActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });

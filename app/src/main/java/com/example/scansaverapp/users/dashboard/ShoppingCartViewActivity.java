@@ -221,6 +221,7 @@ public class ShoppingCartViewActivity extends AppCompatActivity implements View.
 
                 MainCategoryAdapter mainCategoryAdapter = new MainCategoryAdapter(categoryList, ShoppingCartViewActivity.this);
                 main_recycler.setLayoutManager(new LinearLayoutManager(ShoppingCartViewActivity.this, LinearLayoutManager.VERTICAL, false));
+                main_recycler.setItemAnimator(null);
                 main_recycler.setAdapter(mainCategoryAdapter);
                 mainCategoryAdapter.notifyDataSetChanged();
 

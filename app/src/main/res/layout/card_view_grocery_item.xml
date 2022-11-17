@@ -15,7 +15,7 @@
     tools:ignore="MissingDefaultResource">
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/item_grocery_container"
+        android:id="@+id/item_grocery_main_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -38,6 +38,7 @@
                 android:weightSum="5">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/item_grocery_container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"

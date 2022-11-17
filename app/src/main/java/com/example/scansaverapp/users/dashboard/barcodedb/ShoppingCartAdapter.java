@@ -1,6 +1,7 @@
 package com.example.scansaverapp.users.dashboard.barcodedb;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -25,7 +26,9 @@ import com.example.scansaverapp.R;
 import com.example.scansaverapp.helpers_database.GroceryItemModel;
 import com.example.scansaverapp.users.dashboard.ShoppingCartViewActivity;
 import com.example.scansaverapp.users.dashboard.SimilarItemAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -79,6 +82,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         DatabaseReference itemReference = FirebaseDatabase.getInstance().getReference().child("Customers").child("Shopping Cart")
                 .child(model.getCustomerId());
 
+        //Show similar items
         holder.item_grocery_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,11 +94,11 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                     String gName = holder.groceryItemNameTextView.getText().toString();
                     float gPrice = Float.parseFloat(model.getGroceryPrice());
 
-                    itemReference.addValueEventListener(new ValueEventListener() {
+                    itemReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
 
-                            for (DataSnapshot categorySnap : snapshot.getChildren()) {
+                            for (DataSnapshot categorySnap : task.getResult().getChildren()) {
 
                                 String categoryKey = categorySnap.getKey();
 
@@ -113,11 +117,11 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                                                 RecyclerView similarItemRecycler = similarItemDialog.findViewById(R.id.similarItemRecycler);
 
                                                 DatabaseReference shoppingCartReference = FirebaseDatabase.getInstance().getReference("Admin").child("Grocery Items");
-                                                shoppingCartReference.addValueEventListener(new ValueEventListener() {
+                                                shoppingCartReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                                     @Override
-                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                    public void onComplete(@NonNull Task<DataSnapshot> task) {
 
-                                                        for (DataSnapshot grocerySnap : snapshot.getChildren()) {
+                                                        for (DataSnapshot grocerySnap : task.getResult().getChildren()) {
 
                                                             String categorySnap = grocerySnap.getKey();
 
@@ -159,11 +163,6 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                                                         similarItemAdapter.notifyDataSetChanged();
 
                                                     }
-
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                                    }
                                                 });
 
                                                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -201,11 +200,11 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                                                 });
 
                                                 DatabaseReference shoppingCartReference = FirebaseDatabase.getInstance().getReference("Admin").child("Grocery Items");
-                                                shoppingCartReference.addValueEventListener(new ValueEventListener() {
+                                                shoppingCartReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                                     @Override
-                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                    public void onComplete(@NonNull Task<DataSnapshot> task) {
 
-                                                        for (DataSnapshot grocerySnap : snapshot.getChildren()) {
+                                                        for (DataSnapshot grocerySnap : task.getResult().getChildren()) {
 
                                                             String categorySnap = grocerySnap.getKey();
 
@@ -247,11 +246,6 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                                                         similarItemAdapter.notifyDataSetChanged();
 
                                                     }
-
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                                    }
                                                 });
 
                                                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -274,82 +268,75 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
                                             if (uidSnap.child("groceryName").getValue() == gName) {
 
-                                                        //open dialog box for the terms and conditions
-                                                        Dialog similarItemDialog = new Dialog(context);
-                                                        similarItemDialog.setContentView(R.layout.dialog_box_similar_item);
+                                                //open dialog box for the terms and conditions
+                                                Dialog similarItemDialog = new Dialog(context);
+                                                similarItemDialog.setContentView(R.layout.dialog_box_similar_item);
 
-                                                        ImageView backToShoppingCartBtn = similarItemDialog.findViewById(R.id.backToShoppingCartBtn);
-                                                        RecyclerView similarItemRecycler = similarItemDialog.findViewById(R.id.similarItemRecycler);
+                                                ImageView backToShoppingCartBtn = similarItemDialog.findViewById(R.id.backToShoppingCartBtn);
+                                                RecyclerView similarItemRecycler = similarItemDialog.findViewById(R.id.similarItemRecycler);
 
-                                                        backToShoppingCartBtn.setOnClickListener(new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View view) {
-                                                                similarItemDialog.dismiss();
-                                                            }
-                                                        });
+                                                backToShoppingCartBtn.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        similarItemDialog.dismiss();
+                                                    }
+                                                });
 
-                                                        DatabaseReference shoppingCartReference = FirebaseDatabase.getInstance().getReference("Admin").child("Grocery Items");
-                                                        shoppingCartReference.addValueEventListener(new ValueEventListener() {
-                                                            @Override
-                                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                DatabaseReference shoppingCartReference = FirebaseDatabase.getInstance().getReference("Admin").child("Grocery Items");
+                                                shoppingCartReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DataSnapshot> task) {
 
-                                                                for (DataSnapshot grocerySnap : snapshot.getChildren()) {
+                                                        for (DataSnapshot grocerySnap : task.getResult().getChildren()) {
 
-                                                                    String categorySnap = grocerySnap.getKey();
+                                                            String categorySnap = grocerySnap.getKey();
 
-                                                                    if (categorySnap.equalsIgnoreCase("Home Essentials")) {
+                                                            if (categorySnap.equalsIgnoreCase("Home Essentials")) {
 
-                                                                        groceryList.clear();
+                                                                groceryList.clear();
 
-                                                                        for (DataSnapshot uidSnap : grocerySnap.getChildren()) {
+                                                                for (DataSnapshot uidSnap : grocerySnap.getChildren()) {
 
-                                                                            String groceryNameValues = uidSnap.child("groceryName").getValue().toString();
-                                                                            String groceryPrice = uidSnap.child("groceryPrice").getValue().toString();
-                                                                            float groceryPriceValues = Float.parseFloat(groceryPrice);
+                                                                    String groceryNameValues = uidSnap.child("groceryName").getValue().toString();
+                                                                    String groceryPrice = uidSnap.child("groceryPrice").getValue().toString();
+                                                                    float groceryPriceValues = Float.parseFloat(groceryPrice);
 
-                                                                            boolean isFound = gName.indexOf(groceryNameValues) != 1;
+                                                                    boolean isFound = gName.indexOf(groceryNameValues) != 1;
 
-                                                                            if (isFound) {
+                                                                    if (isFound) {
 
-                                                                                if (gName.equalsIgnoreCase(groceryNameValues)) {
+                                                                        if (gName.equalsIgnoreCase(groceryNameValues)) {
 
-                                                                                } else {
+                                                                        } else {
 
-                                                                                    if (groceryPriceValues < gPrice) {
+                                                                            if (groceryPriceValues < gPrice) {
 
-                                                                                        GroceryItemModel groceryItemModel = uidSnap.getValue(GroceryItemModel.class);
-                                                                                        groceryList.add(groceryItemModel);
-
-                                                                                    }
-
-                                                                                }
+                                                                                GroceryItemModel groceryItemModel = uidSnap.getValue(GroceryItemModel.class);
+                                                                                groceryList.add(groceryItemModel);
 
                                                                             }
 
                                                                         }
+
                                                                     }
+
                                                                 }
-
-                                                                SimilarItemAdapter similarItemAdapter = new SimilarItemAdapter(context, groceryList);
-                                                                similarItemRecycler.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-                                                                similarItemRecycler.setAdapter(similarItemAdapter);
-                                                                similarItemAdapter.notifyDataSetChanged();
-
                                                             }
+                                                        }
 
-                                                            @Override
-                                                            public void onCancelled(@NonNull DatabaseError error) {
+                                                        SimilarItemAdapter similarItemAdapter = new SimilarItemAdapter(context, groceryList);
+                                                        similarItemRecycler.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+                                                        similarItemRecycler.setAdapter(similarItemAdapter);
+                                                        similarItemAdapter.notifyDataSetChanged();
 
-                                                            }
-                                                        });
+                                                    }
+                                                });
 
-                                                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                                                        lp.copyFrom(similarItemDialog.getWindow().getAttributes());
-                                                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                                                        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-                                                        similarItemDialog.show();
-                                                        similarItemDialog.getWindow().setAttributes(lp);
-                                                        similarItemDialog.getWindow().setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(android.R.color.transparent)));
+                                                int width = ViewGroup.LayoutParams.MATCH_PARENT;
+                                                int height = ViewGroup.LayoutParams.MATCH_PARENT;
+                                                similarItemDialog.getWindow().setLayout(width, height);
+                                                similarItemDialog.show();
+                                                similarItemDialog.getWindow().setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(android.R.color.transparent)));
 
                                             }
 
@@ -378,11 +365,10 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                                                 });
 
                                                 DatabaseReference shoppingCartReference = FirebaseDatabase.getInstance().getReference("Admin").child("Grocery Items");
-                                                shoppingCartReference.addValueEventListener(new ValueEventListener() {
+                                                shoppingCartReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                                     @Override
-                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                                                        for (DataSnapshot grocerySnap : snapshot.getChildren()) {
+                                                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                                        for (DataSnapshot grocerySnap : task.getResult().getChildren()) {
 
                                                             String categorySnap = grocerySnap.getKey();
 
@@ -423,12 +409,6 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                                                         similarItemRecycler.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
                                                         similarItemRecycler.setAdapter(similarItemAdapter);
                                                         similarItemAdapter.notifyDataSetChanged();
-
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError error) {
-
                                                     }
                                                 });
 
@@ -451,95 +431,150 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                             }
 
                         }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
                     });
 
                 }
             }
         });
 
+        Context context = holder.itemView.getContext();
+        ShoppingCartViewActivity shoppingCartViewActivity = (ShoppingCartViewActivity) context;
+
+        //check the position of the card view that user clicks
         if (selectedPOs == position) {
 
             String gName = holder.groceryItemNameTextView.getText().toString();
-            String[] searchSimilar = gName.split(" ");
+            float gPrice = Float.parseFloat(model.getGroceryPrice());
 
-            itemReference.addValueEventListener(new ValueEventListener() {
+            DatabaseReference similarReference = FirebaseDatabase.getInstance().getReference("Admin").child("Grocery Items");
+            similarReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
 
-                    for (DataSnapshot categorySnap : snapshot.getChildren()) {
+                    for (DataSnapshot categorySnap : task.getResult().getChildren()) {
 
                         String categoryKey = categorySnap.getKey();
 
                         if (categoryKey.equalsIgnoreCase("Beauty & Personal Care")) {
 
-                            if (model.getGroceryCategory().equalsIgnoreCase(categoryKey)) {
+                            for (DataSnapshot uidSnap : categorySnap.getChildren()) {
 
-                                for (DataSnapshot uidSnap : categorySnap.getChildren()) {
+                                String groceryNameValues = uidSnap.child("groceryName").getValue().toString();
+                                String groceryPrice = uidSnap.child("groceryPrice").getValue().toString();
+                                float groceryPriceValues = Float.parseFloat(groceryPrice);
 
-                                    if (uidSnap.child("groceryName").getValue() == gName) {
+                                boolean isFound = gName.indexOf(groceryNameValues) != 1;
 
-                                        holder.item_grocery_container.setBackgroundColor(Color.parseColor("#e1f7d5"));
+                                if (isFound) {
 
+                                    if (gName.equalsIgnoreCase(groceryNameValues)) {
+
+                                    } else {
+
+                                        if (gPrice > groceryPriceValues) {
+
+                                            holder.item_grocery_main_container.setBackgroundColor(Color.parseColor("#ffffff"));
+
+                                        } else {
+
+                                            holder.item_grocery_main_container.setBackgroundColor(Color.parseColor("#e1f7d5"));
+
+                                        }
                                     }
-
                                 }
                             }
+
                         } else if (categoryKey.equalsIgnoreCase("Food")) {
 
-                            if (model.getGroceryCategory().equalsIgnoreCase(categoryKey)) {
+                            for (DataSnapshot uidSnap : categorySnap.getChildren()) {
 
-                                for (DataSnapshot uidSnap : categorySnap.getChildren()) {
+                                String groceryNameValues = uidSnap.child("groceryName").getValue().toString();
+                                String groceryPrice = uidSnap.child("groceryPrice").getValue().toString();
+                                float groceryPriceValues = Float.parseFloat(groceryPrice);
 
-                                    if (uidSnap.child("groceryName").getValue() == gName) {
+                                boolean isFound = gName.indexOf(groceryNameValues) != 1;
 
-                                        holder.item_grocery_container.setBackgroundColor(Color.parseColor("#e1f7d5"));
+                                if (isFound) {
 
+                                    if (gName.equalsIgnoreCase(groceryNameValues)) {
+
+                                    } else {
+
+                                        if (gPrice > groceryPriceValues) {
+
+                                            holder.item_grocery_main_container.setBackgroundColor(Color.parseColor("#ffffff"));
+
+                                        } else {
+
+                                            holder.item_grocery_main_container.setBackgroundColor(Color.parseColor("#e1f7d5"));
+
+                                        }
                                     }
-
                                 }
                             }
+
                         } else if (categoryKey.equalsIgnoreCase("Home Essentials")) {
 
-                            if (model.getGroceryCategory().equalsIgnoreCase(categoryKey)) {
+                            for (DataSnapshot uidSnap : categorySnap.getChildren()) {
 
-                                for (DataSnapshot uidSnap : categorySnap.getChildren()) {
+                                String groceryNameValues = uidSnap.child("groceryName").getValue().toString();
+                                String groceryPrice = uidSnap.child("groceryPrice").getValue().toString();
+                                float groceryPriceValues = Float.parseFloat(groceryPrice);
 
-                                    if (uidSnap.child("groceryName").getValue() == gName) {
+                                boolean isFound = gName.indexOf(groceryNameValues) != 1;
 
-                                        holder.item_grocery_container.setBackgroundColor(Color.parseColor("#e1f7d5"));
+                                if (isFound) {
 
+                                    if (gName.equalsIgnoreCase(groceryNameValues)) {
+
+                                    } else {
+
+                                        if (gPrice > groceryPriceValues) {
+
+                                            holder.item_grocery_main_container.setBackgroundColor(Color.parseColor("#ffffff"));
+
+                                        } else {
+
+                                            holder.item_grocery_main_container.setBackgroundColor(Color.parseColor("#e1f7d5"));
+
+                                        }
                                     }
-
                                 }
                             }
+
                         } else if (categoryKey.equalsIgnoreCase("Pharmacy")) {
 
-                            if (model.getGroceryCategory().equalsIgnoreCase(categoryKey)) {
+                            for (DataSnapshot uidSnap : categorySnap.getChildren()) {
 
-                                for (DataSnapshot uidSnap : categorySnap.getChildren()) {
+                                String groceryNameValues = uidSnap.child("groceryName").getValue().toString();
+                                String groceryPrice = uidSnap.child("groceryPrice").getValue().toString();
+                                float groceryPriceValues = Float.parseFloat(groceryPrice);
 
-                                    if (uidSnap.child("groceryName").getValue() == gName) {
+                                boolean isFound = gName.indexOf(groceryNameValues) != 1;
 
-                                        holder.item_grocery_container.setBackgroundColor(Color.parseColor("#e1f7d5"));
+                                if (isFound) {
 
+                                    if (gName.equalsIgnoreCase(groceryNameValues)) {
+
+                                    } else {
+
+                                        if (gPrice > groceryPriceValues) {
+
+                                            holder.item_grocery_main_container.setBackgroundColor(Color.parseColor("#ffffff"));
+
+                                        } else {
+
+                                            holder.item_grocery_main_container.setBackgroundColor(Color.parseColor("#e1f7d5"));
+
+                                        }
                                     }
-
                                 }
                             }
+
                         }
 
 
                     }
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
 
                 }
             });
@@ -553,8 +588,8 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         price = Float.parseFloat(model.getGroceryPrice());
         totalItemPrice = Float.parseFloat(model.getGroceryTotalItemPrice());
 
-        Context context = holder.itemView.getContext();
-        ShoppingCartViewActivity shoppingCartViewActivity = (ShoppingCartViewActivity) context;
+        /*Context context = holder.itemView.getContext();
+        ShoppingCartViewActivity shoppingCartViewActivity = (ShoppingCartViewActivity) context;*/
         //totalPriceText = shoppingCartViewActivity.findViewById(R.id.totalPriceText);
 
         //totalPriceText.setText(String.format("%.2f", grandTotal()));
@@ -679,7 +714,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         AppCompatTextView groceryItemNameTextView, groceryMeasurementTextView, groceryPriceTextView, groceryQuantityTextView;
         AppCompatImageView groceryImageView;
         AppCompatButton ivPlusSign, ivMinusSign;
-        LinearLayoutCompat item_grocery_container;
+        LinearLayoutCompat item_grocery_container, item_grocery_main_container;
 
 
         public ShoppingCartViewHolder(@NonNull View itemView) {
@@ -693,6 +728,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
             ivMinusSign = itemView.findViewById(R.id.ivMinusSign);
             groceryImageView = itemView.findViewById(R.id.groceryImageView);
             item_grocery_container = itemView.findViewById(R.id.item_grocery_container);
+            item_grocery_main_container = itemView.findViewById(R.id.item_grocery_main_container);
 
         }
     }

@@ -39,8 +39,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ForgotPasswordActivity extends AppCompatActivity implements View.OnClickListener {
 
-    AppCompatTextView phStart;
-    TextInputEditText chooseMethod;
+    TextInputEditText resetPasswordUserEmail;
     Spinner chooseResetPassword;
     AppCompatButton resetPasswordBtn;
     private String verificationId;
@@ -57,32 +56,12 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
 
-        phStart = (AppCompatTextView) findViewById(R.id.phStart);
-        chooseMethod = (TextInputEditText) findViewById(R.id.chooseMethod);
-        chooseResetPassword = (Spinner) findViewById(R.id.chooseResetPassword);
+        resetPasswordUserEmail = (TextInputEditText) findViewById(R.id.resetPasswordUserEmail);
         resetPasswordBtn = (AppCompatButton) findViewById(R.id.resetPasswordBtn);
 
         mAuth = FirebaseAuth.getInstance();
 
         resetPasswordBtn.setOnClickListener(this);
-        chooseResetPassword.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (chooseResetPassword.getSelectedItem().equals("Email")) {
-                    chooseMethod.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-                    phStart.setVisibility(View.GONE);
-                } else {
-                    chooseMethod.setInputType(InputType.TYPE_CLASS_PHONE);
-                    phStart.setVisibility(View.VISIBLE);
-                }
-                chooseMethod.clearFocus();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
     }
 
     @Override
@@ -92,61 +71,25 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onClick(View view) {
-        String choose = chooseMethod.getText().toString();
-        String chooseValue = chooseResetPassword.getSelectedItem().toString();
+        String email = resetPasswordUserEmail.getText().toString();
 
-        if (chooseValue.equals("Email")) {
-            if (choose.isEmpty()) {
-                chooseMethod.setError("Email is required!");
-                chooseMethod.requestFocus();
-            } else if (!Patterns.EMAIL_ADDRESS.matcher(choose).matches()) {         //verify that email address is a valid email
-                chooseMethod.setError("Please enter a valid email address.");
-                chooseMethod.requestFocus();
-            } else {
-                mAuth.sendPasswordResetEmail(choose).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-
-                            Toast.makeText(ForgotPasswordActivity.this, "Please check your email.", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(ForgotPasswordActivity.this, MainActivity.class));
-                            finish();
-                        }
-                    }
-                });
-            }
+        if (email.isEmpty()) {
+            resetPasswordUserEmail.setError("Email is required!");
+            resetPasswordUserEmail.requestFocus();
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {         //verify that email address is a valid email
+            resetPasswordUserEmail.setError("Please enter a valid email address.");
+            resetPasswordUserEmail.requestFocus();
         } else {
-            if (choose.isEmpty()) {
-                chooseMethod.setError("Phone Number is required!");
-                chooseMethod.requestFocus();
-            } else if (choose.length() != 10) {
-                chooseMethod.setError("Invalid Phone Number!");
-                chooseMethod.requestFocus();
-            } else if (!Patterns.PHONE.matcher(choose).matches()) {         //verify that email address is a phone number
-                chooseMethod.setError("Please enter a valid Phone Number.");
-                chooseMethod.requestFocus();
-            } else {
-                Query checkUser = FirebaseDatabase.getInstance().getReference("Users").orderByChild("phoneNumber").equalTo(choose);
-                checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()){
-                            chooseMethod.setError(null);
-
-                            Intent verify = new Intent(ForgotPasswordActivity.this, UserVerifyActivity.class);
-                            verify.putExtra("phone", choose);
-                            verify.putExtra("verified", "updateData");
-                            startActivity(verify);
-                            finish();
-                        }
+            mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(ForgotPasswordActivity.this, "Please check your email.", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(ForgotPasswordActivity.this, MainActivity.class));
+                        finish();
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        chooseMethod.setError("User does not exist!");
-                    }
-                });
-            }
+                }
+            });
         }
     }
 }

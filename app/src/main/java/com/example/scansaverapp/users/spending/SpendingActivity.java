@@ -55,6 +55,8 @@ import com.gkemon.XMLtoPDF.PdfGenerator;
 import com.gkemon.XMLtoPDF.PdfGeneratorListener;
 import com.gkemon.XMLtoPDF.model.FailureResponse;
 import com.gkemon.XMLtoPDF.model.SuccessResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -184,12 +186,13 @@ public class SpendingActivity extends AppCompatActivity implements View.OnClickL
                     chosenCategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                            spendingCategoryReference.addValueEventListener(new ValueEventListener() {
+                            spendingCategoryReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+
                                     cartNumberList.clear();
 
-                                    for (DataSnapshot yearSnap : snapshot.getChildren()) {
+                                    for (DataSnapshot yearSnap : task.getResult().getChildren()) {
 
                                         for (DataSnapshot monthSnap : yearSnap.getChildren()) {
 
@@ -197,24 +200,24 @@ public class SpendingActivity extends AppCompatActivity implements View.OnClickL
 
                                             if (monthKey.equalsIgnoreCase(categoryChosenList.get(position))) {
 
-                                                for (DataSnapshot dateSnap : monthSnap.getChildren()) {
+                                                for (DataSnapshot cartSnap : monthSnap.getChildren()) {
 
-                                                    String cartKey = dateSnap.getKey();
+                                                    String cartKey = cartSnap.getKey();
                                                     categoryList.clear();
 
-                                                    for (DataSnapshot categorySnap : dateSnap.getChildren()) {
+                                                    for (DataSnapshot categorySnap : cartSnap.getChildren()) {
 
-                                                        String catSnap = categorySnap.getKey();
+                                                        String categoryKey = categorySnap.getKey();
 
-                                                        if (catSnap.equalsIgnoreCase("Food")) {
+                                                        if (categoryKey.equalsIgnoreCase("Food")) {
                                                             foodList.clear();
 
                                                             for (DataSnapshot snap : categorySnap.getChildren()) {
                                                                 GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
                                                                 foodList.add(groceryItemModel);
                                                             }
-                                                            categoryList.add(new MainCategorySpendingClass(catSnap, foodList));
-                                                        } else if (catSnap.equalsIgnoreCase("Beauty & Personal Care")) {
+                                                            categoryList.add(new MainCategorySpendingClass(categoryKey, foodList));
+                                                        } else if (categoryKey.equalsIgnoreCase("Beauty & Personal Care")) {
                                                             beautyList.clear();
 
                                                             for (DataSnapshot snap : categorySnap.getChildren()) {
@@ -222,8 +225,8 @@ public class SpendingActivity extends AppCompatActivity implements View.OnClickL
                                                                 GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
                                                                 beautyList.add(groceryItemModel);
                                                             }
-                                                            categoryList.add(new MainCategorySpendingClass(catSnap, beautyList));
-                                                        } else if (catSnap.equalsIgnoreCase("Home Essentials")) {
+                                                            categoryList.add(new MainCategorySpendingClass(categoryKey, beautyList));
+                                                        } else if (categoryKey.equalsIgnoreCase("Home Essentials")) {
                                                             homeList.clear();
 
                                                             for (DataSnapshot snap : categorySnap.getChildren()) {
@@ -231,9 +234,9 @@ public class SpendingActivity extends AppCompatActivity implements View.OnClickL
                                                                 GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
                                                                 homeList.add(groceryItemModel);
                                                             }
-                                                            categoryList.add(new MainCategorySpendingClass(catSnap, homeList));
+                                                            categoryList.add(new MainCategorySpendingClass(categoryKey, homeList));
 
-                                                        } else if (catSnap.equalsIgnoreCase("Pharmacy")) {
+                                                        } else if (categoryKey.equalsIgnoreCase("Pharmacy")) {
                                                             pharmacyList.clear();
 
                                                             for (DataSnapshot snap : categorySnap.getChildren()) {
@@ -241,7 +244,7 @@ public class SpendingActivity extends AppCompatActivity implements View.OnClickL
                                                                 GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
                                                                 pharmacyList.add(groceryItemModel);
                                                             }
-                                                            categoryList.add(new MainCategorySpendingClass(catSnap, pharmacyList));
+                                                            categoryList.add(new MainCategorySpendingClass(categoryKey, pharmacyList));
 
                                                         }
 
@@ -260,12 +263,6 @@ public class SpendingActivity extends AppCompatActivity implements View.OnClickL
                                     spendingMainRecycler.setLayoutManager(new LinearLayoutManager(SpendingActivity.this, LinearLayoutManager.VERTICAL, false));
                                     spendingMainRecycler.setAdapter(cartNumberAdapter);
                                     cartNumberAdapter.notifyDataSetChanged();
-
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-                                    Toast.makeText(SpendingActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
@@ -278,12 +275,13 @@ public class SpendingActivity extends AppCompatActivity implements View.OnClickL
 
                 } else {
 
-                    spendingCategoryReference.addValueEventListener(new ValueEventListener() {
+                    spendingCategoryReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+
                             categoryChosenList.clear();
 
-                            for (DataSnapshot snappy : snapshot.getChildren()) {
+                            for (DataSnapshot snappy : task.getResult().getChildren()) {
                                 String yearKey = snappy.getKey();
                                 categoryChosenList.add(yearKey);
                             }
@@ -292,22 +290,17 @@ public class SpendingActivity extends AppCompatActivity implements View.OnClickL
 
                             chosenCategorySpinner.setAdapter(yearAdapter);
                         }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
                     });
 
                     chosenCategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
 
-                            spendingCategoryReference.addValueEventListener(new ValueEventListener() {
+                            spendingCategoryReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
 
-                                    for (DataSnapshot yearSnap : snapshot.getChildren()) {
+                                    for (DataSnapshot yearSnap : task.getResult().getChildren()) {
 
                                         String yearKey = yearSnap.getKey();
 
@@ -971,7 +964,6 @@ public class SpendingActivity extends AppCompatActivity implements View.OnClickL
                                                                     GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
                                                                     foodList.add(groceryItemModel);
                                                                 }
-                                                                Toast.makeText(SpendingActivity.this, catSnap + String.valueOf(foodList), Toast.LENGTH_SHORT).show();
 
                                                                 categoryList.add(new MainCategorySpendingClass(catSnap, foodList));
                                                             } else if (catSnap.equalsIgnoreCase("Beauty & Personal Care")) {
@@ -982,7 +974,6 @@ public class SpendingActivity extends AppCompatActivity implements View.OnClickL
                                                                     GroceryItemModel groceryItemModel = snap.getValue(GroceryItemModel.class);
                                                                     beautyList.add(groceryItemModel);
                                                                 }
-                                                                Toast.makeText(SpendingActivity.this, catSnap + String.valueOf(categorySnap.getValue()), Toast.LENGTH_SHORT).show();
 
                                                                 categoryList.add(new MainCategorySpendingClass(catSnap, beautyList));
                                                             } else if (catSnap.equalsIgnoreCase("Home Essentials")) {
@@ -1089,12 +1080,6 @@ public class SpendingActivity extends AppCompatActivity implements View.OnClickL
                                     spendingMainRecycler.setLayoutManager(new LinearLayoutManager(SpendingActivity.this, LinearLayoutManager.VERTICAL, false));
                                     spendingMainRecycler.setAdapter(monthNameAdapter);
                                     monthNameAdapter.notifyDataSetChanged();
-
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-                                    Toast.makeText(SpendingActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }

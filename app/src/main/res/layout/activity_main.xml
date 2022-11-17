@@ -34,9 +34,9 @@
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:orientation="horizontal"
+                android:layout_height="120dp"
                 android:layout_marginTop="40dp"
+                android:orientation="horizontal"
                 android:weightSum="2">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
@@ -48,15 +48,27 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/topText"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Sign in"
-                        android:gravity="bottom"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:fontFamily="@font/baloo_bhai"
-                        android:textColor="@android:color/white"
+                        android:gravity="bottom"
+                        android:text="Welcome"
                         android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                        android:textColor="@android:color/white"
                         android:textSize="40sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="20dp"
+                        android:fontFamily="@font/baloo_bhai"
+                        android:gravity="bottom"
+                        android:text="Back!"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                        android:textColor="@android:color/white"
+                        android:textSize="40sp"
+                        android:textStyle="bold" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
@@ -67,7 +79,7 @@
 
                     <ImageView
                         android:id="@+id/imageView5"
-                        android:layout_width="80dp"
+                        android:layout_width="100dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="bottom|end"
                         android:layout_marginRight="20dp"
@@ -80,39 +92,29 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginTop="20dp">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Welcome back!"
-                    android:gravity="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/sen"
-                    android:textColor="@color/white"/>
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:elevation="20dp"
-                    app:cardCornerRadius="20dp"
+                    android:layout_gravity="center"
                     android:layout_margin="20dp"
-                    android:layout_gravity="center">
+                    android:elevation="20dp"
+                    app:cardCornerRadius="20dp">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:layout_margin="20dp">
+                        android:layout_margin="20dp"
+                        android:orientation="vertical">
 
                         <com.google.android.material.textfield.TextInputLayout
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:boxCornerRadiusTopStart="20dp"
                             app:boxCornerRadiusTopEnd="20dp"
+                            app:boxCornerRadiusTopStart="20dp"
                             app:startIconDrawable="@drawable/ic_baseline_email_24">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -128,9 +130,9 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:endIconMode="password_toggle"
-                            app:boxCornerRadiusBottomStart="20dp"
                             app:boxCornerRadiusBottomEnd="20dp"
+                            app:boxCornerRadiusBottomStart="20dp"
+                            app:endIconMode="password_toggle"
                             app:startIconDrawable="@drawable/ic_baseline_lock_24">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -138,8 +140,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Password"
-                                android:textColorHint="@color/blue_dark"
-                                android:inputType="textPassword" />
+                                android:inputType="textPassword"
+                                android:textColorHint="@color/blue_dark" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <androidx.appcompat.widget.AppCompatButton
@@ -149,9 +151,9 @@
                             android:layout_marginTop="40dp"
                             android:background="@drawable/rounded_button_main"
                             android:text="@string/sign_in"
+                            android:textAllCaps="false"
                             android:textColor="#FFFFFF"
                             android:textSize="20sp"
-                            android:textAllCaps="false"
                             android:textStyle="bold" />
 
                         <com.google.android.material.textview.MaterialTextView
@@ -160,7 +162,7 @@
                             android:layout_height="wrap_content"
                             android:padding="10dp"
                             android:text="Forgot Password?"
-                            android:textColor="?attr/colorPrimary"/>
+                            android:textColor="?attr/colorPrimary" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 

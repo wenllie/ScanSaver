@@ -23,6 +23,21 @@
         android:theme="@style/Theme.ScanSaverApp"
         tools:targetApi="31">
         <activity
+            android:name=".users.helpcenter.GrocerySpendingHCActivity"
+            android:exported="false" />
+        <activity
+            android:name=".users.helpcenter.ExpensesAnalyticsHCActivity"
+            android:exported="false" />
+        <activity
+            android:name=".users.helpcenter.MonthlyBudgetHCActivity"
+            android:exported="false" />
+        <activity
+            android:name=".users.helpcenter.ShoppingCartHCActivity"
+            android:exported="false" />
+        <activity
+            android:name=".users.helpcenter.ManageAccountHCActivity"
+            android:exported="false" />
+        <activity
             android:name=".SetProfilePictureActivity"
             android:exported="false" />
         <activity

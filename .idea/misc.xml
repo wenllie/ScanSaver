@@ -50,14 +50,20 @@
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_dashboard.xml" value="0.3625" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_edit_profile.xml" value="0.3484375" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_expenses_analytics.xml" value="0.358695652173913" />
+        <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_expenses_analytics_hcactivity.xml" value="0.302536231884058" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_forgot_password.xml" value="0.3625" />
+        <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_grocery_spending_hcactivity.xml" value="0.3484375" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_help_center.xml" value="0.33" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_main.xml" value="0.3333333333333333" />
+        <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_manage_account.xml" value="0.3625" />
+        <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_manage_account_hc.xml" value="0.302536231884058" />
+        <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_monthly_budget_hcactivity.xml" value="0.3625" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_privacy_security.xml" value="0.358695652173913" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_register.xml" value="0.33" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_scan_barcode.xml" value="0.33" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_set_profile_picture.xml" value="0.3484375" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_settings.xml" value="0.33" />
+        <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_shopping_cart_hcactivity.xml" value="0.302536231884058" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_shopping_cart_show_actovoty.xml" value="0.3625" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_shopping_cart_view.xml" value="0.1" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/activity_spending.xml" value="0.358695652173913" />
@@ -75,12 +81,18 @@
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/content_user_nav_drawer.xml" value="0.34782608695652173" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_box_about_us.xml" value="0.33" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_box_complaints.xml" value="0.25" />
+        <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_box_hc_change_email.xml" value="0.3614583333333333" />
+        <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_box_hc_change_password.xml" value="0.3625" />
+        <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_box_hc_change_phone_number.xml" value="0.3614583333333333" />
+        <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_box_hc_forgot_password.xml" value="0.3625" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_box_privacy_policies.xml" value="0.33" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_box_request.xml" value="0.358695652173913" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_box_show_scanned.xml" value="0.3614583333333333" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_box_similar_item.xml" value="0.3614583333333333" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_box_terms_and_conditions.xml" value="0.358695652173913" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/dialog_rate_us.xml" value="0.3614583333333333" />
+        <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/expandable_login_issue_list.xml" value="0.3016304347826087" />
+        <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/expandable_login_issue_list_item.xml" value="0.3016304347826087" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/expenses_year_list.xml" value="0.21557971014492755" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/fragment_barcode_scanner.xml" value="0.3625" />
         <entry key="..\:/SCHOOL/AndroidStudioCreations/ScanSaverApp/app/src/main/res/layout/fragment_dashboard.xml" value="0.25" />

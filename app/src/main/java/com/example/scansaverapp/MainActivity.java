@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             Toast.makeText(MainActivity.this, "Please verify your email address!", Toast.LENGTH_SHORT).show();
                             FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
                             FirebaseAuth.getInstance().signOut();
+                            clearField();
                         }
                     } else {
                         Toast.makeText(MainActivity.this, "Log in error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
@@ -102,5 +103,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
         }
+    }
+
+    private void clearField() {
+
+        userEmail.setText("");
+        userEmail.clearFocus();
+        userPassword.setText("");
+        userPassword.clearFocus();
     }
 }
